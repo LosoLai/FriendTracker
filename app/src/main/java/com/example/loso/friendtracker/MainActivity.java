@@ -104,7 +104,6 @@ public class MainActivity extends AppCompatActivity {
             switch (position) {
                 case 0:
                     Tab_Friend tabFriend = new Tab_Friend();
-                    //createListItem(tabFriend);
                     return tabFriend;
                 case 1:
                     Tab_Meeting tabMeeting = new Tab_Meeting();
@@ -134,14 +133,6 @@ public class MainActivity extends AppCompatActivity {
                     return "MAP";
             }
             return null;
-        }
-
-        private void createListItem(Tab_Friend tab_friend)
-        {
-            String[] test = {"AAA", "BBB", "CCC", "DDD", "EEE", "FFF"};
-            ListView lvFriend = (ListView)findViewById(R.id.friendlist);
-            ArrayAdapter<String> adapter = new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_list_item_1, test);
-            lvFriend.setAdapter(adapter);
         }
     }
 }
