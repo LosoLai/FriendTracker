@@ -1,5 +1,6 @@
 package com.example.loso.friendtracker;
 
+import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -14,11 +15,9 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
+import android.widget.Button;
 
 import com.example.loso.friendtracker.View.*;
-import com.example.loso.friendtracker.Controller.DataManager;
 
 public class MainActivity extends AppCompatActivity {
 
