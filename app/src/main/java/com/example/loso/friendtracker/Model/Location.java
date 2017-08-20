@@ -1,9 +1,12 @@
 package com.example.loso.friendtracker.Model;
 
-/**
- * Created by Lettisia on 2017/8/19.
- */
 import java.util.Random;
+
+/**
+ * Repersents a location by latitude and longitude and can generate a random location
+ *
+ * @author Lettisia George
+ */
 
 public class Location {
     // LatLong of RMIT: -37.809427, 144.963727
@@ -31,10 +34,8 @@ public class Location {
      * Generates a random location. The new location will be within a square
      * with sides of length 2*within and Location 'near' in the centre.
      *
-     * @param near
-     *            a Location
-     * @param within
-     *            in degrees
+     * @param near   a Location
+     * @param within in degrees
      */
     public static Location generateRandomLocation(Location near, double within) {
         Random rand = new Random(System.currentTimeMillis());
@@ -43,19 +44,19 @@ public class Location {
         return new Location(lat, longi);
     }
 
-    /*
+	/*
      * Simple distance to degrees conversion that is approximate near Melbourne
-     * and worse elsewhere.
-     *
-     * How I found the magic number 0.01:
-     *
-     * I found the factor of 0.01 by starting with the
-     * coordinates of RMIT, adding 0.01 to the latitude and longitude
-     * respectively and finding the average distance between RMIT and the new
-     * points 0.01 degrees away. Changing the latitude by 0.01 degrees gives a
-     * distance of 1.11km. Changing the longitude by 0.01 degrees gives a
-     * distance of 0.87. so 0.01 degrees/km seems reasonable.
-     */
+	 * and worse elsewhere. 
+	 * 
+	 * How I found the magic number 0.01:
+	 * 
+	 * I found the factor of 0.01 by starting with the
+	 * coordinates of RMIT, adding 0.01 to the latitude and longitude
+	 * respectively and finding the average distance between RMIT and the new
+	 * points 0.01 degrees away. Changing the latitude by 0.01 degrees gives a
+	 * distance of 1.11km. Changing the longitude by 0.01 degrees gives a
+	 * distance of 0.87. so 0.01 degrees/km seems reasonable.
+	 */
     public static double distanceToDegrees(double distance) {
         return distance * 0.01;
     }

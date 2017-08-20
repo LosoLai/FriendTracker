@@ -38,7 +38,7 @@ public class FriendListAdapter extends ArrayAdapter<Friend> {
         TextView tvPhone = (TextView) view.findViewById(R.id.tvPhone);
         tvName.setText(friend.getName());
         tvEmail.setText(friend.getEmail());
-        tvPhone.setText(friend.getPhone());
+        //tvPhone.setText(friend.getPhone());
         return view;
     }
 }

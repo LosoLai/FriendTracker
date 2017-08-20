@@ -36,10 +36,10 @@ public class DataManager {
         for(int i=1 ; i<10 ; i++) {
             String id = "ID000" + i;
             String name = "Friend" + i;
-            String phone = "Phone" + i;
+            //        String phone = "Phone" + i; // no requirement in assignmetn for phone number
             String email = "Email" + i;
             Date birthday = null;
-            friends.add(new Friend(id, name, phone, email, birthday));
+            friends.add(new Friend(id, name, email, birthday));
         }
     }
 

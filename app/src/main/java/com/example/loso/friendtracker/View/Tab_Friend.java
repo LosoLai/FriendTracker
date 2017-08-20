@@ -5,10 +5,12 @@ package com.example.loso.friendtracker.View;
  */
 import android.content.Intent;
 import android.os.Build;
+import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,11 +18,15 @@ import android.widget.Button;
 import android.widget.ListView;
 
 import com.example.loso.friendtracker.Controller.DataManager;
+import com.example.loso.friendtracker.Model.ContactDataManager;
 import com.example.loso.friendtracker.Model.Friend;
 import com.example.loso.friendtracker.Controller.FriendListAdapter;
 import com.example.loso.friendtracker.R;
 
 import java.util.ArrayList;
+
+import static android.R.attr.data;
+import static android.app.Activity.RESULT_OK;
 
 public class Tab_Friend extends Fragment {
     View rootView;
