@@ -12,8 +12,12 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-//import com.example.loso.friendtracker.Controller.DataManager;
+import com.example.loso.friendtracker.Controller.DataManager;
+import com.example.loso.friendtracker.Model.Friend;
+import com.example.loso.friendtracker.Controller.FriendListAdapter;
 import com.example.loso.friendtracker.R;
+
+import java.util.ArrayList;
 
 public class Tab_Friend extends Fragment {
     View rootView;
@@ -29,9 +33,12 @@ public class Tab_Friend extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        String[] items = {"AAA", "BBB", "CCC", "DDD", "EEE", "FFF"};
+        DataManager data = DataManager.getInstance();
+        ArrayList<Friend> friends = data.getFriendList();
+        FriendListAdapter adapter = new FriendListAdapter(rootView.getContext(), friends);
         ListView lvFriend = (ListView)rootView.findViewById(R.id.friendlist);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(rootView.getContext(), android.R.layout.simple_list_item_1, items);
+        //String[] items = {"AAA", "BBB", "CCC", "DDD", "EEE", "FFF"};
+        //ArrayAdapter<String> adapter = new ArrayAdapter<String>(rootView.getContext(), android.R.layout.simple_list_item_1, items);
         lvFriend.setAdapter(adapter);
     }
 }

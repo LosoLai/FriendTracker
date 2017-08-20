@@ -8,14 +8,16 @@ import java.util.Date;
 public class Friend {
     private String ID;
     private String name;
+    private String phone;
     private String email;
     private Date birthday;
     private String photo;
     private Location location;
 
-    public Friend(String iD, String name, String email, Date birthday) {
+    public Friend(String iD, String name, String phone,String email, Date birthday) {
         ID = iD;
         this.name = name;
+        this.phone = phone;
         this.email = email;
         this.birthday = birthday;
         this.photo = null;
@@ -36,6 +38,14 @@ public class Friend {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     public String getEmail() {
