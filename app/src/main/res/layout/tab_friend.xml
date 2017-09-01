@@ -7,7 +7,12 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.example.loso.friendtracker.MainActivity$PlaceholderFragment">
+    tools:context="com.example.loso.friendtracker.View.MainActivity$PlaceholderFragment">
+
+    <ListView
+        android:id="@+id/friendlist"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"></ListView>
 
     <Button
         android:id="@+id/bAddFriend"
@@ -15,10 +20,5 @@
         android:layout_height="wrap_content"
         android:textAlignment="center"
         android:text="Add Friend"/>
-
-    <ListView
-        android:id="@+id/friendlist"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"></ListView>
 
 </LinearLayout>

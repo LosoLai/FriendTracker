@@ -30,6 +30,11 @@ public class Meeting {
 		ID = id;
 	}
 
+    public Meeting(String iD, String title) {
+        ID = iD;
+        this.title = title;
+    }
+
 	public Meeting(String iD, String title, Date start, Date end, List<Friend> friends,
 				   Location location) {
 		ID = iD;
