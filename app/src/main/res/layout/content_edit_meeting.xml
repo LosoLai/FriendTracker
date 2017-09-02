@@ -30,7 +30,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Title"
-            android:textAppearance="@android:style/TextAppearance.Material.Medium" />
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <EditText
             android:id="@+id/editTextTitle"
@@ -46,7 +46,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Location"
-            android:textAppearance="@android:style/TextAppearance.Material.Medium" />
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <EditText
             android:id="@+id/editTextLocation"
@@ -62,23 +62,22 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Meeting Date"
-            android:textAppearance="@android:style/TextAppearance.Material.Medium" />
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1">
 
-            <TextView
-                android:id="@+id/tvMeetingDate"
+            <EditText
+                android:id="@+id/etMeetingDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_centerVertical="true"
                 android:layout_weight="3"
-                android:text="06/08/1992"
-                android:textAppearance="@android:style/TextAppearance.Material.Medium" />
+                android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <ImageButton
                 android:id="@+id/btnStartDatePicker"
@@ -89,8 +88,33 @@
                 android:layout_alignParentTop="true"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true" />
-
         </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <EditText
+                android:id="@+id/etMeetingTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:layout_weight="3"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <ImageButton
+                android:id="@+id/btnStartTimePicker"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                app:srcCompat="@android:drawable/ic_menu_my_calendar"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true" />
+        </RelativeLayout>
+
 
         <ImageButton
             android:id="@+id/btnRemoveMeeting"
@@ -101,6 +125,5 @@
             android:layout_alignParentTop="true"
             android:layout_weight="1"
             app:srcCompat="@android:drawable/ic_menu_delete" />
-
     </LinearLayout>
 </RelativeLayout>
