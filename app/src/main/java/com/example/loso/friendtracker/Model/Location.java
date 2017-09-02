@@ -44,6 +44,11 @@ public class Location {
         return new Location(lat, longi);
     }
 
+    @Override
+    public String toString() {
+        return String.format("Location: lat=%.5f, long=%.5f", latitude, longitude);
+    }
+
 	/*
      * Simple distance to degrees conversion that is approximate near Melbourne
 	 * and worse elsewhere. 
