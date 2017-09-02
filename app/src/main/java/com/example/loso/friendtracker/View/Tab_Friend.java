@@ -5,9 +5,11 @@ package com.example.loso.friendtracker.View;
  * Modified to use Model class by Lettisia George 2017/9/1
  */
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,8 +17,10 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 
+import com.example.loso.friendtracker.Controller.FriendController;
 import com.example.loso.friendtracker.Model.Friend;
 import com.example.loso.friendtracker.Controller.FriendListAdapter;
 import com.example.loso.friendtracker.Model.Model;
@@ -74,12 +78,37 @@ public class Tab_Friend extends Fragment implements Observer {
         ListView lvFriend = (ListView) rootView.findViewById(R.id.friendlist);
 
         lvFriend.setAdapter(adapter);
+
+        lvFriend.setClickable(true);
+        lvFriend.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.d(LOG_TAG, "OnItemClickListener reached ok");
+                Friend friend = adapter.getItem(position);
+                startActivity(new Intent(getActivity(), EditFriendActivity.class).putExtra("friend", friend.getID()));
+
+            }
+        });
+
         lvFriend.setLongClickable(true);
         lvFriend.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                Friend friend = adapter.getItem(position);
-                startActivity(new Intent(getActivity(), EditFriendActivity.class).putExtra("friend", friend.getID()));
+                Log.d(LOG_TAG, "OnItemLongClickListener reached ok");
+                final Friend friend = adapter.getItem(position);
+
+                new AlertDialog.Builder(getActivity())
+                        .setTitle("Remove Friend")
+                        .setMessage("Do you really want to remove this friend?")
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                FriendController fc = new FriendController();
+                                fc.removeFriend(friend.getID());
+                                Toast.makeText(getActivity(), "Friend removed", Toast.LENGTH_SHORT).show();
+                            }
+                        })
+                        .setNegativeButton(android.R.string.no, null).show();
                 return true;
             }
         });
