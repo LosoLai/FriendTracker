@@ -108,8 +108,8 @@ public final class Model extends Observable {
         notifyObservers(FRIENDS_CHANGED);
     }
 
-    public void addMeeting(String title, Date start, Date end, Location location) {
-        meetings.add(new Meeting(createID(), title, start, end, friends, location));
+    public void addMeeting(String title, String start, String time, Location location) {
+        meetings.add(new Meeting(createID(), title, start, time, friends, location));
         notifyObservers(MEETINGS_CHANGED);
 
     }

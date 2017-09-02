@@ -15,8 +15,10 @@ import java.util.List;
 public class Meeting {
 	private String ID;
 	private String title;
-	private Date start;
-	private Date end;
+	//private Date startDate;
+	//private Date startTime;
+	private String startDate;
+	private String startTime;
 	private List<Friend> friends;
 	private Location location;
 
@@ -35,12 +37,12 @@ public class Meeting {
         this.title = title;
     }
 
-	public Meeting(String iD, String title, Date start, Date end, List<Friend> friends,
+	public Meeting(String iD, String title, String date, String time, List<Friend> friends,
 				   Location location) {
 		ID = iD;
 		this.title = title;
-		this.start = start;
-		this.end = end;
+		this.startDate = date;
+		this.startTime = time;
 		this.friends = friends;
 		this.location = location;
 	}
@@ -61,20 +63,20 @@ public class Meeting {
 		this.title = title;
 	}
 
-	public Date getStart() {
-		return start;
+	public String getStartDate() {
+		return startDate;
 	}
 
-	public void setStart(Date start) {
-		this.start = start;
+	public void setDate(String start) {
+		this.startDate = start;
 	}
 
-	public Date getEnd() {
-		return end;
+	public String getTime() {
+		return startTime;
 	}
 
-	public void setEnd(Date end) {
-		this.end = end;
+	public void setTime(String time) {
+		this.startTime = time;
 	}
 
 	public List<Friend> getFriends() {

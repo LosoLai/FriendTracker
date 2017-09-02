@@ -1,6 +1,7 @@
 package com.example.loso.friendtracker.View;
 
 import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -8,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.DatePicker;
+import android.widget.TimePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
@@ -33,7 +35,6 @@ public class EditMeetingActivity extends AppCompatActivity {
         // This activity interacts with one specific friend
         // Grab friend ID as passed as an extra in the intent
         meetingID = getIntent().getStringExtra("meeting");
-
         meetingController = new MeetingController();
 
         // initialise DatePickerDIalog so birthday can be selected
@@ -42,6 +43,7 @@ public class EditMeetingActivity extends AppCompatActivity {
         EditText editTitle = (EditText) findViewById(R.id.editTextTitle);
         //EditText editLocation = (EditText) findViewById(R.id.editTextLocation);
         //TextView tvMeetingDate = (TextView) findViewById(R.id.tvMeetingDate);
+
 
         Meeting meeting = meetingController.getMeeting(meetingID);
         editTitle.setText(meeting.getTitle());
@@ -85,15 +87,29 @@ public class EditMeetingActivity extends AppCompatActivity {
 
 
     public void setupDatePickDialog() {
+        final EditText date = (EditText) findViewById(R.id.etMeetingDate);
+        final EditText time = (EditText) findViewById(R.id.etMeetingTime);
+
         final DatePickerDialog.OnDateSetListener dpickerListener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int day) {
-                //               Toast.makeText(EditFriendActivity.this, year + "/" + month + "/" + day, Toast.LENGTH_LONG).show();
+                String startDate = day + "/" + month + "/" + year;
                 meetingController.setMeetingDate(meetingID, year, month, day);
+                date.setText(startDate);
+            }
+        };
+
+        final TimePickerDialog.OnTimeSetListener tpickerListener = new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                String startTime = hourOfDay + ":" + minute;
+                meetingController.setMeetingTime(meetingID, hourOfDay, minute);
+                time.setText(startTime);
             }
         };
 
         ImageButton dateButton = (ImageButton) findViewById(R.id.btnStartDatePicker);
+        ImageButton timeButton = (ImageButton) findViewById(R.id.btnStartTimePicker);
 
         dateButton.setOnClickListener(
                 new View.OnClickListener() {
@@ -110,6 +126,23 @@ public class EditMeetingActivity extends AppCompatActivity {
                                 year_x, month_x, day_x);
                         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                         dialog.show();
+                    }
+                }
+        );
+
+        timeButton.setOnClickListener(
+                new View.OnClickListener() {
+                    public void onClick(View v) {
+                        final Calendar cal = Calendar.getInstance();
+                        int hour = cal.get(Calendar.HOUR_OF_DAY);
+                        int minute = cal.get(Calendar.MINUTE);
+
+
+                        TimePickerDialog timePickerDialog = new TimePickerDialog(
+                                EditMeetingActivity.this,
+                                tpickerListener, hour, minute, true);
+                        timePickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                        timePickerDialog.show();
                     }
                 }
         );

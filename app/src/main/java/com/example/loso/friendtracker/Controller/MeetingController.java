@@ -51,7 +51,16 @@ public class MeetingController {
     public void setMeetingDate(String meetingID, int year, int month, int day) {
         Meeting meeting = mModel.findMeetingByID(meetingID);
         if (meeting != null) {
-            meeting.setStart(new GregorianCalendar(year, month, day).getTime());
+            String date = day + "/" + month + "/" + year;
+            meeting.setDate(date);
+        }
+    }
+
+    public void setMeetingTime(String meetingID, int hourOfDay, int minute) {
+        Meeting meeting = mModel.findMeetingByID(meetingID);
+        if (meeting != null) {
+            String time = hourOfDay + ":" + minute;
+            meeting.setTime(time);
         }
     }
 
