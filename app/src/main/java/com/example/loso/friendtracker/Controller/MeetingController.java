@@ -1,0 +1,82 @@
+package com.example.loso.friendtracker.Controller;
+
+import android.content.Intent;
+import android.support.annotation.Dimension;
+import android.util.Log;
+
+import com.example.loso.friendtracker.Model.Friend;
+import com.example.loso.friendtracker.Model.Location;
+import com.example.loso.friendtracker.Model.Meeting;
+import com.example.loso.friendtracker.Model.Model;
+import com.example.loso.friendtracker.Service.ContactDataManager;
+import com.example.loso.friendtracker.View.MainActivity;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.GregorianCalendar;
+
+/**
+ * Created by Lettisia George on 31/08/2017.
+ */
+
+public class MeetingController {
+    private static final String LOG_TAG = "meetingcontroller";
+    private Model mModel = Model.getInstance();
+
+    public MeetingController() {
+        if (mModel == null) {
+            mModel = Model.getInstance();
+        }
+    }
+
+    public Meeting getMeeting(String meetingID) {
+        return mModel.findMeetingByID(meetingID);
+    }
+
+    public void setLocation(String meetingID, Location location) {
+        Meeting meeting = mModel.findMeetingByID(meetingID);
+        if (meeting != null) {
+            meeting.setLocation(location);
+        }
+    }
+
+    public void updateMeetingDetails(String meetingID, String title) {
+        Meeting meeting = mModel.findMeetingByID(meetingID);
+        if (meeting != null) {
+            //meeting.setLocation(location);
+            meeting.setTitle(title);
+        }
+    }
+
+    public void setMeetingDate(String meetingID, int year, int month, int day) {
+        Meeting meeting = mModel.findMeetingByID(meetingID);
+        if (meeting != null) {
+            meeting.setStart(new GregorianCalendar(year, month, day).getTime());
+        }
+    }
+
+    /*public void addFriendFromContacts(MainActivity mainActivity, Intent data) {
+        ContactDataManager contactsManager = new ContactDataManager(mainActivity, data);
+        String name = "";
+        String email = "";
+        try {
+            name = contactsManager.getContactName();
+            email = contactsManager.getContactEmail();
+            mModel.addFriend(name, email);
+            //Log.d(LOG_TAG, "Added Friend");
+        } catch (ContactDataManager.ContactQueryException e) {
+            Log.e(LOG_TAG, e.getMessage());
+        }
+    }
+
+    public String getFriendBirthday(String friendID) {
+        Friend friend = mModel.findFriendByID(friendID);
+        Date birthday = friend.getBirthday();
+        SimpleDateFormat mFormat = new SimpleDateFormat("dd/MM/yyyy");
+        return mFormat.format(birthday);
+    }
+
+    public void removeFriend(String friendID) {
+        mModel.removeFriend(friendID);
+    }*/
+}

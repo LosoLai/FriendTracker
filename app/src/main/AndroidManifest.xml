@@ -31,6 +31,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.loso.friendtracker.View.DisplayContacts" />
         </activity>
+        <activity
+            android:name=".View.EditMeetingActivity"
+            android:label="@string/title_activity_edit_meeting"
+            android:parentActivityName=".View.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.loso.friendtracker.View.MainActivity" />
+        </activity>
     </application>
 
 </manifest>
