@@ -6,6 +6,7 @@ import android.util.Log;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.List;
+import com.example.loso.friendtracker.Model.FriendLocation;
 
 // Suppoort code by Caspar for MAD assignment s2 2017
 // Simple example to test dummy location service (for demonstration only)
@@ -20,7 +21,7 @@ public class TestLocationService {
 
         Log.i(LOG_TAG, "File Contents:");
         dummyLocationService.logAll();
-        List<DummyLocationService.FriendLocation> matched = null;
+        List<FriendLocation> matched = null;
         try {
             // 2 mins either side of 9:46:30 AM
             matched = dummyLocationService.getFriendLocationsForTime(DateFormat.getTimeInstance(

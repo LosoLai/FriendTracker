@@ -20,7 +20,7 @@ public class Meeting {
 	private String startDate;
 	private String startTime;
 	private List<Friend> friends;
-	private Location location;
+	private FriendLocation location;
 
 	public Meeting() {
 		friends = new ArrayList<Friend>();
@@ -38,7 +38,7 @@ public class Meeting {
     }
 
 	public Meeting(String iD, String title, String date, String time, List<Friend> friends,
-				   Location location) {
+				   FriendLocation location) {
 		ID = iD;
 		this.title = title;
 		this.startDate = date;
@@ -87,11 +87,11 @@ public class Meeting {
 		this.friends = friends;
 	}
 
-	public Location getLocation() {
+	public FriendLocation getLocation() {
 		return location;
 	}
 
-	public void setLocation(Location location) {
+	public void setLocation(FriendLocation location) {
 		this.location = location;
 	}
 }

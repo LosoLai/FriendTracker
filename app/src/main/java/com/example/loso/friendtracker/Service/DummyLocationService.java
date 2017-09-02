@@ -17,6 +17,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import com.example.loso.friendtracker.Model.FriendLocation;
 
 //import mad.friend.simple.R;
 
@@ -28,22 +29,6 @@ public class DummyLocationService {
 
     // Singleton
     private DummyLocationService() {
-    }
-
-    // This is only a data access object (DAO)
-    // You must extract data and place in your model
-    public static class FriendLocation {
-        public Date time;
-        public String id;
-        public String name;
-        public double latitude;
-        public double longitude;
-
-        @Override
-        public String toString() {
-            return String.format("Time=%s, id=%s, name=%s, lat=%.5f, long=%.5f", DateFormat.getTimeInstance(
-                    DateFormat.MEDIUM).format(time), id, name, latitude, longitude);
-        }
     }
 
     // check if the source time is with the range of target time +/- minutes and seconds
@@ -127,7 +112,7 @@ public class DummyLocationService {
         parseFile(context);
         List<FriendLocation> returnList = new ArrayList<FriendLocation>();
         for (FriendLocation friend : locationList)
-            if (timeInRange(friend.time, time, periodMinutes, periodSeconds))
+            if (timeInRange(friend.getTime(), time, periodMinutes, periodSeconds))
                 returnList.add(friend);
         return returnList;
     }

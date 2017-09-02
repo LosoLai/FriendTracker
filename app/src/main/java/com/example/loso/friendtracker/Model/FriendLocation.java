@@ -1,6 +1,8 @@
 package com.example.loso.friendtracker.Model;
 
+import java.text.DateFormat;
 import java.util.Random;
+import java.util.Date;
 
 /**
  * Repersents a location by latitude and longitude and can generate a random location
@@ -8,17 +10,25 @@ import java.util.Random;
  * @author Lettisia George
  */
 
-public class Location {
+public class FriendLocation {
     // LatLong of RMIT: -37.809427, 144.963727
+    private Date time;
     private double latitude;
     private double longitude;
 
-    public Location(double lat, double longi) {
+    public FriendLocation(double lat, double longi) {
+        this.time = null;
         latitude = lat;
         longitude = longi;
     }
 
-    public double distance(Location there) {
+    public FriendLocation(Date time, double lat, double longi) {
+        this.time = time;
+        latitude = lat;
+        longitude = longi;
+    }
+
+    public double distance(FriendLocation there) {
         double lat1 = Math.toRadians(latitude);
         double long1 = Math.toRadians(longitude);
         double lat2 = Math.toRadians(there.getLatitude());
@@ -37,16 +47,17 @@ public class Location {
      * @param near   a Location
      * @param within in degrees
      */
-    public static Location generateRandomLocation(Location near, double within) {
+    public static FriendLocation generateRandomLocation(FriendLocation near, double within) {
         Random rand = new Random(System.currentTimeMillis());
         double lat = near.getLatitude() + rand.nextDouble() * 2 * within - within;
         double longi = near.getLongitude() + rand.nextDouble() * 2 * within - within;
-        return new Location(lat, longi);
+        return new FriendLocation(lat, longi);
     }
 
     @Override
     public String toString() {
-        return String.format("Location: lat=%.5f, long=%.5f", latitude, longitude);
+        return String.format("Time=%s, lat=%.5f, long=%.5f", DateFormat.getTimeInstance(
+                DateFormat.MEDIUM).format(time), latitude, longitude);
     }
 
 	/*
@@ -82,17 +93,21 @@ public class Location {
         this.longitude = longitude;
     }
 
+    public Date getTime() { return this.time; }
+
+    public void setTime(Date time) { this.time = time; }
+
     // Test method
-    public static void main(String[] args) {
-        Location loc1 = new Location(-37.809427, 144.963727);
-        Location loc2 = new Location(-38.809427, 144.963727);
-        Location loc3 = new Location(-37.809427, 144.953727);
-        Location loc4 = new Location(-37.819427, 144.973727);
+    /*public static void main(String[] args) {
+        FriendLocation loc1 = new FriendLocation(-37.809427, 144.963727);
+        FriendLocation loc2 = new FriendLocation(-38.809427, 144.963727);
+        FriendLocation loc3 = new FriendLocation(-37.809427, 144.953727);
+        FriendLocation loc4 = new FriendLocation(-37.819427, 144.973727);
 
         System.out.println("Changing Latitude " + loc1.distance(loc2));
         System.out.println("Changing Longitude " + loc1.distance(loc3));
         System.out.println("Changing Both " + loc1.distance(loc4));
         System.out.println("Distance: 100km = " + distanceToDegrees(100) + " degrees");
-    }
+    }*/
 
 }

@@ -72,8 +72,7 @@ public class Tab_Friend extends Fragment implements Observer {
         ArrayList<Friend> friends = mModel.getFriends();
         adapter = new FriendListAdapter(rootView.getContext(), friends);
         ListView lvFriend = (ListView) rootView.findViewById(R.id.friendlist);
-        //String[] items = {"AAA", "BBB", "CCC", "DDD", "EEE", "FFF"};
-        //ArrayAdapter<String> adapter = new ArrayAdapter<String>(rootView.getContext(), android.R.layout.simple_list_item_1, items);
+
         lvFriend.setAdapter(adapter);
         lvFriend.setLongClickable(true);
         lvFriend.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
