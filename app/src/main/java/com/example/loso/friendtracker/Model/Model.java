@@ -2,7 +2,6 @@ package com.example.loso.friendtracker.Model;
 
 import android.util.Log;
 
-import java.net.PortUnreachableException;
 import java.util.Date;
 import java.util.ArrayList;
 import java.util.Observable;
@@ -22,8 +21,6 @@ public final class Model extends Observable {
 
     public static final int FRIENDS_CHANGED = 24;
     public static final int MEETINGS_CHANGED = 67;
-    public static final int FRIEND_REMOVED = 78;
-    public static final int MEETING_REMOVED = 29;
 
     private ArrayList<Friend> friends;
     private ArrayList<Meeting> meetings;
@@ -47,18 +44,21 @@ public final class Model extends Observable {
 
     public void addFriend(Friend friend) {
         friends.add(friend);
+        setChanged();
         notifyObservers(FRIENDS_CHANGED);
     }
 
     public void addMeeting(Meeting meeting) {
         meetings.add(meeting);
+        setChanged();
         notifyObservers(MEETINGS_CHANGED);
     }
 
     public boolean removeFriend(Friend friend) {
         boolean done = friends.remove(friend);
         if (done) {
-            notifyObservers(friend);
+            setChanged();
+            notifyObservers(FRIENDS_CHANGED);
         }
         return done;
     }
@@ -66,7 +66,8 @@ public final class Model extends Observable {
     public boolean removeMeeting(Meeting meet) {
         boolean done = meetings.remove(meet);
         if (done) {
-            notifyObservers(meet);
+            setChanged();
+            notifyObservers(MEETINGS_CHANGED);
         }
         return done;
     }
@@ -77,7 +78,8 @@ public final class Model extends Observable {
                 boolean done = friends.remove(f);
                 if (done) {
                     Log.d("Model", "in remove friend");
-                    notifyObservers(f);
+                    setChanged();
+                    notifyObservers(FRIENDS_CHANGED);
                 }
                 return done;
             }
@@ -90,7 +92,8 @@ public final class Model extends Observable {
             if (m.getID().equals(ID)) {
                 boolean done = meetings.remove(m);
                 if (done) {
-                    notifyObservers(m);
+                    setChanged();
+                    notifyObservers(MEETINGS_CHANGED);
                 }
                 return done;
             }
@@ -100,16 +103,19 @@ public final class Model extends Observable {
 
     public void addFriend(String name, String email) {
         friends.add(new Friend(createID(), name, email));
+        setChanged();
         notifyObservers(FRIENDS_CHANGED);
     }
 
     public void addFriend(String name, String email, Date birthday) {
         friends.add(new Friend(createID(), name, email, birthday));
+        setChanged();
         notifyObservers(FRIENDS_CHANGED);
     }
 
     public void addMeeting(String title, String start, String time, Location location) {
         meetings.add(new Meeting(createID(), title, start, time, friends, location));
+        setChanged();
         notifyObservers(MEETINGS_CHANGED);
 
     }
@@ -154,6 +160,7 @@ public final class Model extends Observable {
 
     public void setFriends(ArrayList<Friend> friends) {
         this.friends = friends;
+        setChanged();
         notifyObservers(FRIENDS_CHANGED);
     }
 
@@ -163,6 +170,7 @@ public final class Model extends Observable {
 
     public void setMeetings(ArrayList<Meeting> meetings) {
         this.meetings = meetings;
+        setChanged();
         notifyObservers(MEETINGS_CHANGED);
     }
 

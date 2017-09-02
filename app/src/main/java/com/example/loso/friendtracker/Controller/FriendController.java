@@ -7,8 +7,8 @@ import com.example.loso.friendtracker.Model.Friend;
 import com.example.loso.friendtracker.Model.Model;
 import com.example.loso.friendtracker.Service.ContactDataManager;
 import com.example.loso.friendtracker.View.MainActivity;
-import com.example.loso.friendtracker.View.Tab_Friend;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -70,8 +70,11 @@ public class FriendController {
     public String getFriendBirthday(String friendID) {
         Friend friend = mModel.findFriendByID(friendID);
         Date birthday = friend.getBirthday();
-        SimpleDateFormat mFormat = new SimpleDateFormat("dd/MM/yyyy");
-        return mFormat.format(birthday);
+        if (birthday != null) {
+            DateFormat mFormat = SimpleDateFormat.getDateInstance();
+            return mFormat.format(birthday);
+        }
+        return " ";
     }
 
     public void removeFriend(String friendID) {

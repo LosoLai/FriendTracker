@@ -31,6 +31,7 @@ public class Tab_Friend extends Fragment implements Observer {
     private static final String LOG_TAG = "friendtab";
     private View rootView;
     private FriendListAdapter adapter;
+    private static boolean firstRun = true;
 
 
     @Override
@@ -38,7 +39,7 @@ public class Tab_Friend extends Fragment implements Observer {
                              Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.tab_friend, container, false);
 
-        //Log.d(LOG_TAG, "OnCreateView()");
+        Log.d(LOG_TAG, "OnCreateView()");
 
         View.OnClickListener listener = new View.OnClickListener() {
             @Override
@@ -53,12 +54,18 @@ public class Tab_Friend extends Fragment implements Observer {
         return rootView;
     }
 
+    // I have discovered that onResume() is only called sometimes when the user navigates to and from the friend tab
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d(LOG_TAG, "onResume()");
+    }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        //Log.d(LOG_TAG, "onActivityCreated()");
+        Log.d(LOG_TAG, "onActivityCreated()");
         // ListView
         Model mModel = Model.getInstance();
         mModel.addObserver(this);
@@ -83,9 +90,6 @@ public class Tab_Friend extends Fragment implements Observer {
     public void update(Observable o, Object arg) {
         Log.d(LOG_TAG, "MADE IT TO UPDATE METHOD.");
         if (arg.equals(Model.FRIENDS_CHANGED)) {
-            adapter.notifyDataSetChanged();
-        } else if (arg instanceof Friend) { // srg is a friend that has been removed
-            adapter.remove((Friend) arg);
             adapter.notifyDataSetChanged();
         }
     }

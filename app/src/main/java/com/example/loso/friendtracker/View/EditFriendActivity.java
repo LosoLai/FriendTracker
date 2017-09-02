@@ -61,7 +61,7 @@ public class EditFriendActivity extends AppCompatActivity {
                         .setIcon(android.R.drawable.ic_dialog_alert)
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
-                                //friendController.removeFriend(friendID);
+                                friendController.removeFriend(friendID);
                                 Toast.makeText(EditFriendActivity.this, "Friend removed", Toast.LENGTH_SHORT).show();
                                 finish();
                             }

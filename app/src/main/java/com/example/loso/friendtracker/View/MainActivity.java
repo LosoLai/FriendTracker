@@ -78,12 +78,8 @@ public class MainActivity extends AppCompatActivity {
                     case 1:
                         // add meeting
                     case 2:
-                        // do nothing
+                        // map view - do nothing
                 }
-
-//
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
             }
         });
 
@@ -113,6 +109,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
+     * Called when the contact picked returns
      * @author ermyasabebe
      */
     @Override
