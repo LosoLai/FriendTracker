@@ -175,4 +175,13 @@ public final class Model extends Observable {
     }
 
 
+    public void updateFriend(String friendID, String name, String email) {
+        Friend friend = findFriendByID(friendID);
+        if (friend != null) {
+            friend.setName(name);
+            friend.setEmail(email);
+            setChanged();
+            notifyObservers(FRIENDS_CHANGED);
+        }
+    }
 }

@@ -46,11 +46,7 @@ public class FriendController {
     }
 
     public void updateFriendDetails(String friendID, String name, String email) {
-        Friend friend = mModel.findFriendByID(friendID);
-        if (friend != null) {
-            friend.setEmail(email);
-            friend.setName(name);
-        }
+        mModel.updateFriend(friendID, name, email);
     }
 
     public void addFriendFromContacts(MainActivity mainActivity, Intent data) {

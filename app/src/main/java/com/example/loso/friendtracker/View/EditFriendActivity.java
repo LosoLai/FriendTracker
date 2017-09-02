@@ -93,6 +93,8 @@ public class EditFriendActivity extends AppCompatActivity {
             public void onDateSet(DatePicker view, int year, int month, int day) {
                 //               Toast.makeText(EditFriendActivity.this, year + "/" + month + "/" + day, Toast.LENGTH_LONG).show();
                 friendController.setBirthday(friendID, year, month, day);
+                TextView tvBirthday = (TextView) findViewById(R.id.tvBirthday);
+                tvBirthday.setText(friendController.getFriendBirthday(friendID));
             }
         };
 
