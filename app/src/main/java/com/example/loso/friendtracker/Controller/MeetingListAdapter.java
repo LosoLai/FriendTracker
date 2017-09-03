@@ -33,8 +33,20 @@ public class MeetingListAdapter extends ArrayAdapter<Meeting> {
             view = inflater.inflate(R.layout.adapter_meeting_item, parent, false);
         }
         // Populate the data into the template view using the data object
-        TextView tvTitle = (TextView) view.findViewById(R.id.tvTitle);
+        TextView tvTitle = (TextView) view.findViewById(R.id.tvTitleContent);
         tvTitle.setText(meeting.getTitle());
+
+        if(meeting.getLocation() != null)
+        {
+            TextView tvLocation = (TextView) view.findViewById(R.id.tvLocationContent);
+            tvLocation.setText(meeting.getLocation().toString());
+        }
+
+        if(meeting.getFriends().size() > 0)
+        {
+            TextView tvAttend = (TextView) view.findViewById(R.id.tvAttendNumber);
+            tvAttend.setText(Integer.toString(meeting.getFriends().size()));
+        }
         return view;
     }
 }

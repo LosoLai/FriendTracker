@@ -57,7 +57,10 @@ public class DataManager {
         ArrayList<Meeting> meetings = new ArrayList<Meeting>();
         ;
         for (int i = 0; i < 3; i++) {
-            meetings.add(new Meeting(Model.createID(), "Meeting" + Integer.toString(i)));
+            String title = "Meeting" + Integer.toString(i);
+            List<Friend> friends = new ArrayList<Friend>();
+            friends.add(new Friend(Model.createID(), Integer.toString(i), Integer.toString(i), null, null));
+            meetings.add(new Meeting(Model.createID(), "Meeting" + Integer.toString(i), friends, null));
         }
         return meetings;
     }
