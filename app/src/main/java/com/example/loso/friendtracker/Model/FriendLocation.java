@@ -58,8 +58,12 @@ public class FriendLocation {
 
     @Override
     public String toString() {
-        return String.format("Time=%s, lat=%.5f, long=%.5f", DateFormat.getTimeInstance(
-                DateFormat.MEDIUM).format(time), latitude, longitude);
+        return String.format("Time=%s, lat=%.5f, long=%.5f",
+                DateFormat.getTimeInstance(
+                        DateFormat.MEDIUM)
+                        .format(time),
+                latitude,
+                longitude);
     }
 
 	/*

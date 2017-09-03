@@ -10,7 +10,6 @@ import com.example.loso.friendtracker.Model.Model;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.Calendar;
 
 
@@ -37,15 +36,12 @@ public class MeetingController {
         Meeting meeting = mModel.findMeetingByID(meetingID);
         if (meeting != null) {
             meeting.setLocation(location);
+            mModel.forceUpdate();
         }
     }
 
     public void updateMeetingDetails(String meetingID, String title, double lati, double longi) {
-        Meeting meeting = mModel.findMeetingByID(meetingID);
-        if (meeting != null) {
-            meeting.setLocation(lati, longi);
-            meeting.setTitle(title);
-        }
+        mModel.updateMeeting(meetingID, title, lati, longi);
     }
 
     public void setMeetingStart(String meetingID, int year, int month, int day, int hour, int minute) throws InvalidDateException {
@@ -61,6 +57,7 @@ public class MeetingController {
                 throw new InvalidDateException("Start is before current time");
             } else {
                 meeting.setStartDate(newStart);
+                mModel.forceUpdate();
             }
         }
     }
@@ -79,6 +76,7 @@ public class MeetingController {
                 throw new InvalidDateException("End is before Start");
             } else {
                 meeting.setEndDate(newEnd);
+                mModel.forceUpdate();
             }
         }
     }

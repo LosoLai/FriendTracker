@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.example.loso.friendtracker.Model.FriendLocation;
 import com.example.loso.friendtracker.Model.Meeting;
 import com.example.loso.friendtracker.R;
 
@@ -36,16 +37,17 @@ public class MeetingListAdapter extends ArrayAdapter<Meeting> {
         TextView tvTitle = (TextView) view.findViewById(R.id.tvTitleContent);
         tvTitle.setText(meeting.getTitle());
 
-        if(meeting.getLocation() != null)
-        {
+        FriendLocation fl = meeting.getLocation();
+        if (fl != null) {
             TextView tvLocation = (TextView) view.findViewById(R.id.tvLocationContent);
-            tvLocation.setText(meeting.getLocation().toString());
+            tvLocation.setText("(" + fl.getLatitude() + ", " + fl.getLongitude() + ")");
         }
 
-        if(meeting.getFriends().size() > 0)
-        {
+        if (meeting.getFriends().size() > 0) {
             TextView tvAttend = (TextView) view.findViewById(R.id.tvAttendNumber);
-            tvAttend.setText(Integer.toString(meeting.getFriends().size()));
+            if (tvAttend != null) {
+                tvAttend.setText(Integer.toString(meeting.getFriends().size()));
+            }
         }
         return view;
     }

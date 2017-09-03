@@ -208,4 +208,20 @@ public final class Model extends Observable {
             notifyObservers(FRIENDS_CHANGED);
         }
     }
+
+    public void updateMeeting(String meetingID, String title, double lati, double longi) {
+        Meeting meet = findMeetingByID(meetingID);
+        if (meet != null) {
+            meet.setTitle(title);
+            meet.setLocation(lati, longi);
+            setChanged();
+            notifyObservers(MEETINGS_CHANGED);
+        }
+    }
+
+    public void forceUpdate() {
+        setChanged();
+        notifyObservers(FRIENDS_CHANGED);
+        notifyObservers(MEETINGS_CHANGED);
+    }
 }
