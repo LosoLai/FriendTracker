@@ -11,7 +11,9 @@ import com.example.loso.friendtracker.Model.FriendLocation;
 import com.example.loso.friendtracker.Model.Meeting;
 import com.example.loso.friendtracker.R;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 /**
  * Created by Loso on 2017/8/20.
@@ -49,6 +51,31 @@ public class MeetingListAdapter extends ArrayAdapter<Meeting> {
                 tvAttend.setText(Integer.toString(meeting.getFriends().size()));
             }
         }
+
+        if (meeting.getStartDate() != null) {
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(meeting.getStartDate());
+            java.text.DateFormat formatter = java.text.DateFormat.getDateInstance(
+                    DateFormat.FULL); // one of SHORT, MEDIUM, LONG, FULL, or DEFAULT
+            formatter.setTimeZone(cal.getTimeZone());
+            String formatted = formatter.format(cal.getTime());
+
+            TextView tvStart = (TextView) view.findViewById(R.id.tvStartTime);
+            tvStart.setText(formatted);
+        }
+
+        if (meeting.getEndDate() != null) {
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(meeting.getEndDate());
+            java.text.DateFormat formatter = java.text.DateFormat.getDateInstance(
+                    DateFormat.FULL); // one of SHORT, MEDIUM, LONG, FULL, or DEFAULT
+            formatter.setTimeZone(cal.getTimeZone());
+            String formatted = formatter.format(cal.getTime());
+
+            TextView tvEnd = (TextView) view.findViewById(R.id.tvEndTime);
+            tvEnd.setText(formatted);
+        }
+
         return view;
     }
 }
