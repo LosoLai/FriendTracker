@@ -58,31 +58,4 @@ public class MeetingController {
     public void removeMeeting(Meeting meeting) {
         mModel.removeMeeting(meeting);
     }
-
-
-
-    /*public void addFriendFromContacts(MainActivity mainActivity, Intent data) {
-        ContactDataManager contactsManager = new ContactDataManager(mainActivity, data);
-        String name = "";
-        String email = "";
-        try {
-            name = contactsManager.getContactName();
-            email = contactsManager.getContactEmail();
-            mModel.addFriend(name, email);
-            //Log.d(LOG_TAG, "Added Friend");
-        } catch (ContactDataManager.ContactQueryException e) {
-            Log.e(LOG_TAG, e.getMessage());
-        }
-    }
-
-    public String getFriendBirthday(String friendID) {
-        Friend friend = mModel.findFriendByID(friendID);
-        Date birthday = friend.getBirthday();
-        SimpleDateFormat mFormat = new SimpleDateFormat("dd/MM/yyyy");
-        return mFormat.format(birthday);
-    }
-
-    public void removeFriend(String friendID) {
-        mModel.removeFriend(friendID);
-    }*/
 }

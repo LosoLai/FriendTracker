@@ -8,8 +8,6 @@ package com.example.loso.friendtracker.View;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Build;
-import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -40,7 +38,6 @@ public class Tab_Friend extends Fragment implements Observer {
     private View rootView;
     private FriendListAdapter adapter;
 
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
