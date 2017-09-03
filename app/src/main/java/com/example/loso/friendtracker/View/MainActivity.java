@@ -1,6 +1,7 @@
 package com.example.loso.friendtracker.View;
 
 import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.provider.ContactsContract;
@@ -8,6 +9,7 @@ import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -118,7 +120,16 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == PICK_CONTACTS) {
             if (resultCode == RESULT_OK) {
                 FriendController fc = new FriendController();
-                fc.addFriendFromContacts(this, data);
+                boolean ok = fc.addFriendFromContacts(this, data);
+                if (!ok) {
+                    Log.d(LOG_TAG, "not ok activity result");
+                    Toast.makeText(MainActivity.this, "Friend with that name and email already exists", Toast.LENGTH_LONG);
+                    new AlertDialog.Builder(this)
+                            .setTitle("Friend Exists")
+                            .setMessage("Friend with that name and email already exists")
+                            .setIcon(android.R.drawable.ic_dialog_info)
+                            .setNeutralButton(android.R.string.ok, null).show();
+                }
             }
         }
     }

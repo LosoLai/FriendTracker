@@ -21,16 +21,6 @@ public class Tab_Map extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.tab_map, container, false);
 
-        View.OnClickListener listener = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getActivity(), EditFriendActivity.class));
-            }
-        };
-
-        Button addFriend = (Button) rootView.findViewById(R.id.button);
-        addFriend.setOnClickListener(listener);
-
         return rootView;
     }
 }

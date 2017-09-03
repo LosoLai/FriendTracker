@@ -1,19 +1,10 @@
 package com.example.loso.friendtracker.Controller;
 
-import android.content.Intent;
-import android.support.annotation.Dimension;
-import android.util.Log;
 
-import com.example.loso.friendtracker.Model.Friend;
+import com.example.loso.friendtracker.Model.FriendLocation;
 import com.example.loso.friendtracker.Model.Meeting;
 import com.example.loso.friendtracker.Model.Model;
-import com.example.loso.friendtracker.Model.FriendLocation;
-import com.example.loso.friendtracker.Service.ContactDataManager;
-import com.example.loso.friendtracker.View.MainActivity;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.GregorianCalendar;
 
 /**
  * Created by Lettisia George on 31/08/2017.
@@ -63,6 +54,12 @@ public class MeetingController {
             meeting.setTime(time);
         }
     }
+
+    public void removeMeeting(Meeting meeting) {
+        mModel.removeMeeting(meeting);
+    }
+
+
 
     /*public void addFriendFromContacts(MainActivity mainActivity, Intent data) {
         ContactDataManager contactsManager = new ContactDataManager(mainActivity, data);

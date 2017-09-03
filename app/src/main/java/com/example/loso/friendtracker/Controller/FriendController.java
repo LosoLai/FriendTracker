@@ -46,25 +46,25 @@ public class FriendController {
     }
 
     public void updateFriendDetails(String friendID, String name, String email) {
-        Friend friend = mModel.findFriendByID(friendID);
-        if (friend != null) {
-            friend.setEmail(email);
-            friend.setName(name);
-        }
+        mModel.updateFriend(friendID, name, email);
     }
 
-    public void addFriendFromContacts(MainActivity mainActivity, Intent data) {
+    public boolean addFriendFromContacts(MainActivity mainActivity, Intent data) {
         ContactDataManager contactsManager = new ContactDataManager(mainActivity, data);
         String name = "";
         String email = "";
         try {
             name = contactsManager.getContactName();
             email = contactsManager.getContactEmail();
-            mModel.addFriend(name, email);
+            if (!mModel.isFriend(name, email)) {
+                mModel.addFriend(name, email);
+                return true;
+            }
             //Log.d(LOG_TAG, "Added Friend");
         } catch (ContactDataManager.ContactQueryException e) {
             Log.e(LOG_TAG, e.getMessage());
         }
+        return false;
     }
 
     public String getFriendBirthday(String friendID) {
@@ -79,5 +79,9 @@ public class FriendController {
 
     public void removeFriend(String friendID) {
         mModel.removeFriend(friendID);
+    }
+
+    public void removeFriend(Friend friend) {
+        mModel.removeFriend(friend);
     }
 }
