@@ -5,9 +5,9 @@ import android.support.annotation.Dimension;
 import android.util.Log;
 
 import com.example.loso.friendtracker.Model.Friend;
-import com.example.loso.friendtracker.Model.Location;
 import com.example.loso.friendtracker.Model.Meeting;
 import com.example.loso.friendtracker.Model.Model;
+import com.example.loso.friendtracker.Model.FriendLocation;
 import com.example.loso.friendtracker.Service.ContactDataManager;
 import com.example.loso.friendtracker.View.MainActivity;
 
@@ -33,7 +33,7 @@ public class MeetingController {
         return mModel.findMeetingByID(meetingID);
     }
 
-    public void setLocation(String meetingID, Location location) {
+    public void setLocation(String meetingID, FriendLocation location) {
         Meeting meeting = mModel.findMeetingByID(meetingID);
         if (meeting != null) {
             meeting.setLocation(location);
