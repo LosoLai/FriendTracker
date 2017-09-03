@@ -14,24 +14,30 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.TextView;
+import android.widget.ListView;
+import android.widget.AdapterView;
 import android.widget.TimePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.example.loso.friendtracker.Controller.MeetingController;
+import com.example.loso.friendtracker.Controller.FriendListAdapter;
 import com.example.loso.friendtracker.Model.FriendLocation;
 import com.example.loso.friendtracker.Model.Meeting;
+import com.example.loso.friendtracker.Model.Friend;
 import com.example.loso.friendtracker.R;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.ArrayList;
 
 
 public class EditMeetingActivity extends AppCompatActivity {
     private String meetingID = "";
     private MeetingController meetingController;
+    private FriendListAdapter adapter;
     private static final String LOG_TAG = "EditMeetingActivity";
 
     @Override
@@ -76,6 +82,8 @@ public class EditMeetingActivity extends AppCompatActivity {
         endDate.setText(dates[2]);
         endTime.setText(dates[3]);
 
+        // display attend list
+        setupAttendSection(meeting);
 
         ImageButton removeButton = (ImageButton) findViewById(R.id.btnRemoveMeeting);
         removeButton.setOnClickListener(new View.OnClickListener() {
@@ -165,6 +173,36 @@ public class EditMeetingActivity extends AppCompatActivity {
         });
     }
 
+    public void setupAttendSection(Meeting meeting) {
+        final Meeting currentM = meeting;
+        Button addAttend = (Button) findViewById(R.id.bAddAttend);
+
+        ArrayList<Friend> friends = (ArrayList<Friend>) meeting.getFriends();
+        adapter = new FriendListAdapter(getApplicationContext(), friends);
+        ListView lvAttend = (ListView) findViewById(R.id.attendlist);
+        lvAttend.setAdapter(adapter);
+        lvAttend.setLongClickable(true);
+        lvAttend.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.d(LOG_TAG, "OnItemLongClickListener reached ok");
+                final Friend friend = adapter.getItem(position);
+
+                new AlertDialog.Builder(EditMeetingActivity.this)
+                        .setTitle("Remove Attend")
+                        .setMessage("Do you really want to remove this friend?")
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                meetingController.removeAttend(currentM, friend);
+                                Toast.makeText(EditMeetingActivity.this, "Attend removed", Toast.LENGTH_SHORT).show();
+                            }
+                        })
+                        .setNegativeButton(android.R.string.no, null).show();
+                return true;
+            }
+        });
+    }
 
     public void setupDatePickDialog() {
         final TextView startDate = (TextView) findViewById(R.id.tvMeetStartDate);

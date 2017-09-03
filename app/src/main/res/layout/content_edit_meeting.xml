@@ -163,6 +163,18 @@
 
         </LinearLayout>
 
+        <Button
+            android:id="@+id/bAddAttend"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:text="Add Attend"/>
+
+        <ListView
+            android:id="@+id/attendlist"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
 
     </LinearLayout>
 
