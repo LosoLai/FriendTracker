@@ -35,6 +35,13 @@ public class FriendListAdapter extends ArrayAdapter<Friend> {
         // Populate the data into the template view using the data object
         TextView tvName = (TextView) view.findViewById(R.id.tvName);
         tvName.setText(friend.getName());
+
+        if(friend.getLocation() != null)
+        {
+            TextView tvLocation = (TextView) view.findViewById(R.id.tvLocation);
+            tvLocation.setText(friend.getLocation().toString());
+        }
+
         return view;
     }
 }
