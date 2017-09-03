@@ -5,6 +5,7 @@ import android.icu.util.Calendar;
 
 import com.example.loso.friendtracker.Model.FriendLocation;
 import com.example.loso.friendtracker.Model.Meeting;
+import com.example.loso.friendtracker.Model.Friend;
 import com.example.loso.friendtracker.Model.Model;
 
 import java.text.SimpleDateFormat;
@@ -63,6 +64,8 @@ public class MeetingController {
     public void removeMeeting(Meeting meeting) {
         mModel.removeMeeting(meeting);
     }
+
+    public void removeAttend(Meeting meeting, Friend friend) { meeting.removeAttend(friend); }
 
     public FriendLocation getMeetingLocation(String meetingID) {
         FriendLocation loc = null;
