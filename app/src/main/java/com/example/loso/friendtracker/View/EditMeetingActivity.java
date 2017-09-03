@@ -101,7 +101,7 @@ public class EditMeetingActivity extends AppCompatActivity {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                boolean changed = false;
+                boolean finished = true;
 
                 TextView tvTitle = (TextView) findViewById(R.id.editTextTitle);
                 String title = tvTitle.getText().toString();
@@ -113,7 +113,6 @@ public class EditMeetingActivity extends AppCompatActivity {
                     double lati = Double.parseDouble(etLat.getText().toString());
                     double longi = Double.parseDouble(etLong.getText().toString());
                     meetingController.updateMeetingDetails(meetingID, title, lati, longi);
-                    changed = true;
                 } catch (NumberFormatException e) {
                     Log.e(LOG_TAG, e.getMessage());
                 }
@@ -126,39 +125,44 @@ public class EditMeetingActivity extends AppCompatActivity {
                     String[] dateStartTokens = startDate.getText().toString().split("/");
 
                     int year = Integer.parseInt(dateStartTokens[0]);
-                    int month = Integer.parseInt(dateStartTokens[1]);
+                    int month = Integer.parseInt(dateStartTokens[1]) - 1;
                     int day = Integer.parseInt(dateStartTokens[2]);
                     int hour = Integer.parseInt(timeStartTokens[0]);
                     int minute = Integer.parseInt(timeStartTokens[1]);
 
                     meetingController.setMeetingStart(meetingID, year, month, day, hour, minute);
-                    changed = true;
-                } catch (NumberFormatException e) {
-                    Log.e(LOG_TAG, e.getMessage());
-                }
 
-                try {
                     TextView endDate = (TextView) findViewById(R.id.tvMeetEndDate);
                     TextView endTime = (TextView) findViewById(R.id.tvMeetEndTime);
                     String[] timeEndTokens = endTime.getText().toString().split(":");
                     String[] dateEndTokens = endDate.getText().toString().split("/");
 
-                    int year = Integer.parseInt(dateEndTokens[0]);
-                    int month = Integer.parseInt(dateEndTokens[1]);
-                    int day = Integer.parseInt(dateEndTokens[2]);
-                    int hour = Integer.parseInt(timeEndTokens[0]);
-                    int minute = Integer.parseInt(timeEndTokens[1]);
+                    year = Integer.parseInt(dateEndTokens[0]);
+                    month = Integer.parseInt(dateEndTokens[1]) - 1;
+                    day = Integer.parseInt(dateEndTokens[2]);
+                    hour = Integer.parseInt(timeEndTokens[0]);
+                    minute = Integer.parseInt(timeEndTokens[1]);
 
                     meetingController.setMeetingEnd(meetingID, year, month, day, hour, minute);
-                    changed = true;
+                } catch (MeetingController.InvalidDateException e) {
+                    Log.e(LOG_TAG, e.getMessage());
+                    new AlertDialog.Builder(EditMeetingActivity.this)
+                            .setTitle("Causality Broken")
+                            .setMessage(e.getMessage())
+                            .setIcon(android.R.drawable.ic_dialog_alert)
+                            .setNeutralButton(android.R.string.ok, null).show();
+                    //Toast.makeText(EditMeetingActivity.this, e.getMessage(), Toast.LENGTH_LONG);
+                    finished = false;
                 } catch (NumberFormatException e) {
                     Log.e(LOG_TAG, e.getMessage());
                 }
 
-                if (changed) {
+
+                if (finished) {
+
                     Toast.makeText(EditMeetingActivity.this, "Details Updated", Toast.LENGTH_LONG).show();
+                    finish();
                 }
-                finish();
             }
         });
     }
@@ -169,6 +173,7 @@ public class EditMeetingActivity extends AppCompatActivity {
         final TextView endDate = (TextView) findViewById(R.id.tvMeetEndDate);
         final TextView startTime = (TextView) findViewById(R.id.tvMeetStartTime);
         final TextView endTime = (TextView) findViewById(R.id.tvMeetEndTime);
+
 
         final DateFormat sdf = SimpleDateFormat.getDateInstance();
 
