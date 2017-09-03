@@ -8,23 +8,32 @@ package com.example.loso.friendtracker.Service;
 // NOTE: you may need to expliity add the import for the generated some.package.R class
 // which is based on your package declaration in the manifest
 
+import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.res.Resources;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.util.Log;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Scanner;
+
 import com.example.loso.friendtracker.Model.FriendLocation;
+import com.example.loso.friendtracker.R;
 
 //import mad.friend.simple.R;
 
 public class DummyLocationService {
     // PRIVATE PORTION
     private static final String LOG_TAG = DummyLocationService.class.getName();
-    private LinkedList<FriendLocation> locationList = new LinkedList<FriendLocation>();
+    private HashMap<String, FriendLocation> locationList = new HashMap<String, FriendLocation>();
     private static Context context;
 
     // Singleton
@@ -52,30 +61,31 @@ public class DummyLocationService {
     }
 
     // called internally before usage
+    @TargetApi(Build.VERSION_CODES.KITKAT)
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     private void parseFile(Context context) {
-//      locationList.clear();
-//      // resource reference to dummy_data.txt in res/raw/ folder of your project
-//      try (Scanner scanner = new Scanner(context.getResources().openRawResource(R.raw.dummy_data)))
-//      {
-//         // match comma and 0 or more whitepace (to catch newlines)
-//         scanner.useDelimiter(",\\s*");
-//         while (scanner.hasNext())
-//         {
-//            FriendLocation friend = new FriendLocation();
-//            friend.time = DateFormat.getTimeInstance(DateFormat.MEDIUM).parse(scanner.next());
-//            friend.id = scanner.next();
-//            friend.name = scanner.next();
-//            friend.latitude = Double.parseDouble(scanner.next());
-//            friend.longitude = Double.parseDouble(scanner.next());
-//            locationList.addLast(friend);
-//         }
-//      } catch (Resources.NotFoundException e)
-//      {
-//         Log.i(LOG_TAG, "File Not Found Exception Caught");
-//      } catch (ParseException e)
-//      {
-//         Log.i(LOG_TAG, "ParseException Caught (Incorrect File Format)");
-//      }
+        //locationList.clear();
+     // resource reference to dummy_data.txt in res/raw/ folder of your project
+      try (Scanner scanner = new Scanner(context.getResources().openRawResource(R.raw.dummy_data)))
+     {
+         // match comma and 0 or more whitepace (to catch newlines)
+         scanner.useDelimiter(",\\s*");
+         while (scanner.hasNext())
+         {
+             FriendLocation friend = new FriendLocation();
+             friend.setTime(DateFormat.getTimeInstance(DateFormat.MEDIUM).parse(scanner.next()));
+             String name = scanner.next();
+             friend.setLatitude(Double.parseDouble(scanner.next()));
+             friend.setLongitude(Double.parseDouble(scanner.next()));
+             locationList.put(name, friend);
+         }
+      } catch (Resources.NotFoundException e)
+      {
+         Log.i(LOG_TAG, "File Not Found Exception Caught");
+     } catch (ParseException e)
+     {
+        Log.i(LOG_TAG, "ParseException Caught (Incorrect File Format)");
+      }
     }
 
     // singleton support
@@ -92,28 +102,30 @@ public class DummyLocationService {
         return LazyHolder.INSTANCE;
     }
 
-    // log contents of file (for testing/logging only)
+    //log contents of file (for testing/logging only)
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void logAll() {
-        log(locationList);
+        // we reparse file contents for latest data on every call
+        parseFile(context);
+        Iterator itr = locationList.entrySet().iterator();
+        while (itr.hasNext()){
+            Map.Entry pair = (Map.Entry) itr.next();
+            Log.i(LOG_TAG, pair.getValue().toString());
+        }
     }
 
     // log contents of provided list (for testing/logging and example purposes only)
-    public void log(List<FriendLocation> locationList) {
-        // we reparse file contents for latest data on every call
-        parseFile(context);
-        for (FriendLocation friend : locationList)
-            Log.i(LOG_TAG, friend.toString());
+    public void log(FriendLocation location) {
+        Log.i(LOG_TAG, location.toString());
     }
 
     // the main method you can call periodcally to get data that matches a given time period
     // time +/- period minutes/seconds to check
-    public List<FriendLocation> getFriendLocationsForTime(Date time, int periodMinutes, int periodSeconds) {
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    public FriendLocation getFriendLocationsForTime(Date time, String name, int periodMinutes, int periodSeconds) {
         // we reparse file contents for latest data on every call
         parseFile(context);
-        List<FriendLocation> returnList = new ArrayList<FriendLocation>();
-        for (FriendLocation friend : locationList)
-            if (timeInRange(friend.getTime(), time, periodMinutes, periodSeconds))
-                returnList.add(friend);
-        return returnList;
+        FriendLocation location = locationList.get(name);
+        return location;
     }
 }

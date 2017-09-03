@@ -16,13 +16,22 @@ public class Friend {
     private String photo;
     private FriendLocation location;
 
+    public Friend(String iD, String name, String email, Date birthday, FriendLocation location) {
+        ID = iD;
+        this.name = name;
+        this.email = email;
+        this.birthday = birthday;
+        this.location = location;
+        this.photo = null;
+    }
+
     public Friend(String iD, String name, String email, Date birthday) {
         ID = iD;
         this.name = name;
         this.email = email;
         this.birthday = birthday;
-        this.photo = null;
         this.location = null;
+        this.photo = null;
     }
 
     public Friend(String iD, String name, String email) {

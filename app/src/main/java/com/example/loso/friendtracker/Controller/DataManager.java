@@ -5,6 +5,8 @@ package com.example.loso.friendtracker.Controller;
  * Repurposed by Lettisia George on 01/09/2017
  */
 import android.content.Context;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.util.Log;
 
 import com.example.loso.friendtracker.Model.Friend;
@@ -23,15 +25,30 @@ import java.util.List;
 public class DataManager {
     private static final String LOG_TAG = DummyLocationService.class.getName();
 
-    public static ArrayList<Friend> createDummyFriendList() {
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    public static ArrayList<Friend> createDummyFriendList(Context context) {
+        //scan location first
+        DummyLocationService dummyLocationService = DummyLocationService.getSingletonInstance(context);
+        dummyLocationService.logAll();
+
+        //create dummy friend list
         ArrayList<Friend> friends = new ArrayList<Friend>();
         for(int i=1 ; i<10 ; i++) {
             String id = Model.createID();
             String name = "Friend" + i;
-            //        String phone = "Phone" + i; // no requirement in assignmetn for phone number
             String email = "Email" + i;
             Date birthday = new GregorianCalendar(1985 + i, (i + 5) % 12, i % 28).getTime();
-            friends.add(new Friend(id, name, email, birthday));
+
+            //get dummy location
+            FriendLocation location = null;
+            try {
+                location = DataManager.getFriendLocationsForTime(context, name, DateFormat.getTimeInstance(
+                        DateFormat.MEDIUM).parse("9:46:30 AM"), 2, 0);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            friends.add(new Friend(id, name, email, birthday, location));
         }
         return friends;
     }
@@ -45,20 +62,16 @@ public class DataManager {
         return meetings;
     }
 
-    public static List<FriendLocation> getFriendLocationsForTime(Context context, Date time, int periodMinutes, int periodSeconds) {
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    public static FriendLocation getFriendLocationsForTime(Context context, String name, Date time, int periodMinutes, int periodSeconds) {
         DummyLocationService dummyLocationService = DummyLocationService.getSingletonInstance(context);
-
-        dummyLocationService.logAll();
-        List<FriendLocation> matched = null;
-        try {
-            // 2 mins either side of 9:46:30 AM
-            matched = dummyLocationService.getFriendLocationsForTime(DateFormat.getTimeInstance(
-                    DateFormat.MEDIUM).parse("9:46:30 AM"), 2, 0);
-        } catch (ParseException e) {
-            e.printStackTrace();
+        FriendLocation matched = null;
+        // 2 mins either side of 9:46:30 AM
+        matched = dummyLocationService.getFriendLocationsForTime(time, name, periodMinutes, periodSeconds);
+        if(matched != null) {
+            Log.i(LOG_TAG, "Matched Query:");
+            dummyLocationService.log(matched);
         }
-        Log.i(LOG_TAG, "Matched Query:");
-        dummyLocationService.log(matched);
 
         return matched;
     }

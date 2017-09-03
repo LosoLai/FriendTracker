@@ -16,6 +16,8 @@ public class FriendLocation {
     private double latitude;
     private double longitude;
 
+    public FriendLocation() {}
+
     public FriendLocation(double lat, double longi) {
         this.time = null;
         latitude = lat;
