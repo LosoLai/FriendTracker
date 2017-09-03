@@ -58,13 +58,6 @@ public class Tab_Friend extends Fragment implements Observer {
         return rootView;
     }
 
-    // I have discovered that onResume() is only called sometimes when the user navigates to and from the friend tab
-    @Override
-    public void onResume() {
-        super.onResume();
-        Log.d(LOG_TAG, "onResume()");
-    }
-
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);

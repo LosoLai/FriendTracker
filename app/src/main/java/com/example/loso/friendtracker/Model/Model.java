@@ -108,6 +108,7 @@ public final class Model extends Observable {
     }
 
     public void addFriend(String name, String email, Date birthday) {
+
         friends.add(new Friend(createID(), name, email, birthday));
         setChanged();
         notifyObservers(FRIENDS_CHANGED);
@@ -152,6 +153,15 @@ public final class Model extends Observable {
             }
         }
         return found;
+    }
+
+    public boolean isFriend(String name, String email) {
+        for (Friend f : friends) {
+            if (f.getName().equals(name) && f.getEmail().equals(email)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public ArrayList<Friend> getFriends() {
