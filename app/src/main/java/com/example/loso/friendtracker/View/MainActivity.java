@@ -79,13 +79,12 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 int selectedTabPosition = tabLayout.getSelectedTabPosition();
                 Log.d(LOG_TAG, "Tab position: " + Integer.toString(selectedTabPosition));
-                switch (selectedTabPosition) {
-                    case 0:
-                        startContactPicker();
-                    case 1:
-                        addMeeting();
-                    case 2:
-                        // map view - do nothing
+                if (selectedTabPosition == 0) {
+                    startContactPicker();
+                } else if (selectedTabPosition == 1) {
+                    addMeeting();
+                } else {
+                    // map view - do nothing
                 }
             }
         });
