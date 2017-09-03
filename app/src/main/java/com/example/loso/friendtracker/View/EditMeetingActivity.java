@@ -22,6 +22,7 @@ import com.example.loso.friendtracker.Controller.MeetingController;
 import com.example.loso.friendtracker.Model.Meeting;
 import com.example.loso.friendtracker.R;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class EditMeetingActivity extends AppCompatActivity {
@@ -76,7 +77,22 @@ public class EditMeetingActivity extends AppCompatActivity {
                 TextView tvTitle = (TextView) findViewById(R.id.editTextTitle);
                 String title = tvTitle.getText().toString();
 
-                meetingController.updateMeetingDetails(meetingID, title);
+                EditText etLat = (EditText) findViewById(R.id.etLatitude);
+                EditText etLong = (EditText) findViewById(R.id.etLongitude);
+                double lati = Double.parseDouble(etLat.getText().toString());
+                double longi = Double.parseDouble(etLong.getText().toString());
+
+                meetingController.updateMeetingDetails(meetingID, title, lati, longi);
+
+                TextView startDate = (TextView) findViewById(R.id.tvMeetStartDate);
+                TextView endDate = (TextView) findViewById(R.id.tvMeetEndDate);
+                TextView startTime = (TextView) findViewById(R.id.tvMeetStartTime);
+                TextView endTime = (TextView) findViewById(R.id.tvMeetEndTime);
+
+                int year, month, day, hour, minute;
+
+                SimpleDateFormat sdf = new SimpleDateFormat("dd/mm/YYYY");
+
                 Toast.makeText(EditMeetingActivity.this, "Details Updated", Toast.LENGTH_LONG).show();
                 finish();
             }
@@ -90,10 +106,13 @@ public class EditMeetingActivity extends AppCompatActivity {
         final TextView startTime = (TextView) findViewById(R.id.tvMeetStartTime);
         final TextView endTime = (TextView) findViewById(R.id.tvMeetEndTime);
 
+        //SimpleDateFormat sdf
+
 
         final DatePickerDialog.OnDateSetListener startDateListener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int day) {
+
                 startDate.setText(day + "/" + Integer.toString(month + 1) + "/" + year);
             }
         };

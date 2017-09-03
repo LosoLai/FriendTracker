@@ -5,6 +5,8 @@ import com.example.loso.friendtracker.Model.FriendLocation;
 import com.example.loso.friendtracker.Model.Meeting;
 import com.example.loso.friendtracker.Model.Model;
 
+import java.util.GregorianCalendar;
+
 
 /**
  * Created by Lettisia George on 31/08/2017.
@@ -31,29 +33,28 @@ public class MeetingController {
         }
     }
 
-    public void updateMeetingDetails(String meetingID, String title) {
+    public void updateMeetingDetails(String meetingID, String title, double lati, double longi) {
         Meeting meeting = mModel.findMeetingByID(meetingID);
         if (meeting != null) {
-            //meeting.setLocation(location);
+            meeting.setLocation(lati, longi);
             meeting.setTitle(title);
         }
     }
 
-    public void setMeetingDate(String meetingID, int year, int month, int day) {
+    public void setMeetingStart(String meetingID, int year, int month, int day, int hour, int minute) {
         Meeting meeting = mModel.findMeetingByID(meetingID);
         if (meeting != null) {
-            String date = day + "/" + month + "/" + year;
-            meeting.setDate(date);
+            meeting.setStartDate(new GregorianCalendar(year, month, day, hour, minute).getTime());
         }
     }
 
-    public void setMeetingTime(String meetingID, int hourOfDay, int minute) {
+    public void setMeetingEnd(String meetingID, int year, int month, int day, int hour, int minute) {
         Meeting meeting = mModel.findMeetingByID(meetingID);
         if (meeting != null) {
-            String time = hourOfDay + ":" + minute;
-            meeting.setTime(time);
+            meeting.setEndDate(new GregorianCalendar(year, month, day, hour, minute).getTime());
         }
     }
+
 
     public void removeMeeting(Meeting meeting) {
         mModel.removeMeeting(meeting);

@@ -1,7 +1,5 @@
 package com.example.loso.friendtracker.Model;
 
-//import java.time.LocalDateTime;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -15,11 +13,9 @@ import java.util.List;
 public class Meeting {
 	private String ID;
 	private String title;
-	//private Date startDate;
-	//private Date startTime;
-	private String startDate;
-	private String startTime;
-	private List<Friend> friends;
+    private Date startDate;
+    private Date endDate;
+    private List<Friend> friends;
 	private FriendLocation location;
 
 	public Meeting() {
@@ -37,15 +33,25 @@ public class Meeting {
         this.title = title;
     }
 
-	public Meeting(String iD, String title, String date, String time, List<Friend> friends,
-				   FriendLocation location) {
+    public Meeting(String iD, String title, List<Friend> friends,
+                   FriendLocation location) {
 		ID = iD;
 		this.title = title;
-		this.startDate = date;
-		this.startTime = time;
-		this.friends = friends;
+        this.startDate = null;
+        this.endDate = null;
+        this.friends = friends;
 		this.location = location;
 	}
+
+    public Meeting(String iD, String title, Date start, Date end, List<Friend> friends,
+                   FriendLocation location) {
+        ID = iD;
+        this.title = title;
+        this.startDate = start;
+        this.endDate = end;
+        this.friends = friends;
+        this.location = location;
+    }
 
 	public String getID() {
 		return ID;
@@ -63,21 +69,21 @@ public class Meeting {
 		this.title = title;
 	}
 
-	public String getStartDate() {
-		return startDate;
+    public Date getStartDate() {
+        return startDate;
 	}
 
-	public void setDate(String start) {
-		this.startDate = start;
+    public void setStartDate(Date start) {
+        this.startDate = start;
 	}
 
-	public String getTime() {
-		return startTime;
-	}
+    public Date getTime() {
+        return endDate;
+    }
 
-	public void setTime(String time) {
-		this.startTime = time;
-	}
+    public void setEndDate(Date end) {
+        this.endDate = end;
+    }
 
 	public List<Friend> getFriends() {
 		return friends;
@@ -94,4 +100,8 @@ public class Meeting {
 	public void setLocation(FriendLocation location) {
 		this.location = location;
 	}
+
+    public void setLocation(double lati, double longi) {
+        location = new FriendLocation(lati, longi);
+    }
 }
