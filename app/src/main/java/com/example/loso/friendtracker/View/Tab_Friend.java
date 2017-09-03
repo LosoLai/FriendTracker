@@ -59,10 +59,6 @@ public class Tab_Friend extends Fragment implements Observer {
         Button addFriend = (Button) rootView.findViewById(R.id.bAddFriend);
         addFriend.setOnClickListener(listener);
 
-        //Add dummy data to Model
-        Model mModel = Model.getInstance();
-        mModel.setFriends(DataManager.createDummyFriendList(rootView.getContext()));
-
         return rootView;
     }
 
