@@ -123,7 +123,7 @@ public class MainActivity extends AppCompatActivity {
                 boolean ok = fc.addFriendFromContacts(this, data);
                 if (!ok) {
                     Log.d(LOG_TAG, "not ok activity result");
-                    Toast.makeText(this, "Friend with that name and email already exists", Toast.LENGTH_LONG);
+                    Toast.makeText(MainActivity.this, "Friend with that name and email already exists", Toast.LENGTH_LONG);
                     new AlertDialog.Builder(this)
                             .setTitle("Friend Exists")
                             .setMessage("Friend with that name and email already exists")

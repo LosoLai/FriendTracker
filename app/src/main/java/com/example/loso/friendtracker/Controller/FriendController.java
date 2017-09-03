@@ -80,4 +80,8 @@ public class FriendController {
     public void removeFriend(String friendID) {
         mModel.removeFriend(friendID);
     }
+
+    public void removeFriend(Friend friend) {
+        mModel.removeFriend(friend);
+    }
 }

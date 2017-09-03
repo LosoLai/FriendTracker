@@ -55,6 +55,12 @@ public class MeetingController {
         }
     }
 
+    public void removeMeeting(Meeting meeting) {
+        mModel.removeMeeting(meeting);
+    }
+
+
+
     /*public void addFriendFromContacts(MainActivity mainActivity, Intent data) {
         ContactDataManager contactsManager = new ContactDataManager(mainActivity, data);
         String name = "";

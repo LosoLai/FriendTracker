@@ -3,6 +3,7 @@ package com.example.loso.friendtracker.View;
 /**
  * Created by Loso on 2017/8/19.
  * Modified to use Model class by Lettisia George 2017/9/1
+ *
  */
 
 import android.content.DialogInterface;
@@ -35,8 +36,6 @@ public class Tab_Friend extends Fragment implements Observer {
     private static final String LOG_TAG = "friendtab";
     private View rootView;
     private FriendListAdapter adapter;
-    private static boolean firstRun = true;
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -97,7 +96,7 @@ public class Tab_Friend extends Fragment implements Observer {
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
                                 FriendController fc = new FriendController();
-                                fc.removeFriend(friend.getID());
+                                fc.removeFriend(friend);
                                 Toast.makeText(getActivity(), "Friend removed", Toast.LENGTH_SHORT).show();
                             }
                         })
