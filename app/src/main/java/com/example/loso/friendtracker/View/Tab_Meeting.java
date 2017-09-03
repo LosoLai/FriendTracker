@@ -17,8 +17,6 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.example.loso.friendtracker.Controller.DataManager;
-import com.example.loso.friendtracker.Controller.FriendController;
 import com.example.loso.friendtracker.Controller.MeetingController;
 import com.example.loso.friendtracker.R;
 

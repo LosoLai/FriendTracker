@@ -1,6 +1,7 @@
 package com.example.loso.friendtracker.Controller;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.example.loso.friendtracker.Model.Friend;
+import com.example.loso.friendtracker.Model.FriendLocation;
 import com.example.loso.friendtracker.R;
 
 import java.util.ArrayList;
@@ -24,6 +26,9 @@ public class FriendListAdapter extends ArrayAdapter<Friend> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        FriendController fc = new FriendController();
+        fc.updateFriendLocations(this.getContext());
+
         // Get the data item
         Friend friend = getItem(position);
         // Check if an existing view is being reused, otherwise inflate the view
@@ -36,10 +41,15 @@ public class FriendListAdapter extends ArrayAdapter<Friend> {
         TextView tvName = (TextView) view.findViewById(R.id.tvName);
         tvName.setText(friend.getName());
 
-        if(friend.getLocation() != null)
+        //FriendLocation fl = friend.getLocation();
+        FriendLocation fl = FriendController.getFriendLocationsForTime(this.getContext(), friend.getName());
+
+        if (fl != null)
         {
+            Log.d("FriendListAdapter", fl.toString());
             TextView tvLocation = (TextView) view.findViewById(R.id.tvLocation);
-            tvLocation.setText(friend.getLocation().toString());
+
+            tvLocation.setText("(" + fl.getLatitude() + ", " + fl.getLongitude() + ")");
         }
 
         return view;

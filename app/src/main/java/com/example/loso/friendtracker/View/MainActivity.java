@@ -1,7 +1,6 @@
 package com.example.loso.friendtracker.View;
 
 import android.Manifest;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -26,7 +25,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import com.example.loso.friendtracker.Controller.DataManager;
+import com.example.loso.friendtracker.Service.DataManager;
 import com.example.loso.friendtracker.Controller.FriendController;
 import com.example.loso.friendtracker.Controller.MeetingController;
 import com.example.loso.friendtracker.Model.Meeting;

@@ -1,15 +1,20 @@
 package com.example.loso.friendtracker.Controller;
 
+import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
 import com.example.loso.friendtracker.Model.Friend;
+import com.example.loso.friendtracker.Model.FriendLocation;
 import com.example.loso.friendtracker.Model.Model;
 import com.example.loso.friendtracker.Service.ContactDataManager;
+import com.example.loso.friendtracker.Service.DataManager;
 import com.example.loso.friendtracker.View.MainActivity;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
@@ -25,6 +30,30 @@ public class FriendController {
         if (mModel == null) {
             mModel = Model.getInstance();
         }
+    }
+
+    public void updateFriendLocations(Context context) {
+        DataManager dm = new DataManager();
+        ArrayList<Friend> friends = mModel.getFriends();
+        if (friends != null) {
+            for (Friend f : friends) {
+                FriendLocation fl = DataManager.getFriendLocation(context, f.getName(), Calendar.getInstance().getTime());
+                if (fl != null) {
+                    f.setLocation(fl);
+                    Log.d(LOG_TAG, "Time: " + Calendar.getInstance().getTime() + " location: " + fl.toString());
+                }
+            }
+        }
+    }
+
+    public static FriendLocation getFriendLocationsForTime(Context context, String name) {
+        FriendLocation fl = DataManager.getFriendLocation(context, name, Calendar.getInstance().getTime());
+        if (fl == null) {
+            Log.d(LOG_TAG, "null");
+        } else {
+            Log.d(LOG_TAG, "Time: " + Calendar.getInstance().getTime() + " location: " + fl.toString());
+        }
+        return fl;
     }
 
     public String getFriendName(String friendID) {
@@ -84,4 +113,6 @@ public class FriendController {
     public void removeFriend(Friend friend) {
         mModel.removeFriend(friend);
     }
+
+
 }
