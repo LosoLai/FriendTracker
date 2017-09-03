@@ -4,7 +4,9 @@ import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.provider.ContactsContract;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
@@ -50,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
     private ViewPager mViewPager;
 
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
 
         //Add dummy data to Model
         Model mModel = Model.getInstance();
-        mModel.setFriends(DataManager.createDummyFriendList());
+        mModel.setFriends(DataManager.createDummyFriendList(getApplicationContext()));
         mModel.setMeetings(DataManager.createDummMeetingList());
     }
 

@@ -25,19 +25,6 @@ import java.util.List;
 public class DataManager {
     private static final String LOG_TAG = DummyLocationService.class.getName();
 
-    public static ArrayList<Friend> createDummyFriendList() {
-        //create dummy friend list
-        ArrayList<Friend> friends = new ArrayList<Friend>();
-        for(int i=1 ; i<10 ; i++) {
-            String id = Model.createID();
-            String name = "Friend" + i;
-            String email = "Email" + i;
-            Date birthday = new GregorianCalendar(1985 + i, (i + 5) % 12, i % 28).getTime();
-            friends.add(new Friend(id, name, email, birthday));
-        }
-        return friends;
-    }
-
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public static ArrayList<Friend> createDummyFriendList(Context context) {
         //scan location first
