@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -19,15 +20,19 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.example.loso.friendtracker.Controller.MeetingController;
+import com.example.loso.friendtracker.Model.FriendLocation;
 import com.example.loso.friendtracker.Model.Meeting;
 import com.example.loso.friendtracker.R;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+
 
 public class EditMeetingActivity extends AppCompatActivity {
     private String meetingID = "";
     private MeetingController meetingController;
+    private static final String LOG_TAG = "EditMeetingActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +54,28 @@ public class EditMeetingActivity extends AppCompatActivity {
 
         final Meeting meeting = meetingController.getMeeting(meetingID);
         editTitle.setText(meeting.getTitle());
+
+        EditText etLat = (EditText) findViewById(R.id.etLatitude);
+        EditText etLong = (EditText) findViewById(R.id.etLongitude);
+
+        FriendLocation location = meetingController.getMeetingLocation(meetingID);
+        if (location != null) {
+            etLat.setText(Double.toString(location.getLatitude()));
+            etLong.setText(Double.toString(location.getLongitude()));
+        }
+
+        TextView startDate = (TextView) findViewById(R.id.tvMeetStartDate);
+        TextView endDate = (TextView) findViewById(R.id.tvMeetEndDate);
+        TextView startTime = (TextView) findViewById(R.id.tvMeetStartTime);
+        TextView endTime = (TextView) findViewById(R.id.tvMeetEndTime);
+
+        String[] dates = meetingController.getStartEndStrings(meetingID);
+
+        startDate.setText(dates[0]);
+        startTime.setText(dates[1]);
+        endDate.setText(dates[2]);
+        endTime.setText(dates[3]);
+
 
         ImageButton removeButton = (ImageButton) findViewById(R.id.btnRemoveMeeting);
         removeButton.setOnClickListener(new View.OnClickListener() {
@@ -74,26 +101,63 @@ public class EditMeetingActivity extends AppCompatActivity {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                boolean changed = false;
+
                 TextView tvTitle = (TextView) findViewById(R.id.editTextTitle);
                 String title = tvTitle.getText().toString();
 
-                EditText etLat = (EditText) findViewById(R.id.etLatitude);
-                EditText etLong = (EditText) findViewById(R.id.etLongitude);
-                double lati = Double.parseDouble(etLat.getText().toString());
-                double longi = Double.parseDouble(etLong.getText().toString());
+                try {
+                    EditText etLat = (EditText) findViewById(R.id.etLatitude);
+                    EditText etLong = (EditText) findViewById(R.id.etLongitude);
 
-                meetingController.updateMeetingDetails(meetingID, title, lati, longi);
+                    double lati = Double.parseDouble(etLat.getText().toString());
+                    double longi = Double.parseDouble(etLong.getText().toString());
+                    meetingController.updateMeetingDetails(meetingID, title, lati, longi);
+                    changed = true;
+                } catch (NumberFormatException e) {
+                    Log.e(LOG_TAG, e.getMessage());
+                }
 
-                TextView startDate = (TextView) findViewById(R.id.tvMeetStartDate);
-                TextView endDate = (TextView) findViewById(R.id.tvMeetEndDate);
-                TextView startTime = (TextView) findViewById(R.id.tvMeetStartTime);
-                TextView endTime = (TextView) findViewById(R.id.tvMeetEndTime);
+                try {
+                    TextView startDate = (TextView) findViewById(R.id.tvMeetStartDate);
+                    TextView startTime = (TextView) findViewById(R.id.tvMeetStartTime);
 
-                int year, month, day, hour, minute;
+                    String[] timeStartTokens = startTime.getText().toString().split(":");
+                    String[] dateStartTokens = startDate.getText().toString().split("/");
 
-                SimpleDateFormat sdf = new SimpleDateFormat("dd/mm/YYYY");
+                    int year = Integer.parseInt(dateStartTokens[0]);
+                    int month = Integer.parseInt(dateStartTokens[1]);
+                    int day = Integer.parseInt(dateStartTokens[2]);
+                    int hour = Integer.parseInt(timeStartTokens[0]);
+                    int minute = Integer.parseInt(timeStartTokens[1]);
 
-                Toast.makeText(EditMeetingActivity.this, "Details Updated", Toast.LENGTH_LONG).show();
+                    meetingController.setMeetingStart(meetingID, year, month, day, hour, minute);
+                    changed = true;
+                } catch (NumberFormatException e) {
+                    Log.e(LOG_TAG, e.getMessage());
+                }
+
+                try {
+                    TextView endDate = (TextView) findViewById(R.id.tvMeetEndDate);
+                    TextView endTime = (TextView) findViewById(R.id.tvMeetEndTime);
+                    String[] timeEndTokens = endTime.getText().toString().split(":");
+                    String[] dateEndTokens = endDate.getText().toString().split("/");
+
+                    int year = Integer.parseInt(dateEndTokens[0]);
+                    int month = Integer.parseInt(dateEndTokens[1]);
+                    int day = Integer.parseInt(dateEndTokens[2]);
+                    int hour = Integer.parseInt(timeEndTokens[0]);
+                    int minute = Integer.parseInt(timeEndTokens[1]);
+
+                    meetingController.setMeetingEnd(meetingID, year, month, day, hour, minute);
+                    changed = true;
+                } catch (NumberFormatException e) {
+                    Log.e(LOG_TAG, e.getMessage());
+                }
+
+                if (changed) {
+                    Toast.makeText(EditMeetingActivity.this, "Details Updated", Toast.LENGTH_LONG).show();
+                }
                 finish();
             }
         });
@@ -106,14 +170,13 @@ public class EditMeetingActivity extends AppCompatActivity {
         final TextView startTime = (TextView) findViewById(R.id.tvMeetStartTime);
         final TextView endTime = (TextView) findViewById(R.id.tvMeetEndTime);
 
-        //SimpleDateFormat sdf
+        final DateFormat sdf = SimpleDateFormat.getDateInstance();
 
 
         final DatePickerDialog.OnDateSetListener startDateListener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int day) {
-
-                startDate.setText(day + "/" + Integer.toString(month + 1) + "/" + year);
+                startDate.setText(year + "/" + Integer.toString(month + 1) + "/" + day);
             }
         };
 
@@ -127,7 +190,7 @@ public class EditMeetingActivity extends AppCompatActivity {
         final DatePickerDialog.OnDateSetListener endDateListner = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int day) {
-                endDate.setText(day + "/" + Integer.toString(month + 1) + "/" + year);
+                endDate.setText(year + "/" + Integer.toString(month + 1) + "/" + day);
             }
         };
 

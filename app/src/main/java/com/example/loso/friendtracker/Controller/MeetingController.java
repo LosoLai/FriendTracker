@@ -1,10 +1,14 @@
 package com.example.loso.friendtracker.Controller;
 
 
+import android.icu.util.Calendar;
+
 import com.example.loso.friendtracker.Model.FriendLocation;
 import com.example.loso.friendtracker.Model.Meeting;
 import com.example.loso.friendtracker.Model.Model;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.GregorianCalendar;
 
 
@@ -58,5 +62,44 @@ public class MeetingController {
 
     public void removeMeeting(Meeting meeting) {
         mModel.removeMeeting(meeting);
+    }
+
+    public FriendLocation getMeetingLocation(String meetingID) {
+        FriendLocation loc = null;
+        Meeting meeting = mModel.findMeetingByID(meetingID);
+        if (meeting != null) {
+            loc = meeting.getLocation();
+        }
+        return loc;
+    }
+
+    public String[] getStartEndStrings(String meetingID) {
+        String[] dates = new String[4];
+        Meeting meeting = mModel.findMeetingByID(meetingID);
+        if (meeting != null) {
+            Date startDate = meeting.getStartDate();
+            Date endDate = meeting.getEndDate();
+
+            SimpleDateFormat sdf = new SimpleDateFormat("Y/M/d h:m");
+
+            if (startDate != null) {
+                String[] startdatetime = sdf.format(startDate).split(" ");
+                dates[0] = startdatetime[0];
+                dates[1] = startdatetime[1];
+            } else {
+                dates[0] = " ";
+                dates[1] = " ";
+            }
+
+            if (endDate != null) {
+                String[] enddatetime = sdf.format(endDate).split(" ");
+                dates[2] = enddatetime[0];
+                dates[3] = enddatetime[1];
+            } else {
+                dates[2] = " ";
+                dates[3] = " ";
+            }
+        }
+        return dates;
     }
 }

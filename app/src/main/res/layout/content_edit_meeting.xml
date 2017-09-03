@@ -58,10 +58,10 @@
                 android:id="@+id/etLatitude"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:ems="10"
                 android:hint="Latitude"
-                android:layout_weight="1"
-                android:inputType="numberDecimal" />
+                android:inputType="numberSigned|numberDecimal" />
 
             <EditText
                 android:id="@+id/etLongitude"
@@ -70,7 +70,7 @@
                 android:layout_weight="1"
                 android:ems="10"
                 android:hint="Longitude"
-                android:inputType="numberDecimal" />
+                android:inputType="numberSigned|numberDecimal" />
         </LinearLayout>
 
         <TextView

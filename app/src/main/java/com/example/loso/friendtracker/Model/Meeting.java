@@ -77,8 +77,8 @@ public class Meeting {
         this.startDate = start;
 	}
 
-    public Date getTime() {
-        return endDate;
+	public Date getEndDate() {
+		return endDate;
     }
 
     public void setEndDate(Date end) {
