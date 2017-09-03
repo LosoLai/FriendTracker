@@ -85,12 +85,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //Commend by Loso ---- move to each tab view for creating dummy data
         //Add dummy data to Model
-        //Model mModel = Model.getInstance();
-        //mModel.setFriends(DataManager.createDummyFriendList());
-        //mModel.setMeetings(DataManager.createDummMeetingList());
-        //-----------------------------------------------------------------------------------
+        Model mModel = Model.getInstance();
+        mModel.setFriends(DataManager.createDummyFriendList());
+        mModel.setMeetings(DataManager.createDummMeetingList());
     }
 
     private void startContactPicker() {
