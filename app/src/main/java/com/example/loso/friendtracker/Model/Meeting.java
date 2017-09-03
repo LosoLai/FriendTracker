@@ -104,4 +104,10 @@ public class Meeting {
     public void setLocation(double lati, double longi) {
         location = new FriendLocation(lati, longi);
     }
+
+    public boolean removeAttend(Friend friend) {
+		if(this.friends != null)
+			return this.friends.remove(friend);
+		return false;
+	}
 }

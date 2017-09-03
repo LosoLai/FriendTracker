@@ -101,6 +101,20 @@ public final class Model extends Observable {
         return false;
     }
 
+    public boolean removeAttend(String meetingID, Friend attend) {
+        for (Meeting m : meetings) {
+            if (m.getID().equals(meetingID)) {
+                boolean done = m.removeAttend(attend);
+                if (done) {
+                    setChanged();
+                    notifyObservers(MEETINGS_CHANGED);
+                }
+                return done;
+            }
+        }
+        return false;
+    }
+
     public void addFriend(String name, String email) {
         friends.add(new Friend(createID(), name, email));
         setChanged();
