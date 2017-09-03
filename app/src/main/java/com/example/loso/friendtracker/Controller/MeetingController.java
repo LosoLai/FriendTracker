@@ -129,6 +129,14 @@ public class MeetingController {
         return dates;
     }
 
+    public Meeting createNewMeeting() {
+        Meeting meet = new Meeting(Model.createID());
+        mModel.addMeeting(meet);
+        return meet;
+    }
+
+
+
     public class InvalidDateException extends Throwable {
         public InvalidDateException(String s) {
             super(s);

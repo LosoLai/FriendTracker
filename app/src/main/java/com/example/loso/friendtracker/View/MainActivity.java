@@ -28,6 +28,8 @@ import android.widget.Toast;
 
 import com.example.loso.friendtracker.Controller.DataManager;
 import com.example.loso.friendtracker.Controller.FriendController;
+import com.example.loso.friendtracker.Controller.MeetingController;
+import com.example.loso.friendtracker.Model.Meeting;
 import com.example.loso.friendtracker.Model.Model;
 import com.example.loso.friendtracker.R;
 
@@ -81,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
                     case 0:
                         startContactPicker();
                     case 1:
-                        // add meeting
+                        addMeeting();
                     case 2:
                         // map view - do nothing
                 }
@@ -93,6 +95,14 @@ public class MainActivity extends AppCompatActivity {
         mModel.setFriends(DataManager.createDummyFriendList(getApplicationContext()));
         mModel.setMeetings(DataManager.createDummMeetingList());
     }
+
+    public void addMeeting() {
+        MeetingController mc = new MeetingController();
+        Meeting meet = mc.createNewMeeting();
+        startActivity(new Intent(this, EditMeetingActivity.class).putExtra("meeting", meet.getID()));
+    }
+
+
 
     private void startContactPicker() {
         int permissionCheck = ContextCompat.checkSelfPermission(this,

@@ -157,9 +157,7 @@ public class EditMeetingActivity extends AppCompatActivity {
                     Log.e(LOG_TAG, e.getMessage());
                 }
 
-
                 if (finished) {
-
                     Toast.makeText(EditMeetingActivity.this, "Details Updated", Toast.LENGTH_LONG).show();
                     finish();
                 }
