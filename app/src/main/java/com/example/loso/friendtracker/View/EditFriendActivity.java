@@ -98,7 +98,7 @@ public class EditFriendActivity extends AppCompatActivity {
             }
         };
 
-        ImageButton dateButton = (ImageButton) findViewById(R.id.btnStartDatePicker);
+        ImageButton dateButton = (ImageButton) findViewById(R.id.btnEndDatePicker);
 
         dateButton.setOnClickListener(
                 new View.OnClickListener() {
