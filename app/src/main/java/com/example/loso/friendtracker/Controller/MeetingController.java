@@ -1,7 +1,7 @@
 package com.example.loso.friendtracker.Controller;
 
 
-import android.icu.util.Calendar;
+import android.util.Log;
 
 import com.example.loso.friendtracker.Model.FriendLocation;
 import com.example.loso.friendtracker.Model.Meeting;
@@ -11,6 +11,8 @@ import com.example.loso.friendtracker.Model.Model;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Calendar;
+
 
 
 /**
@@ -46,17 +48,38 @@ public class MeetingController {
         }
     }
 
-    public void setMeetingStart(String meetingID, int year, int month, int day, int hour, int minute) {
+    public void setMeetingStart(String meetingID, int year, int month, int day, int hour, int minute) throws InvalidDateException {
         Meeting meeting = mModel.findMeetingByID(meetingID);
         if (meeting != null) {
-            meeting.setStartDate(new GregorianCalendar(year, month, day, hour, minute).getTime());
+            Calendar cal = Calendar.getInstance();
+            cal.set(year, month, day, hour, minute);
+            Date newStart = cal.getTime();
+            Log.d(LOG_TAG, "newStart: " + newStart);
+            Date now = Calendar.getInstance().getTime();
+            Log.d(LOG_TAG, "now: " + now);
+            if (newStart.before(now)) {
+                throw new InvalidDateException("Start is before current time");
+            } else {
+                meeting.setStartDate(newStart);
+            }
         }
     }
 
-    public void setMeetingEnd(String meetingID, int year, int month, int day, int hour, int minute) {
+    public void setMeetingEnd(String meetingID, int year, int month, int day, int hour, int minute) throws InvalidDateException {
         Meeting meeting = mModel.findMeetingByID(meetingID);
         if (meeting != null) {
-            meeting.setEndDate(new GregorianCalendar(year, month, day, hour, minute).getTime());
+            Calendar cal = Calendar.getInstance();
+            cal.set(year, month, day, hour, minute);
+            Date newEnd = cal.getTime();
+            Date now = Calendar.getInstance().getTime();
+            Date startDate = meeting.getStartDate();
+            if (newEnd.before(now)) {
+                throw new InvalidDateException("End is before current time");
+            } else if (newEnd.before(startDate)) {
+                throw new InvalidDateException("End is before Start");
+            } else {
+                meeting.setEndDate(newEnd);
+            }
         }
     }
 
@@ -83,7 +106,7 @@ public class MeetingController {
             Date startDate = meeting.getStartDate();
             Date endDate = meeting.getEndDate();
 
-            SimpleDateFormat sdf = new SimpleDateFormat("Y/M/d h:m");
+            SimpleDateFormat sdf = new SimpleDateFormat("Y/M/d H:mm");
 
             if (startDate != null) {
                 String[] startdatetime = sdf.format(startDate).split(" ");
@@ -104,5 +127,11 @@ public class MeetingController {
             }
         }
         return dates;
+    }
+
+    public class InvalidDateException extends Throwable {
+        public InvalidDateException(String s) {
+            super(s);
+        }
     }
 }
