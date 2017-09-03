@@ -21,6 +21,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 
+import com.example.loso.friendtracker.Controller.DataManager;
 import com.example.loso.friendtracker.Controller.FriendController;
 import com.example.loso.friendtracker.Model.Friend;
 import com.example.loso.friendtracker.Controller.FriendListAdapter;
@@ -54,6 +55,11 @@ public class Tab_Friend extends Fragment implements Observer {
 
         Button addFriend = (Button) rootView.findViewById(R.id.bAddFriend);
         addFriend.setOnClickListener(listener);
+
+        //Add dummy data to Model
+        Model mModel = Model.getInstance();
+        mModel.setFriends(DataManager.createDummyFriendList());
+
         return rootView;
     }
 
@@ -68,7 +74,6 @@ public class Tab_Friend extends Fragment implements Observer {
         ArrayList<Friend> friends = mModel.getFriends();
         adapter = new FriendListAdapter(rootView.getContext(), friends);
         ListView lvFriend = (ListView) rootView.findViewById(R.id.friendlist);
-
         lvFriend.setAdapter(adapter);
 
         lvFriend.setClickable(true);

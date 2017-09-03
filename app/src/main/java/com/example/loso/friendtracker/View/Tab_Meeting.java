@@ -17,6 +17,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.example.loso.friendtracker.Controller.DataManager;
 import com.example.loso.friendtracker.Controller.FriendController;
 import com.example.loso.friendtracker.Controller.MeetingController;
 import com.example.loso.friendtracker.R;
@@ -38,6 +39,11 @@ public class Tab_Meeting extends Fragment implements Observer {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.tab_meeting, container, false);
+
+        //Add dummy data to Model
+        Model mModel = Model.getInstance();
+        mModel.setMeetings(DataManager.createDummMeetingList());
+
         return rootView;
     }
 
