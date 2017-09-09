@@ -3,6 +3,7 @@ package com.example.loso.friendtracker.View;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -176,6 +177,12 @@ public class EditMeetingActivity extends AppCompatActivity {
     public void setupAttendSection(Meeting meeting) {
         final Meeting currentM = meeting;
         Button addAttend = (Button) findViewById(R.id.bAddAttend);
+        addAttend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), DisplayAttendList.class).putExtra("meeting", currentM.getID()));
+            }
+        });
 
         ArrayList<Friend> friends = (ArrayList<Friend>) meeting.getFriends();
         adapter = new FriendListAdapter(getApplicationContext(), friends);

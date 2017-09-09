@@ -4,4 +4,5 @@
     <string name="section_format">Hello World from section: %1$d</string>
     <string name="title_activity_edit_friend">EditFriendActivity</string>
     <string name="title_activity_edit_meeting">EditMeetingActivity</string>
+    <string name="title_activity_display_attends">DisplayAttendsListActivity</string>
 </resources>

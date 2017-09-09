@@ -106,6 +106,7 @@ public class FriendController {
         return " ";
     }
 
+    public ArrayList<Friend> getFriendsList() { return mModel.getFriends(); }
     public void removeFriend(String friendID) {
         mModel.removeFriend(friendID);
     }
