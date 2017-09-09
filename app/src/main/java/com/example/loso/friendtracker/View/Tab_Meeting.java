@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.loso.friendtracker.Controller.MeetingController;
@@ -23,7 +24,9 @@ import com.example.loso.friendtracker.R;
 import com.example.loso.friendtracker.Controller.MeetingListAdapter;
 import com.example.loso.friendtracker.Model.Model;
 import com.example.loso.friendtracker.Model.Meeting;
+import com.example.loso.friendtracker.Model.MeetingComparator;
 
+import java.util.Collections;
 import java.util.Observer;
 import java.util.Observable;
 import java.util.ArrayList;
@@ -47,7 +50,7 @@ public class Tab_Meeting extends Fragment implements Observer {
         // ListView
         Model mModel = Model.getInstance();
         mModel.addObserver(this);
-        ArrayList<Meeting> meetings = mModel.getMeetings();
+        final ArrayList<Meeting> meetings = mModel.getMeetings();
         adapter = new MeetingListAdapter(rootView.getContext(), meetings);
         ListView lvMeeting = (ListView) rootView.findViewById(R.id.meetinglist);
         lvMeeting.setAdapter(adapter);
@@ -84,6 +87,29 @@ public class Tab_Meeting extends Fragment implements Observer {
                 return true;
             }
         });
+
+        // add by Loso 09.09.17
+        // sort buttons
+        Button acsBtn = (Button) rootView.findViewById(R.id.btnAcs);
+        acsBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MeetingComparator comp = new MeetingComparator(MeetingComparator.ORDER_ACS);
+                Collections.sort(meetings, comp);
+                adapter.notifyDataSetChanged();
+            }
+        });
+
+        Button decsBtn = (Button) rootView.findViewById(R.id.btnDecs);
+        decsBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MeetingComparator comp = new MeetingComparator(MeetingComparator.ORDER_DECS);
+                Collections.sort(meetings, comp);
+                adapter.notifyDataSetChanged();
+            }
+        });
+        //---------------------------
     }
 
     @Override

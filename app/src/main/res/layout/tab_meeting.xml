@@ -9,6 +9,26 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.loso.friendtracker.View.MainActivity$PlaceholderFragment">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="1">
+        <Button
+            android:id="@+id/btnAcs"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Acsending"
+            android:layout_weight="0.5" />
+
+        <Button
+            android:id="@+id/btnDecs"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Desending"
+            android:layout_weight="0.5" />
+    </LinearLayout>
+
     <ListView
         android:id="@+id/meetinglist"
         android:layout_width="match_parent"

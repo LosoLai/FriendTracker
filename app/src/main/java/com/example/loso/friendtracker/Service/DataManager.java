@@ -56,9 +56,15 @@ public class DataManager {
         ;
         for (int i = 0; i < 3; i++) {
             String title = "Meeting" + Integer.toString(i);
+            int[] dates = {6,4,7};
             List<Friend> friends = new ArrayList<Friend>();
             friends.add(new Friend(Model.createID(), Integer.toString(i), Integer.toString(i), null, null));
-            meetings.add(new Meeting(Model.createID(), "Meeting" + Integer.toString(i), friends, null));
+            Meeting item = new Meeting(Model.createID(), "Meeting" + Integer.toString(i), friends, null);
+            Calendar cal = Calendar.getInstance();
+            cal.set(2017, 9, dates[i], 10, 30);
+            Date date = cal.getTime();
+            item.setStartDate(date);
+            meetings.add(item);
         }
         return meetings;
     }
