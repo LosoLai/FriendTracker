@@ -5,7 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import com.example.loso.friendtracker.Controller.FriendListAdapter;
+import com.example.loso.friendtracker.Controller.AttendListAdapter;
 import com.example.loso.friendtracker.Controller.MeetingController;
 import com.example.loso.friendtracker.Controller.FriendController;
 import com.example.loso.friendtracker.Model.Friend;
@@ -34,7 +34,7 @@ public class DisplayAttendList extends AppCompatActivity {
         ArrayList<Friend> meeting_Attend = (ArrayList<Friend>) meeting.getFriends();
         ArrayList<Friend> friendslist = friendController.getFriendsList();
 
-        ArrayList<String> filtered = new ArrayList<String>();
+        ArrayList<Friend> filtered = new ArrayList<Friend>();
         // filter friends
         for(int i=0 ; i<friendslist.size() ; i++)
         {
@@ -50,11 +50,11 @@ public class DisplayAttendList extends AppCompatActivity {
             }
 
             if(!bSame)
-                filtered.add(friend.getName());
+                filtered.add(friend);
         }
 
         ListView friendsList = (ListView)findViewById(R.id.lvFriendsList);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, filtered);
+        AttendListAdapter adapter = new AttendListAdapter(getApplicationContext(), filtered);
         friendsList.setAdapter(adapter);
     }
 }
