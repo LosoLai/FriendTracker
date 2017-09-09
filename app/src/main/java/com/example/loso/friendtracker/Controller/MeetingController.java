@@ -100,29 +100,15 @@ public class MeetingController {
     public String[] getStartEndStrings(String meetingID) {
         String[] dates = new String[4];
         Meeting meeting = mModel.findMeetingByID(meetingID);
+        Date curDate = Calendar.getInstance().getTime();
         if (meeting != null) {
-            Date startDate = meeting.getStartDate();
-            Date endDate = meeting.getEndDate();
+            SimpleDateFormat sdf_Date = new SimpleDateFormat("yyyy-MM-dd");
+            SimpleDateFormat sdf_Time = new SimpleDateFormat("h:mm a");
 
-            SimpleDateFormat sdf = new SimpleDateFormat("Y/M/d H:mm");
-
-            if (startDate != null) {
-                String[] startdatetime = sdf.format(startDate).split(" ");
-                dates[0] = startdatetime[0];
-                dates[1] = startdatetime[1];
-            } else {
-                dates[0] = " ";
-                dates[1] = " ";
-            }
-
-            if (endDate != null) {
-                String[] enddatetime = sdf.format(endDate).split(" ");
-                dates[2] = enddatetime[0];
-                dates[3] = enddatetime[1];
-            } else {
-                dates[2] = " ";
-                dates[3] = " ";
-            }
+            dates[0] = sdf_Date.format(curDate);
+            dates[1] = sdf_Time.format(curDate);
+            dates[2] = sdf_Date.format(curDate);
+            dates[3] = sdf_Time.format(curDate);
         }
         return dates;
     }
