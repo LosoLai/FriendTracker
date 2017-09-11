@@ -87,6 +87,7 @@ public class MeetingController {
     }
 
     public void removeAttend(Meeting meeting, Friend friend) { meeting.removeAttend(friend); }
+    public void addAttend(Meeting meeting, Friend friend) { meeting.addAttend(friend); }
 
     public FriendLocation getMeetingLocation(String meetingID) {
         FriendLocation loc = null;

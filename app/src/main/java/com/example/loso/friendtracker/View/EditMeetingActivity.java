@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.ListView;
 import android.widget.AdapterView;
@@ -22,6 +23,8 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import com.example.loso.friendtracker.Controller.AttendListAdapter;
+import com.example.loso.friendtracker.Controller.FriendController;
 import com.example.loso.friendtracker.Controller.MeetingController;
 import com.example.loso.friendtracker.Controller.FriendListAdapter;
 import com.example.loso.friendtracker.Model.FriendLocation;
@@ -39,6 +42,7 @@ public class EditMeetingActivity extends AppCompatActivity {
     private String meetingID = "";
     private MeetingController meetingController;
     private FriendListAdapter adapter;
+    private AttendListAdapter attend_adapter;
     private static final String LOG_TAG = "EditMeetingActivity";
 
     @Override
@@ -176,16 +180,49 @@ public class EditMeetingActivity extends AppCompatActivity {
 
     public void setupAttendSection(Meeting meeting) {
         final Meeting currentM = meeting;
-        Button addAttend = (Button) findViewById(R.id.bAddAttend);
-        addAttend.setOnClickListener(new View.OnClickListener() {
+        ArrayList<Friend> attends = (ArrayList<Friend>) meeting.getFriends();
+        FriendController friendController = new FriendController();
+        ArrayList<Friend> friendslist = friendController.getFriendsList();
+        ArrayList<Friend> filtered = new ArrayList<Friend>();
+        // filter friends
+        for(int i=0 ; i<friendslist.size() ; i++)
+        {
+            boolean bSame = false;
+            Friend friend = friendslist.get(i);
+            for(int j=0 ; j<attends.size() ; j++)
+            {
+                Friend attend = attends.get(j);
+                if(friend == attend) {
+                    bSame = true;
+                    break;
+                }
+            }
+
+            if(!bSame)
+                filtered.add(friend);
+        }
+
+        attend_adapter = new AttendListAdapter(this, filtered);
+        Spinner spAttend = (Spinner) findViewById(R.id.spinner_Attend);
+        spAttend.setAdapter(attend_adapter);
+        spAttend.setSelected(false);
+        spAttend.setSelection(0, true);
+        spAttend.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), DisplayAttendList.class).putExtra("meeting", currentM.getID()));
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                final Friend attend = (Friend) parent.getItemAtPosition(position);
+                meetingController.addAttend(currentM, attend);
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
             }
         });
 
-        ArrayList<Friend> friends = (ArrayList<Friend>) meeting.getFriends();
-        adapter = new FriendListAdapter(getApplicationContext(), friends);
+
+        adapter = new FriendListAdapter(getApplicationContext(), attends);
         ListView lvAttend = (ListView) findViewById(R.id.attendlist);
         lvAttend.setAdapter(adapter);
         lvAttend.setLongClickable(true);

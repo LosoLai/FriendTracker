@@ -110,4 +110,10 @@ public class Meeting {
 			return this.friends.remove(friend);
 		return false;
 	}
+
+	public boolean addAttend(Friend friend) {
+		if(this.friends != null)
+			return this.friends.add(friend);
+		return false;
+	}
 }
