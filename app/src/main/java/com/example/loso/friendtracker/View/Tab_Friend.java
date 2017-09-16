@@ -2,8 +2,7 @@ package com.example.loso.friendtracker.View;
 
 /**
  * Created by Loso on 2017/8/19.
- * Modified to use Model class by Lettisia George 2017/9/1
- *
+ * Modified to use MeetingModel class by Lettisia George 2017/9/1
  */
 
 import android.content.DialogInterface;
@@ -16,7 +15,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -24,7 +22,8 @@ import android.widget.Toast;
 import com.example.loso.friendtracker.Controller.FriendController;
 import com.example.loso.friendtracker.Model.Friend;
 import com.example.loso.friendtracker.Controller.FriendListAdapter;
-import com.example.loso.friendtracker.Model.Model;
+import com.example.loso.friendtracker.Model.FriendModel;
+import com.example.loso.friendtracker.Model.MeetingModel;
 import com.example.loso.friendtracker.R;
 
 import java.util.ArrayList;
@@ -44,16 +43,16 @@ public class Tab_Friend extends Fragment implements Observer {
 
         Log.d(LOG_TAG, "OnCreateView()");
 
-        View.OnClickListener listener = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent displayContacts = new Intent(getActivity(), DisplayContacts.class);
-                startActivity(displayContacts);
-            }
-        };
-
-        Button addFriend = (Button) rootView.findViewById(R.id.bAddFriend);
-        addFriend.setOnClickListener(listener);
+//        View.OnClickListener listener = new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent displayContacts = new Intent(getActivity(), DisplayContacts.class);
+//                startActivity(displayContacts);
+//            }
+//        };
+//
+//        Button addFriend = (Button) rootView.findViewById(R.id.bAddFriend);
+//        addFriend.setOnClickListener(listener);
 
         return rootView;
     }
@@ -64,9 +63,9 @@ public class Tab_Friend extends Fragment implements Observer {
 
         Log.d(LOG_TAG, "onActivityCreated()");
         // ListView
-        Model mModel = Model.getInstance();
-        mModel.addObserver(this);
-        ArrayList<Friend> friends = mModel.getFriends();
+        FriendModel mFriendModel = FriendModel.getInstance();
+        mFriendModel.addObserver(this);
+        ArrayList<Friend> friends = mFriendModel.getFriends();
         FriendController fc = new FriendController();
         fc.updateFriendLocations(this.getContext());
 
@@ -112,10 +111,8 @@ public class Tab_Friend extends Fragment implements Observer {
     @Override
     public void update(Observable o, Object arg) {
         Log.d(LOG_TAG, "MADE IT TO UPDATE METHOD.");
-        if (arg.equals(Model.FRIENDS_CHANGED)) {
-            FriendController fc = new FriendController();
-            fc.updateFriendLocations(this.getContext());
-            adapter.notifyDataSetChanged();
-        }
+        FriendController fc = new FriendController();
+        fc.updateFriendLocations(this.getContext());
+        adapter.notifyDataSetChanged();
     }
 }

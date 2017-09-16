@@ -2,7 +2,6 @@ package com.example.loso.friendtracker.Model;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 /**
  * Contains meeting data
@@ -12,19 +11,17 @@ import java.util.List;
 
 public class Meeting {
 	private String ID;
-	private String title;
-    private Date startDate;
-    private Date endDate;
-    private List<Friend> friends;
-	private FriendLocation location;
+    private String title = null;
+    private Date startDate = null;
+    private Date endDate = null;
+    private GuestList friends = null;
+    private Location location = null;
 
-	public Meeting() {
-		friends = new ArrayList<Friend>();
-		ID = "user" + Long.toString(System.currentTimeMillis());
-	}
+    private Meeting() {
+        // Can't have a meeting without an ID
+    }
 
 	public Meeting(String id) {
-		friends = new ArrayList<Friend>();
 		ID = id;
 	}
 
@@ -33,27 +30,34 @@ public class Meeting {
         this.title = title;
     }
 
-    public Meeting(String iD, String title, List<Friend> friends,
-                   FriendLocation location) {
-		ID = iD;
+    public Meeting(String iD, String title, Date startDate, Date endDate, Location location) {
+        ID = iD;
 		this.title = title;
-        this.startDate = null;
-        this.endDate = null;
-        this.friends = friends;
-		this.location = location;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.location = location;
 	}
 
-    public Meeting(String iD, String title, Date start, Date end, List<Friend> friends,
-                   FriendLocation location) {
+    public Meeting(String iD, String title, ArrayList<Friend> friends,
+                   Location location) {
+        ID = iD;
+        this.title = title;
+        this.friends = new GuestList(friends);
+        this.location = location;
+    }
+
+    public Meeting(String iD, String title, Date start, Date end, ArrayList<Friend> friends,
+                   Location location) {
         ID = iD;
         this.title = title;
         this.startDate = start;
         this.endDate = end;
-        this.friends = friends;
+        this.friends = new GuestList(friends);
         this.location = location;
     }
 
-	public String getID() {
+
+    public String getID() {
 		return ID;
 	}
 
@@ -85,29 +89,33 @@ public class Meeting {
         this.endDate = end;
     }
 
-	public List<Friend> getFriends() {
-		return friends;
+    public ArrayList<Friend> getFriends() {
+        return friends.getGuestList();
+    }
+
+    public void setFriends(ArrayList<Friend> friends) {
+        if (friends == null) {
+            this.friends = new GuestList(friends);
+        } else {
+            this.friends.setGuests(friends);
+        }
+    }
+
+    public Location getLocation() {
+        return location;
 	}
 
-	public void setFriends(List<Friend> friends) {
-		this.friends = friends;
-	}
-
-	public FriendLocation getLocation() {
-		return location;
-	}
-
-	public void setLocation(FriendLocation location) {
-		this.location = location;
+    public void setLocation(Location location) {
+        this.location = location;
 	}
 
     public void setLocation(double lati, double longi) {
-        location = new FriendLocation(lati, longi);
+        location = new Location(lati, longi);
     }
 
-    public boolean removeAttend(Friend friend) {
-		if(this.friends != null)
-			return this.friends.remove(friend);
-		return false;
-	}
+    public void removeAttend(String friendID) {
+        if (friends != null) {
+            friends.removeFriend(friendID);
+        }
+    }
 }

@@ -5,8 +5,8 @@ import android.content.Intent;
 import android.util.Log;
 
 import com.example.loso.friendtracker.Model.Friend;
-import com.example.loso.friendtracker.Model.FriendLocation;
-import com.example.loso.friendtracker.Model.Model;
+import com.example.loso.friendtracker.Model.FriendModel;
+import com.example.loso.friendtracker.Model.Location;
 import com.example.loso.friendtracker.Service.ContactDataManager;
 import com.example.loso.friendtracker.Service.DataManager;
 import com.example.loso.friendtracker.View.MainActivity;
@@ -24,20 +24,20 @@ import java.util.GregorianCalendar;
 
 public class FriendController {
     private static final String LOG_TAG = "friendcontroller";
-    private Model mModel = Model.getInstance();
+    private FriendModel friendModel = FriendModel.getInstance();
 
     public FriendController() {
-        if (mModel == null) {
-            mModel = Model.getInstance();
+        if (friendModel == null) {
+            friendModel = FriendModel.getInstance();
         }
     }
 
     public void updateFriendLocations(Context context) {
         DataManager dm = new DataManager();
-        ArrayList<Friend> friends = mModel.getFriends();
+        ArrayList<Friend> friends = friendModel.getFriends();
         if (friends != null) {
             for (Friend f : friends) {
-                FriendLocation fl = DataManager.getFriendLocation(context, f.getName(), Calendar.getInstance().getTime());
+                Location fl = DataManager.getFriendLocation(context, f.getName(), Calendar.getInstance().getTime());
                 if (fl != null) {
                     f.setLocation(fl);
                     Log.d(LOG_TAG, "Time: " + Calendar.getInstance().getTime() + " location: " + fl.toString());
@@ -46,8 +46,8 @@ public class FriendController {
         }
     }
 
-    public static FriendLocation getFriendLocationsForTime(Context context, String name) {
-        FriendLocation fl = DataManager.getFriendLocation(context, name, Calendar.getInstance().getTime());
+    public static Location getFriendLocationsForTime(Context context, String name) {
+        Location fl = DataManager.getFriendLocation(context, name, Calendar.getInstance().getTime());
         if (fl == null) {
             Log.d(LOG_TAG, "null");
         } else {
@@ -57,36 +57,36 @@ public class FriendController {
     }
 
     public String getFriendName(String friendID) {
-        Friend friend = mModel.findFriendByID(friendID);
+        Friend friend = friendModel.findFriendByID(friendID);
         return friend.getName();
     }
 
     public String getFriendEmail(String friendID) {
-        Friend friend = mModel.findFriendByID(friendID);
+        Friend friend = friendModel.findFriendByID(friendID);
         return friend.getEmail();
     }
 
 
     public void setBirthday(String friendID, int year, int month, int day) {
-        Friend friend = mModel.findFriendByID(friendID);
+        Friend friend = friendModel.findFriendByID(friendID);
         if (friend != null) {
             friend.setBirthday(new GregorianCalendar(year, month, day).getTime());
         }
     }
 
     public void updateFriendDetails(String friendID, String name, String email) {
-        mModel.updateFriend(friendID, name, email);
+        friendModel.updateFriend(friendID, name, email);
     }
 
     public boolean addFriendFromContacts(MainActivity mainActivity, Intent data) {
         ContactDataManager contactsManager = new ContactDataManager(mainActivity, data);
-        String name = "";
-        String email = "";
+        String name;
+        String email;
         try {
             name = contactsManager.getContactName();
             email = contactsManager.getContactEmail();
-            if (!mModel.isFriend(name, email)) {
-                mModel.addFriend(name, email);
+            if (!friendModel.isFriend(name, email)) {
+                friendModel.addFriend(name, email);
                 return true;
             }
             //Log.d(LOG_TAG, "Added Friend");
@@ -97,7 +97,7 @@ public class FriendController {
     }
 
     public String getFriendBirthday(String friendID) {
-        Friend friend = mModel.findFriendByID(friendID);
+        Friend friend = friendModel.findFriendByID(friendID);
         Date birthday = friend.getBirthday();
         if (birthday != null) {
             DateFormat mFormat = SimpleDateFormat.getDateInstance();
@@ -106,13 +106,15 @@ public class FriendController {
         return " ";
     }
 
-    public ArrayList<Friend> getFriendsList() { return mModel.getFriends(); }
+    public ArrayList<Friend> getFriendsList() {
+        return friendModel.getFriends();
+    }
     public void removeFriend(String friendID) {
-        mModel.removeFriend(friendID);
+        friendModel.removeFriend(friendID);
     }
 
     public void removeFriend(Friend friend) {
-        mModel.removeFriend(friend);
+        friendModel.removeFriend(friend);
     }
 
 

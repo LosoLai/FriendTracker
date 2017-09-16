@@ -24,15 +24,17 @@ import android.widget.Toast;
 
 import com.example.loso.friendtracker.Controller.MeetingController;
 import com.example.loso.friendtracker.Controller.FriendListAdapter;
-import com.example.loso.friendtracker.Model.FriendLocation;
+import com.example.loso.friendtracker.Model.Location;
 import com.example.loso.friendtracker.Model.Meeting;
 import com.example.loso.friendtracker.Model.Friend;
+import com.example.loso.friendtracker.Model.MeetingModel;
 import com.example.loso.friendtracker.R;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.ArrayList;
+import java.util.Date;
 
 
 public class EditMeetingActivity extends AppCompatActivity {
@@ -59,13 +61,12 @@ public class EditMeetingActivity extends AppCompatActivity {
 
         EditText editTitle = (EditText) findViewById(R.id.editTextTitle);
 
-        final Meeting meeting = meetingController.getMeeting(meetingID);
-        editTitle.setText(meeting.getTitle());
+        editTitle.setText((meetingController.getMeetingTitle(meetingID)));
 
         EditText etLat = (EditText) findViewById(R.id.etLatitude);
         EditText etLong = (EditText) findViewById(R.id.etLongitude);
 
-        FriendLocation location = meetingController.getMeetingLocation(meetingID);
+        Location location = meetingController.getMeetingLocation(meetingID);
         if (location != null) {
             etLat.setText(Double.toString(location.getLatitude()));
             etLong.setText(Double.toString(location.getLongitude()));
@@ -76,15 +77,26 @@ public class EditMeetingActivity extends AppCompatActivity {
         TextView startTime = (TextView) findViewById(R.id.tvMeetStartTime);
         TextView endTime = (TextView) findViewById(R.id.tvMeetEndTime);
 
-        String[] dates = meetingController.getStartEndStrings(meetingID);
+        Date[] dates = meetingController.getMeetingTimes(meetingID);
 
-        startDate.setText(dates[0]);
-        startTime.setText(dates[1]);
-        endDate.setText(dates[2]);
-        endTime.setText(dates[3]);
+        Calendar curDate = Calendar.getInstance();
+        SimpleDateFormat sdf_Date = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat sdf_Time = new SimpleDateFormat("h:mm a");
+
+        if (dates[0] != null) {
+            curDate.setTime(dates[0]);
+            startDate.setText(sdf_Date.format(curDate.getTime()));
+            startTime.setText(sdf_Time.format(curDate.getTime()));
+        }
+
+        if (dates[1] != null) {
+            curDate.setTime(dates[1]);
+            endDate.setText(sdf_Date.format(curDate.getTime()));
+            endTime.setText(sdf_Time.format(curDate.getTime()));
+        }
 
         // display attend list
-        setupAttendSection(meeting);
+        setupAttendSection(meetingID);
 
         ImageButton removeButton = (ImageButton) findViewById(R.id.btnRemoveMeeting);
         removeButton.setOnClickListener(new View.OnClickListener() {
@@ -96,8 +108,9 @@ public class EditMeetingActivity extends AppCompatActivity {
                         .setIcon(android.R.drawable.ic_dialog_alert)
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
-                                meetingController.removeMeeting(meeting);
-                                Toast.makeText(EditMeetingActivity.this, "Meeting removed", Toast.LENGTH_SHORT).show();
+                                meetingController.removeMeeting(meetingID);
+                                Toast.makeText(EditMeetingActivity.this, "Meeting removed",
+                                        Toast.LENGTH_SHORT).show();
                                 finish();
                             }
                         })
@@ -139,7 +152,10 @@ public class EditMeetingActivity extends AppCompatActivity {
                     int hour = Integer.parseInt(timeStartTokens[0]);
                     int minute = Integer.parseInt(timeStartTokens[1]);
 
-                    meetingController.setMeetingStart(meetingID, year, month, day, hour, minute);
+                    Calendar cal = Calendar.getInstance();
+                    cal.set(year, month, day, hour, minute);
+                    Date newStart = cal.getTime();
+
 
                     TextView endDate = (TextView) findViewById(R.id.tvMeetEndDate);
                     TextView endTime = (TextView) findViewById(R.id.tvMeetEndTime);
@@ -152,8 +168,12 @@ public class EditMeetingActivity extends AppCompatActivity {
                     hour = Integer.parseInt(timeEndTokens[0]);
                     minute = Integer.parseInt(timeEndTokens[1]);
 
-                    meetingController.setMeetingEnd(meetingID, year, month, day, hour, minute);
-                } catch (MeetingController.InvalidDateException e) {
+                    cal.set(year, month, day, hour, minute);
+                    Date newEnd = cal.getTime();
+
+                    meetingController.setMeetingTimes(meetingID, newStart, newEnd);
+
+                } catch (MeetingModel.InvalidDateException e) {
                     Log.e(LOG_TAG, e.getMessage());
                     new AlertDialog.Builder(EditMeetingActivity.this)
                             .setTitle("Causality Broken")
@@ -167,24 +187,26 @@ public class EditMeetingActivity extends AppCompatActivity {
                 }
 
                 if (finished) {
-                    Toast.makeText(EditMeetingActivity.this, "Details Updated", Toast.LENGTH_LONG).show();
+                    Toast.makeText(EditMeetingActivity.this, "Details Updated",
+                            Toast.LENGTH_LONG).show();
                     finish();
                 }
             }
         });
     }
 
-    public void setupAttendSection(Meeting meeting) {
-        final Meeting currentM = meeting;
+    public void setupAttendSection(final String meetingID) {
         Button addAttend = (Button) findViewById(R.id.bAddAttend);
+
         addAttend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), DisplayAttendList.class).putExtra("meeting", currentM.getID()));
+                startActivity(new Intent(getApplicationContext(),
+                        DisplayAttendList.class).putExtra("meeting", meetingID));
             }
         });
 
-        ArrayList<Friend> friends = (ArrayList<Friend>) meeting.getFriends();
+        ArrayList<Friend> friends = meetingController.getMeetingAttendees(meetingID);
         adapter = new FriendListAdapter(getApplicationContext(), friends);
         ListView lvAttend = (ListView) findViewById(R.id.attendlist);
         lvAttend.setAdapter(adapter);
@@ -196,13 +218,14 @@ public class EditMeetingActivity extends AppCompatActivity {
                 final Friend friend = adapter.getItem(position);
 
                 new AlertDialog.Builder(EditMeetingActivity.this)
-                        .setTitle("Remove Attend")
-                        .setMessage("Do you really want to remove this friend?")
+                        .setTitle("Remove Guest")
+                        .setMessage("Do you really want to remove this guest?")
                         .setIcon(android.R.drawable.ic_dialog_alert)
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
-                                meetingController.removeAttend(currentM, friend);
-                                Toast.makeText(EditMeetingActivity.this, "Attend removed", Toast.LENGTH_SHORT).show();
+                                meetingController.removeAttend(meetingID, friend.getID());
+                                Toast.makeText(EditMeetingActivity.this, "Guest Removed",
+                                        Toast.LENGTH_SHORT).show();
                             }
                         })
                         .setNegativeButton(android.R.string.no, null).show();

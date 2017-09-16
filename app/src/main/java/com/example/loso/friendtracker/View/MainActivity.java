@@ -25,11 +25,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.example.loso.friendtracker.Model.FriendModel;
+import com.example.loso.friendtracker.Model.MeetingModel;
 import com.example.loso.friendtracker.Service.DataManager;
 import com.example.loso.friendtracker.Controller.FriendController;
 import com.example.loso.friendtracker.Controller.MeetingController;
 import com.example.loso.friendtracker.Model.Meeting;
-import com.example.loso.friendtracker.Model.Model;
 import com.example.loso.friendtracker.R;
 
 public class MainActivity extends AppCompatActivity {
@@ -88,10 +89,11 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //Add dummy data to Model
-        Model mModel = Model.getInstance();
-        mModel.setFriends(DataManager.createDummyFriendList(getApplicationContext()));
-        mModel.setMeetings(DataManager.createDummMeetingList());
+        //Add dummy data to MeetingModel
+        MeetingModel mMeetingModel = MeetingModel.getInstance();
+        FriendModel friendModel = FriendModel.getInstance();
+        friendModel.setFriends(DataManager.createDummyFriendList(getApplicationContext()));
+        mMeetingModel.setMeetings(DataManager.createDummMeetingList());
     }
 
     public void addMeeting() {

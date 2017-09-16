@@ -12,7 +12,6 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.util.Log;
 
-import com.example.loso.friendtracker.Model.FriendLocation;
 import com.example.loso.friendtracker.R;
 
 import java.text.DateFormat;
@@ -51,27 +50,59 @@ public class DummyLocationService {
         }
     }
 
+//    // check if the source time is with the range of target time +/- minutes and seconds
+//    private boolean timeInRange3(Date source, Date target, int periodMinutes, int periodSeconds) {
+//        Calendar sourceCal = Calendar.getInstance();
+//        Calendar referenceCal = Calendar.getInstance();
+//        referenceCal.setTime(source);
+//        sourceCal.set(Calendar.MINUTE, referenceCal.get(Calendar.MINUTE));
+//        sourceCal.set(Calendar.HOUR_OF_DAY, referenceCal.get(Calendar.HOUR_OF_DAY));
+//        sourceCal.set(Calendar.HOUR, referenceCal.get(Calendar.HOUR));
+//        // set up start and end range match
+//        // +/- period minutes/seconds to check
+//        Calendar targetCalStart = Calendar.getInstance();
+//        targetCalStart.setTime(target);
+//        targetCalStart.set(Calendar.MINUTE, targetCalStart.get(Calendar.MINUTE) - periodMinutes);
+//        targetCalStart.set(Calendar.SECOND, targetCalStart.get(Calendar.SECOND) - periodSeconds);
+//        Calendar targetCalEnd = Calendar.getInstance();
+//        targetCalEnd.setTime(target);
+//        targetCalEnd.set(Calendar.MINUTE, targetCalEnd.get(Calendar.MINUTE) + periodMinutes);
+//        targetCalEnd.set(Calendar.SECOND, targetCalEnd.get(Calendar.SECOND) + periodSeconds);
+//
+//        // return if source time in the target range
+//        return sourceCal.after(targetCalStart) && sourceCal.before(targetCalEnd);
+//    }
+
     // check if the source time is with the range of target time +/- minutes and seconds
     private boolean timeInRange(Date source, Date target, int periodMinutes, int periodSeconds) {
-        Calendar today = Calendar.getInstance();
+        // We only want the time part of our two dates and we want the date parts to match
+
+        Calendar referenceCal = Calendar.getInstance();
+        referenceCal.setTime(source);
+
         Calendar sourceCal = Calendar.getInstance();
-        sourceCal.setTime(source);
-        today.set(Calendar.MINUTE, sourceCal.get(Calendar.MINUTE));
-        today.set(Calendar.HOUR_OF_DAY, sourceCal.get(Calendar.HOUR_OF_DAY));
-        today.set(Calendar.HOUR, sourceCal.get(Calendar.HOUR));
-        // set up start and end range match
-        // +/- period minutes/seconds to check
+        sourceCal.set(Calendar.MINUTE, referenceCal.get(Calendar.MINUTE));
+        sourceCal.set(Calendar.HOUR_OF_DAY, referenceCal.get(Calendar.HOUR_OF_DAY));
+        sourceCal.set(Calendar.SECOND, referenceCal.get(Calendar.SECOND));
+
+        referenceCal.setTime(target);
+
         Calendar targetCalStart = Calendar.getInstance();
-        targetCalStart.setTime(target);
-        targetCalStart.set(Calendar.MINUTE, targetCalStart.get(Calendar.MINUTE) - periodMinutes);
-        targetCalStart.set(Calendar.SECOND, targetCalStart.get(Calendar.SECOND) - periodSeconds);
+        targetCalStart.set(Calendar.MINUTE, referenceCal.get(Calendar.MINUTE));
+        targetCalStart.set(Calendar.HOUR_OF_DAY, referenceCal.get(Calendar.HOUR_OF_DAY));
+        targetCalStart.set(Calendar.SECOND, referenceCal.get(Calendar.SECOND));
+        targetCalStart.add(Calendar.MINUTE, -periodMinutes);
+        targetCalStart.add(Calendar.SECOND, -periodSeconds);
+
         Calendar targetCalEnd = Calendar.getInstance();
-        targetCalEnd.setTime(target);
-        targetCalEnd.set(Calendar.MINUTE, targetCalEnd.get(Calendar.MINUTE) + periodMinutes);
-        targetCalEnd.set(Calendar.SECOND, targetCalEnd.get(Calendar.SECOND) + periodMinutes);
+        targetCalEnd.set(Calendar.MINUTE, referenceCal.get(Calendar.MINUTE));
+        targetCalEnd.set(Calendar.HOUR_OF_DAY, referenceCal.get(Calendar.HOUR_OF_DAY));
+        targetCalEnd.set(Calendar.SECOND, referenceCal.get(Calendar.SECOND));
+        targetCalEnd.add(Calendar.MINUTE, periodMinutes);
+        targetCalEnd.add(Calendar.SECOND, periodSeconds);
 
         // return if source time in the target range
-        return today.after(targetCalStart) && today.before(targetCalEnd);
+        return sourceCal.after(targetCalStart) && sourceCal.before(targetCalEnd);
     }
 
     // called internally before usage

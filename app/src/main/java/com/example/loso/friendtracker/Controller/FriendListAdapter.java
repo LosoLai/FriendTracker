@@ -9,7 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.example.loso.friendtracker.Model.Friend;
-import com.example.loso.friendtracker.Model.FriendLocation;
+import com.example.loso.friendtracker.Model.Location;
 import com.example.loso.friendtracker.R;
 
 import java.util.ArrayList;
@@ -41,8 +41,8 @@ public class FriendListAdapter extends ArrayAdapter<Friend> {
         TextView tvName = (TextView) view.findViewById(R.id.tvName);
         tvName.setText(friend.getName());
 
-        //FriendLocation fl = friend.getLocation();
-        FriendLocation fl = FriendController.getFriendLocationsForTime(this.getContext(), friend.getName());
+        //Location fl = friend.getLocation();
+        Location fl = FriendController.getFriendLocationsForTime(this.getContext(), friend.getName());
 
         if (fl != null)
         {

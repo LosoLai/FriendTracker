@@ -19,10 +19,10 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.loso.friendtracker.Controller.MeetingController;
+import com.example.loso.friendtracker.Model.MeetingModel;
 import com.example.loso.friendtracker.R;
 
 import com.example.loso.friendtracker.Controller.MeetingListAdapter;
-import com.example.loso.friendtracker.Model.Model;
 import com.example.loso.friendtracker.Model.Meeting;
 import com.example.loso.friendtracker.Model.MeetingComparator;
 
@@ -48,9 +48,9 @@ public class Tab_Meeting extends Fragment implements Observer {
         super.onActivityCreated(savedInstanceState);
 
         // ListView
-        Model mModel = Model.getInstance();
-        mModel.addObserver(this);
-        final ArrayList<Meeting> meetings = mModel.getMeetings();
+        MeetingModel mMeetingModel = MeetingModel.getInstance();
+        mMeetingModel.addObserver(this);
+        final ArrayList<Meeting> meetings = mMeetingModel.getMeetings();
         adapter = new MeetingListAdapter(rootView.getContext(), meetings);
         ListView lvMeeting = (ListView) rootView.findViewById(R.id.meetinglist);
         lvMeeting.setAdapter(adapter);
@@ -78,7 +78,7 @@ public class Tab_Meeting extends Fragment implements Observer {
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
                                 MeetingController mc = new MeetingController();
-                                mc.removeMeeting(meeting);
+                                mc.removeMeeting(meeting.getID());
                                 Toast.makeText(getActivity(), "Meeting removed", Toast.LENGTH_SHORT).show();
                             }
                         })
@@ -114,8 +114,6 @@ public class Tab_Meeting extends Fragment implements Observer {
 
     @Override
     public void update(Observable o, Object arg) {
-        if (arg.equals(Model.MEETINGS_CHANGED)) {
-            adapter.notifyDataSetChanged();
-        }
+        adapter.notifyDataSetChanged();
     }
 }

@@ -7,7 +7,9 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import com.example.loso.friendtracker.Model.FriendLocation;
+import com.example.loso.friendtracker.Model.Friend;
+import com.example.loso.friendtracker.Model.GuestList;
+import com.example.loso.friendtracker.Model.Location;
 import com.example.loso.friendtracker.Model.Meeting;
 import com.example.loso.friendtracker.R;
 
@@ -25,6 +27,8 @@ public class MeetingListAdapter extends ArrayAdapter<Meeting> {
         super(context, 0, contacts);
     }
 
+    //// TODO: 16/09/2017 Massive problems here. should be calling a model but is operating
+    /// directly on meeting instead. Is this ok?
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         // Get the data item
@@ -39,16 +43,20 @@ public class MeetingListAdapter extends ArrayAdapter<Meeting> {
         TextView tvTitle = (TextView) view.findViewById(R.id.tvTitleContent);
         tvTitle.setText(meeting.getTitle());
 
-        FriendLocation fl = meeting.getLocation();
+        Location fl = meeting.getLocation();
         if (fl != null) {
             TextView tvLocation = (TextView) view.findViewById(R.id.tvLocationContent);
             tvLocation.setText("(" + fl.getLatitude() + ", " + fl.getLongitude() + ")");
         }
 
-        if (meeting.getFriends().size() > 0) {
-            TextView tvAttend = (TextView) view.findViewById(R.id.tvAttendNumber);
-            if (tvAttend != null) {
-                tvAttend.setText(Integer.toString(meeting.getFriends().size()));
+        TextView tvAttend = (TextView) view.findViewById(R.id.tvAttendNumber);
+        if (tvAttend != null) {
+            ArrayList<Friend> friends = meeting.getFriends();
+
+            if (meeting.getFriends() == null) {
+                tvAttend.setText("0");
+            } else {
+                tvAttend.setText(Integer.toString(friends.size()));
             }
         }
 

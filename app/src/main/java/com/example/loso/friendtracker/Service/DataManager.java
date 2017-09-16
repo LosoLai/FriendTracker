@@ -10,9 +10,9 @@ import android.support.annotation.RequiresApi;
 import android.util.Log;
 
 import com.example.loso.friendtracker.Model.Friend;
-import com.example.loso.friendtracker.Model.FriendLocation;
+import com.example.loso.friendtracker.Model.Location;
 import com.example.loso.friendtracker.Model.Meeting;
-import com.example.loso.friendtracker.Model.Model;
+import com.example.loso.friendtracker.Model.MeetingModel;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -32,13 +32,13 @@ public class DataManager {
         //create dummy friend list
         ArrayList<Friend> friends = new ArrayList<Friend>();
         for(int i=1 ; i<10 ; i++) {
-            String id = Model.createID();
+            String id = MeetingModel.createID();
             String name = "Friend" + i;
             String email = "Email" + i;
             Date birthday = new GregorianCalendar(1985 + i, (i + 5) % 12, i % 28).getTime();
 
             //get dummy location
-            FriendLocation location = null;
+            Location location = null;
             try {
                 //Log.d(LOG_TAG, Calendar.getInstance().getTime());
                 location = getFriendLocation(context, name, Calendar.getInstance().getTime());
@@ -57,9 +57,11 @@ public class DataManager {
         for (int i = 0; i < 3; i++) {
             String title = "Meeting" + Integer.toString(i);
             int[] dates = {6,4,7};
-            List<Friend> friends = new ArrayList<Friend>();
-            friends.add(new Friend(Model.createID(), Integer.toString(i), Integer.toString(i), null, null));
-            Meeting item = new Meeting(Model.createID(), "Meeting" + Integer.toString(i), friends, null);
+            ArrayList<Friend> friends = new ArrayList<>();
+            friends.add(new Friend(MeetingModel.createID(), Integer.toString(i),
+                    Integer.toString(i), null, null));
+            Meeting item = new Meeting(MeetingModel.createID(), "Meeting" + Integer.toString(i),
+                    friends, null);
             Calendar cal = Calendar.getInstance();
             cal.set(2017, 9, dates[i], 10, 30);
             Date date = cal.getTime();
@@ -69,17 +71,17 @@ public class DataManager {
         return meetings;
     }
 
-    public static FriendLocation getFriendLocation(Context context, String name, Date time) {
+    public static Location getFriendLocation(Context context, String name, Date time) {
         List<DummyLocationService.FriendLocation> list = getFriendLocationsForTime(context, name, time, 2, 0);
         return grabFriendLocation(name, list);
     }
 
-    public static FriendLocation grabFriendLocation(String name, List<DummyLocationService.FriendLocation> locs) {
-        FriendLocation found = null;
+    public static Location grabFriendLocation(String name, List<DummyLocationService.FriendLocation> locs) {
+        Location found = null;
         for (DummyLocationService.FriendLocation fl : locs) {
             //Log.d(LOG_TAG, fl.name + "=" + name);
             if (fl.name.equals(name)) {
-                found = new FriendLocation(fl.time, fl.latitude, fl.longitude);
+                found = new Location(fl.time, fl.latitude, fl.longitude);
             }
         }
         return found;

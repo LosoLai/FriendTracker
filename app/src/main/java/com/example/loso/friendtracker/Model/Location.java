@@ -10,27 +10,28 @@ import java.util.Date;
  * @author Lettisia George
  */
 
-public class FriendLocation {
+public class Location {
     // LatLong of RMIT: -37.809427, 144.963727
     private Date time;
     private double latitude;
     private double longitude;
 
-    public FriendLocation() {}
+    public Location() {
+    }
 
-    public FriendLocation(double lat, double longi) {
+    public Location(double lat, double longi) {
         this.time = null;
         latitude = lat;
         longitude = longi;
     }
 
-    public FriendLocation(Date time, double lat, double longi) {
+    public Location(Date time, double lat, double longi) {
         this.time = time;
         latitude = lat;
         longitude = longi;
     }
 
-    public double distance(FriendLocation there) {
+    public double distance(Location there) {
         double lat1 = Math.toRadians(latitude);
         double long1 = Math.toRadians(longitude);
         double lat2 = Math.toRadians(there.getLatitude());
@@ -49,11 +50,11 @@ public class FriendLocation {
      * @param near   a Location
      * @param within in degrees
      */
-    public static FriendLocation generateRandomLocation(FriendLocation near, double within) {
+    public static Location generateRandomLocation(Location near, double within) {
         Random rand = new Random(System.currentTimeMillis());
         double lat = near.getLatitude() + rand.nextDouble() * 2 * within - within;
         double longi = near.getLongitude() + rand.nextDouble() * 2 * within - within;
-        return new FriendLocation(lat, longi);
+        return new Location(lat, longi);
     }
 
     @Override
@@ -105,10 +106,10 @@ public class FriendLocation {
 
     // Test method
     /*public static void main(String[] args) {
-        FriendLocation loc1 = new FriendLocation(-37.809427, 144.963727);
-        FriendLocation loc2 = new FriendLocation(-38.809427, 144.963727);
-        FriendLocation loc3 = new FriendLocation(-37.809427, 144.953727);
-        FriendLocation loc4 = new FriendLocation(-37.819427, 144.973727);
+        Location loc1 = new Location(-37.809427, 144.963727);
+        Location loc2 = new Location(-38.809427, 144.963727);
+        Location loc3 = new Location(-37.809427, 144.953727);
+        Location loc4 = new Location(-37.819427, 144.973727);
 
         System.out.println("Changing Latitude " + loc1.distance(loc2));
         System.out.println("Changing Longitude " + loc1.distance(loc3));

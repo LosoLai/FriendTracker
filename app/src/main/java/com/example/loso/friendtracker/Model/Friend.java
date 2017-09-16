@@ -14,9 +14,9 @@ public class Friend {
     private String email;
     private Date birthday;
     private String photo;
-    private FriendLocation location;
+    private Location location;
 
-    public Friend(String iD, String name, String email, Date birthday, FriendLocation location) {
+    public Friend(String iD, String name, String email, Date birthday, Location location) {
         ID = iD;
         this.name = name;
         this.email = email;
@@ -83,11 +83,11 @@ public class Friend {
         this.photo = photo;
     }
 
-    public FriendLocation getLocation() {
+    public Location getLocation() {
         return location;
     }
 
-    public void setLocation(FriendLocation location) {
+    public void setLocation(Location location) {
         this.location = location;
     }
 }

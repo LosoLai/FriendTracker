@@ -14,19 +14,20 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:weightSum="1">
+
         <Button
             android:id="@+id/btnAcs"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Acsending"
-            android:layout_weight="0.5" />
+            android:layout_weight="0.5"
+            android:text="Ascending" />
 
         <Button
             android:id="@+id/btnDecs"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Desending"
-            android:layout_weight="0.5" />
+            android:layout_weight="0.5"
+            android:text="Descending" />
     </LinearLayout>
 
     <ListView

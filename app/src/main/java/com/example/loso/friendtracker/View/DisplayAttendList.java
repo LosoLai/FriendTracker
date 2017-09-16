@@ -30,8 +30,7 @@ public class DisplayAttendList extends AppCompatActivity {
         meetingID = getIntent().getStringExtra("meeting");
         meetingController = new MeetingController();
         friendController = new FriendController();
-        Meeting meeting = meetingController.getMeeting(meetingID);
-        ArrayList<Friend> meeting_Attend = (ArrayList<Friend>) meeting.getFriends();
+        ArrayList<Friend> meeting_Attend = meetingController.getMeetingAttendees(meetingID);
         ArrayList<Friend> friendslist = friendController.getFriendsList();
 
         ArrayList<Friend> filtered = new ArrayList<Friend>();

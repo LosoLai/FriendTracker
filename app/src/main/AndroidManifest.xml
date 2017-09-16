@@ -25,11 +25,11 @@
         <activity
             android:name=".View.EditFriendActivity"
             android:label="@string/title_activity_edit_friend"
-            android:parentActivityName=".View.DisplayContacts"
+            android:parentActivityName=".View.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.loso.friendtracker.View.DisplayContacts" />
+                android:value="com.example.loso.friendtracker.View.MainActivity" />
         </activity>
         <activity
             android:name=".View.EditMeetingActivity"
