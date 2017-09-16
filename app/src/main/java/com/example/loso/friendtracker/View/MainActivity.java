@@ -25,6 +25,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.example.loso.friendtracker.Database_SQLite.DatabaseHelper;
 import com.example.loso.friendtracker.Service.DataManager;
 import com.example.loso.friendtracker.Controller.FriendController;
 import com.example.loso.friendtracker.Controller.MeetingController;
@@ -36,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String LOG_TAG = "MainActivity";
     private static final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 17;
     private static final int PICK_CONTACTS = 100;
+    private DatabaseHelper db;
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -92,6 +94,21 @@ public class MainActivity extends AppCompatActivity {
         Model mModel = Model.getInstance();
         mModel.setFriends(DataManager.createDummyFriendList(getApplicationContext()));
         mModel.setMeetings(DataManager.createDummMeetingList());
+
+        //testing----------------------------------------------------------------
+        //create database
+        db = new DatabaseHelper(this);
+        // set friends
+        for(int i=0 ; i<mModel.getFriends().size() ; i++)
+        {
+            db.addFriend(mModel.getFriends().get(i));
+        }
+        // set meetings
+        for(int j=0 ; j<mModel.getMeetings().size() ; j++)
+        {
+            db.addMeeting(mModel.getMeetings().get(j));
+        }
+        //------------------------------------------------------------------------
     }
 
     public void addMeeting() {
