@@ -183,7 +183,7 @@ public class EditMeetingActivity extends AppCompatActivity {
         ArrayList<Friend> attends = (ArrayList<Friend>) meeting.getFriends();
         FriendController friendController = new FriendController();
         ArrayList<Friend> friendslist = friendController.getFriendsList();
-        ArrayList<Friend> filtered = new ArrayList<Friend>();
+        final ArrayList<Friend> filtered = new ArrayList<Friend>();
         // filter friends
         for(int i=0 ; i<friendslist.size() ; i++)
         {
@@ -203,7 +203,7 @@ public class EditMeetingActivity extends AppCompatActivity {
         }
 
         attend_adapter = new AttendListAdapter(this, filtered);
-        Spinner spAttend = (Spinner) findViewById(R.id.spinner_Attend);
+        final Spinner spAttend = (Spinner) findViewById(R.id.spinner_Attend);
         spAttend.setAdapter(attend_adapter);
         spAttend.setSelected(false);
         spAttend.setSelection(0, true);
@@ -212,6 +212,7 @@ public class EditMeetingActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 final Friend attend = (Friend) parent.getItemAtPosition(position);
                 meetingController.addAttend(currentM, attend);
+                filtered.remove(attend);
                 adapter.notifyDataSetChanged();
             }
 
