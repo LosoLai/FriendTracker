@@ -8,10 +8,13 @@ import java.util.Observable;
  */
 
 public class GuestList extends Observable {
-    private ArrayList<Friend> guests;
+    private ArrayList<Friend> guests = new ArrayList<>();
+
+    public GuestList() {
+    }
 
     public GuestList(ArrayList<Friend> friends) {
-        guests = friends;
+        guests.addAll(friends);
     }
 
     public void addFriend(Friend friend) {
@@ -40,5 +43,9 @@ public class GuestList extends Observable {
         guests = friends;
         setChanged();
         notifyObservers();
+    }
+
+    public void addGuests(ArrayList<Friend> friends) {
+        guests.addAll(friends);
     }
 }

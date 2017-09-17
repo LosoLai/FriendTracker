@@ -14,7 +14,7 @@ public class Meeting {
     private String title = null;
     private Date startDate = null;
     private Date endDate = null;
-    private GuestList friends = null;
+    private GuestList friends = new GuestList();
     private Location location = null;
 
     private Meeting() {
@@ -42,7 +42,7 @@ public class Meeting {
                    Location location) {
         ID = iD;
         this.title = title;
-        this.friends = new GuestList(friends);
+        this.friends.addGuests(friends);
         this.location = location;
     }
 
@@ -52,7 +52,7 @@ public class Meeting {
         this.title = title;
         this.startDate = start;
         this.endDate = end;
-        this.friends = new GuestList(friends);
+        this.friends.addGuests(friends);
         this.location = location;
     }
 
