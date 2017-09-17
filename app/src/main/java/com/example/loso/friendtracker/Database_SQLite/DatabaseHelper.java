@@ -80,8 +80,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put("title", meeting.getTitle());
         contentValues.put("start_date", String.valueOf(meeting.getStartDate()));
         contentValues.put("end_date", String.valueOf(meeting.getEndDate()));
-        contentValues.put("location", meeting.getLocation().toString());
+        if(meeting.getLocation() != null)
+            contentValues.put("location", meeting.getLocation().toString());
         db.insert("meeting", null, contentValues);
+        addAttendList(meeting);
         db.close();
         return true;
     }
