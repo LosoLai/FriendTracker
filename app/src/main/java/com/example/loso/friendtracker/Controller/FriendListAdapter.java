@@ -1,6 +1,7 @@
 package com.example.loso.friendtracker.Controller;
 
 import android.content.Context;
+import android.location.LocationManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,6 +41,8 @@ public class FriendListAdapter extends ArrayAdapter<Friend> {
         // Populate the data into the template view using the data object
         TextView tvName = (TextView) view.findViewById(R.id.tvName);
         tvName.setText(friend.getName());
+
+        // Get current Location
 
         //Location fl = friend.getLocation();
         Location fl = FriendController.getFriendLocationsForTime(this.getContext(), friend.getName());

@@ -1,8 +1,10 @@
 package com.example.loso.friendtracker.View;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.LocationManager;
 import android.os.Build;
 import android.provider.ContactsContract;
 import android.support.annotation.RequiresApi;
@@ -94,6 +96,9 @@ public class MainActivity extends AppCompatActivity {
         FriendModel friendModel = FriendModel.getInstance();
         friendModel.setFriends(DataManager.createDummyFriendList(getApplicationContext()));
         mMeetingModel.setMeetings(DataManager.createDummMeetingList());
+
+        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
     }
 
     public void addMeeting() {
@@ -112,13 +117,15 @@ public class MainActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.READ_CONTACTS},
                     MY_PERMISSIONS_REQUEST_READ_CONTACTS);
+            permissionCheck = ContextCompat.checkSelfPermission(this,
+                    Manifest.permission.READ_CONTACTS);
         }
 
         if (permissionCheck == PackageManager.PERMISSION_GRANTED) {
             Intent contactPickerIntent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
             startActivityForResult(contactPickerIntent, PICK_CONTACTS);
         } else { //Still not granted
-            Toast.makeText(this, "Requires access to contacts", Toast.LENGTH_SHORT);
+            Toast.makeText(this, "Requires access to contacts", Toast.LENGTH_SHORT).show();
         }
 
     }
@@ -136,7 +143,7 @@ public class MainActivity extends AppCompatActivity {
                 boolean ok = fc.addFriendFromContacts(this, data);
                 if (!ok) {
                     Log.d(LOG_TAG, "not ok activity result");
-                    Toast.makeText(MainActivity.this, "Friend with that name and email already exists", Toast.LENGTH_LONG);
+                    Toast.makeText(MainActivity.this, "Friend with that name and email already exists", Toast.LENGTH_LONG).show();
                     new AlertDialog.Builder(this)
                             .setTitle("Friend Exists")
                             .setMessage("Friend with that name and email already exists")
@@ -160,9 +167,8 @@ public class MainActivity extends AppCompatActivity {
                     startActivityForResult(contactPickerIntent, PICK_CONTACTS);
 
                 } else {
-                    Toast.makeText(this, "Requires access to contacts", Toast.LENGTH_SHORT);
+                    Toast.makeText(this, "Requires access to contacts", Toast.LENGTH_SHORT).show();
                 }
-                return;
             }
         }
     }
