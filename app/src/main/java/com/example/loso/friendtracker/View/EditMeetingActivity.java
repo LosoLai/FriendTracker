@@ -199,24 +199,8 @@ public class EditMeetingActivity extends AppCompatActivity {
         });
     }
 
-<<<<<<< HEAD
     public void setupAttendSection(final String meetingID) {
-        Button addAttend = (Button) findViewById(R.id.bAddAttend);
-
-        addAttend.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(),
-                        DisplayAttendList.class).putExtra("meeting", meetingID));
-            }
-        });
-
-        ArrayList<Friend> friends = meetingController.getMeetingAttendees(meetingID);
-        adapter = new FriendListAdapter(getApplicationContext(), friends);
-=======
-    public void setupAttendSection(Meeting meeting) {
-        final Meeting currentM = meeting;
-        ArrayList<Friend> attends = (ArrayList<Friend>) meeting.getFriends();
+        ArrayList<Friend> attends = meetingController.getMeetingAttendees(meetingID);
         FriendController friendController = new FriendController();
         ArrayList<Friend> friendslist = friendController.getFriendsList();
         final ArrayList<Friend> filtered = new ArrayList<Friend>();
@@ -247,7 +231,7 @@ public class EditMeetingActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 final Friend attend = (Friend) parent.getItemAtPosition(position);
-                meetingController.addAttend(currentM, attend);
+                meetingController.addAttend(meetingID, attend);
                 filtered.remove(attend);
                 adapter.notifyDataSetChanged();
             }
@@ -260,7 +244,6 @@ public class EditMeetingActivity extends AppCompatActivity {
 
 
         adapter = new FriendListAdapter(getApplicationContext(), attends);
->>>>>>> Loso_experiment
         ListView lvAttend = (ListView) findViewById(R.id.attendlist);
         lvAttend.setAdapter(adapter);
         lvAttend.setLongClickable(true);
