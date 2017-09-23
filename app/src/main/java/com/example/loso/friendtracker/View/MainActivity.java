@@ -27,12 +27,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-<<<<<<< HEAD
 import com.example.loso.friendtracker.Model.FriendModel;
 import com.example.loso.friendtracker.Model.MeetingModel;
-=======
 import com.example.loso.friendtracker.Database_SQLite.DatabaseHelper;
->>>>>>> Loso_experiment
 import com.example.loso.friendtracker.Service.DataManager;
 import com.example.loso.friendtracker.Controller.FriendController;
 import com.example.loso.friendtracker.Controller.MeetingController;
@@ -96,7 +93,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-<<<<<<< HEAD
         //Add dummy data to MeetingModel
         MeetingModel mMeetingModel = MeetingModel.getInstance();
         FriendModel friendModel = FriendModel.getInstance();
@@ -105,27 +101,26 @@ public class MainActivity extends AppCompatActivity {
 
         LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
-=======
         //Add dummy data to Model
-        Model mModel = Model.getInstance();
-        mModel.setFriends(DataManager.createDummyFriendList(getApplicationContext()));
-        mModel.setMeetings(DataManager.createDummMeetingList());
+        FriendModel mFModel = FriendModel.getInstance();
+        mFModel.setFriends(DataManager.createDummyFriendList(getApplicationContext()));
+        MeetingModel mMModel = MeetingModel.getInstance();
+        mMModel.setMeetings(DataManager.createDummMeetingList());
 
         //testing----------------------------------------------------------------
         //create database
         db = new DatabaseHelper(this);
         // set friends
-        for(int i=0 ; i<mModel.getFriends().size() ; i++)
+        for(int i=0 ; i<mFModel.getFriends().size() ; i++)
         {
-            db.addFriend(mModel.getFriends().get(i));
+            db.addFriend(mFModel.getFriends().get(i));
         }
         // set meetings
-        for(int j=0 ; j<mModel.getMeetings().size() ; j++)
+        for(int j=0 ; j<mMModel.getMeetings().size() ; j++)
         {
-            db.addMeeting(mModel.getMeetings().get(j));
+            db.addMeeting(mMModel.getMeetings().get(j));
         }
         //------------------------------------------------------------------------
->>>>>>> Loso_experiment
     }
 
     public void addMeeting() {
