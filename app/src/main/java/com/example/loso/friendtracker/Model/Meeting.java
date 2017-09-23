@@ -113,23 +113,14 @@ public class Meeting {
         location = new Location(lati, longi);
     }
 
-<<<<<<< HEAD
     public void removeAttend(String friendID) {
         if (friends != null) {
             friends.removeFriend(friendID);
         }
     }
-=======
-    public boolean removeAttend(Friend friend) {
-		if(this.friends != null)
-			return this.friends.remove(friend);
-		return false;
-	}
 
-	public boolean addAttend(Friend friend) {
+	public void addAttend(Friend friend) {
 		if(this.friends != null)
-			return this.friends.add(friend);
-		return false;
+            friends.addFriend(friend);
 	}
->>>>>>> Loso_experiment
 }
