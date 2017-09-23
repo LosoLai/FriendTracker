@@ -54,9 +54,4 @@ public class AttendListAdapter extends ArrayAdapter<Friend> {
 
         return view;
     }
-
-    @Override
-    public View getDropDownView(int position, View convertView, ViewGroup parent) {
-        return getView(position, convertView, parent);
-    }
 }
