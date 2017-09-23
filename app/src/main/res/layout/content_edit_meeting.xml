@@ -163,17 +163,29 @@
 
         </LinearLayout>
 
-        <Button
-            android:id="@+id/bAddAttend"
+        <TextView
+            android:id="@+id/tvAddAttend"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAlignment="center"
-            android:text="Add Attend"/>
+            android:text="Add extra attends:"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <Spinner
+            android:id="@+id/spinner_Attend"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/tvAttendList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Attend List:"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <ListView
             android:id="@+id/attendlist"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent" />
 
 
     </LinearLayout>

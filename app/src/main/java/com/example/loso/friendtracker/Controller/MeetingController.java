@@ -42,8 +42,21 @@ public class MeetingController {
         mMeetingModel.removeGuest(meeting, friend);
     }
 
+<<<<<<< HEAD
     public Location getMeetingLocation(String meetingID) {
         return mMeetingModel.findMeetingByID(meetingID).getLocation();
+=======
+    public void removeAttend(Meeting meeting, Friend friend) { meeting.removeAttend(friend); }
+    public void addAttend(Meeting meeting, Friend friend) { meeting.addAttend(friend); }
+
+    public FriendLocation getMeetingLocation(String meetingID) {
+        FriendLocation loc = null;
+        Meeting meeting = mModel.findMeetingByID(meetingID);
+        if (meeting != null) {
+            loc = meeting.getLocation();
+        }
+        return loc;
+>>>>>>> Loso_experiment
     }
 
     public ArrayList<Friend> getMeetingAttendees(String meetingID) {
