@@ -1,8 +1,8 @@
 package com.example.loso.friendtracker.Model;
 
 import java.text.DateFormat;
-import java.util.Random;
 import java.util.Date;
+import java.util.Random;
 
 /**
  * Repersents a location by latitude and longitude and can generate a random location
@@ -31,18 +31,6 @@ public class Location {
         longitude = longi;
     }
 
-    public double distance(Location there) {
-        double lat1 = Math.toRadians(latitude);
-        double long1 = Math.toRadians(longitude);
-        double lat2 = Math.toRadians(there.getLatitude());
-        double long2 = Math.toRadians(there.getLongitude());
-
-        // Use spherical cosine formula to calculate distance in km
-        // See http://www.movable-type.co.uk/scripts/latlong.html
-        return Math.acos(Math.sin(lat1) * Math.sin(lat2) + Math.cos(lat1) * Math.cos(lat2) * Math.cos(long2 - long1))
-                * 6371; // Radius of Earth in km
-    }
-
     /**
      * Generates a random location. The new location will be within a square
      * with sides of length 2*within and Location 'near' in the centre.
@@ -57,6 +45,35 @@ public class Location {
         return new Location(lat, longi);
     }
 
+    /*
+     * Simple distance to degrees conversion that is approximate near Melbourne
+     * and worse elsewhere.
+     *
+     * How I found the magic number 0.01:
+     *
+     * I found the factor of 0.01 by starting with the
+     * coordinates of RMIT, adding 0.01 to the latitude and longitude
+     * respectively and finding the average distance between RMIT and the new
+     * points 0.01 degrees away. Changing the latitude by 0.01 degrees gives a
+     * distance of 1.11km. Changing the longitude by 0.01 degrees gives a
+     * distance of 0.87. so 0.01 degrees/km seems reasonable.
+     */
+    public static double distanceToDegrees(double distance) {
+        return distance * 0.01;
+    }
+
+    public double distance(Location there) {
+        double lat1 = Math.toRadians(latitude);
+        double long1 = Math.toRadians(longitude);
+        double lat2 = Math.toRadians(there.getLatitude());
+        double long2 = Math.toRadians(there.getLongitude());
+
+        // Use spherical cosine formula to calculate distance in km
+        // See http://www.movable-type.co.uk/scripts/latlong.html
+        return Math.acos(Math.sin(lat1) * Math.sin(lat2) + Math.cos(lat1) * Math.cos(lat2) * Math.cos(long2 - long1))
+                * 6371; // Radius of Earth in km
+    }
+
     @Override
     public String toString() {
         return String.format("Time=%s, lat=%.5f, long=%.5f",
@@ -65,23 +82,6 @@ public class Location {
                         .format(time),
                 latitude,
                 longitude);
-    }
-
-	/*
-     * Simple distance to degrees conversion that is approximate near Melbourne
-	 * and worse elsewhere. 
-	 * 
-	 * How I found the magic number 0.01:
-	 * 
-	 * I found the factor of 0.01 by starting with the
-	 * coordinates of RMIT, adding 0.01 to the latitude and longitude
-	 * respectively and finding the average distance between RMIT and the new
-	 * points 0.01 degrees away. Changing the latitude by 0.01 degrees gives a
-	 * distance of 1.11km. Changing the longitude by 0.01 degrees gives a
-	 * distance of 0.87. so 0.01 degrees/km seems reasonable.
-	 */
-    public static double distanceToDegrees(double distance) {
-        return distance * 0.01;
     }
 
     public double getLatitude() {
@@ -100,9 +100,13 @@ public class Location {
         this.longitude = longitude;
     }
 
-    public Date getTime() { return this.time; }
+    public Date getTime() {
+        return this.time;
+    }
 
-    public void setTime(Date time) { this.time = time; }
+    public void setTime(Date time) {
+        this.time = time;
+    }
 
     // Test method
     /*public static void main(String[] args) {

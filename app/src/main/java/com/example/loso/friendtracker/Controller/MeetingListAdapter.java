@@ -8,7 +8,6 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.example.loso.friendtracker.Model.Friend;
-import com.example.loso.friendtracker.Model.GuestList;
 import com.example.loso.friendtracker.Model.Location;
 import com.example.loso.friendtracker.Model.Meeting;
 import com.example.loso.friendtracker.R;

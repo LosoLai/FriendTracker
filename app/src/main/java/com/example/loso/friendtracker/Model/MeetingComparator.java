@@ -9,11 +9,10 @@ import java.util.Date;
 
 public class MeetingComparator implements Comparator<Meeting> {
     public final static int ORDER_ACS = 0;
-    public final static int ORDER_DECS =1;
+    public final static int ORDER_DECS = 1;
     private int orderType;
 
-    public MeetingComparator(int orderType)
-    {
+    public MeetingComparator(int orderType) {
         this.orderType = orderType;
     }
 
@@ -21,10 +20,10 @@ public class MeetingComparator implements Comparator<Meeting> {
     public int compare(Meeting o1, Meeting o2) {
         Date date1 = o1.getStartDate();
         Date date2 = o2.getStartDate();
-        if(date1 != null && date2 != null) {
-            if(orderType == ORDER_ACS)
+        if (date1 != null && date2 != null) {
+            if (orderType == ORDER_ACS)
                 return date1.compareTo(date2);
-            if(orderType == ORDER_DECS) {
+            if (orderType == ORDER_DECS) {
                 if (date1.compareTo(date2) > 0)
                     return -1;
                 else if (date1.compareTo(date2) < 0)

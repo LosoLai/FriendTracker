@@ -7,8 +7,8 @@ package com.example.loso.friendtracker.View;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,13 +18,12 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
-
 import com.example.loso.friendtracker.Controller.FriendController;
-import com.example.loso.friendtracker.Model.Friend;
 import com.example.loso.friendtracker.Controller.FriendListAdapter;
+import com.example.loso.friendtracker.Model.Friend;
 import com.example.loso.friendtracker.Model.FriendModel;
-import com.example.loso.friendtracker.Model.MeetingModel;
 import com.example.loso.friendtracker.R;
+import com.example.loso.friendtracker.Service.LocationService;
 
 import java.util.ArrayList;
 import java.util.Observable;
@@ -69,7 +68,9 @@ public class Tab_Friend extends Fragment implements Observer {
         FriendController fc = new FriendController();
         fc.updateFriendLocations(this.getContext());
 
-        adapter = new FriendListAdapter(rootView.getContext(), friends);
+        LocationService locationService = new LocationService(this.getActivity());
+
+        adapter = new FriendListAdapter(rootView.getContext(), friends, locationService);
         ListView lvFriend = (ListView) rootView.findViewById(R.id.friendlist);
         lvFriend.setAdapter(adapter);
 

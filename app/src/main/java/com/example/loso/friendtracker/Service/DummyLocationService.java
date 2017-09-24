@@ -27,27 +27,18 @@ import java.util.Scanner;
 public class DummyLocationService {
     // PRIVATE PORTION
     private static final String LOG_TAG = DummyLocationService.class.getName();
-    private LinkedList<FriendLocation> locationList = new LinkedList<FriendLocation>();
     private static Context context;
+    private LinkedList<FriendLocation> locationList = new LinkedList<FriendLocation>();
 
     // Singleton
     private DummyLocationService() {
     }
 
-    // This is only a data access object (DAO)
-    // You must extract data and place in your model
-    public static class FriendLocation {
-        public Date time;
-        public String id;
-        public String name;
-        public double latitude;
-        public double longitude;
-
-        @Override
-        public String toString() {
-            return String.format("Time=%s, id=%s, name=%s, lat=%.5f, long=%.5f", DateFormat.getTimeInstance(
-                    DateFormat.MEDIUM).format(time), id, name, latitude, longitude);
-        }
+    // singleton
+    // thread safe lazy initialisation: see https://en.wikipedia.org/wiki/Initialization-on-demand_holder_idiom
+    public static DummyLocationService getSingletonInstance(Context context) {
+        DummyLocationService.context = context;
+        return LazyHolder.INSTANCE;
     }
 
 //    // check if the source time is with the range of target time +/- minutes and seconds
@@ -128,24 +119,12 @@ public class DummyLocationService {
         }
     }
 
-    // singleton support
-    private static class LazyHolder {
-        static final DummyLocationService INSTANCE = new DummyLocationService();
-    }
-
-    // PUBLIC METHODS
-
-    // singleton
-    // thread safe lazy initialisation: see https://en.wikipedia.org/wiki/Initialization-on-demand_holder_idiom
-    public static DummyLocationService getSingletonInstance(Context context) {
-        DummyLocationService.context = context;
-        return LazyHolder.INSTANCE;
-    }
-
     // log contents of file (for testing/logging only)
     public void logAll() {
         //log(locationList);
     }
+
+    // PUBLIC METHODS
 
     // log contents of provided list (for testing/logging and example purposes only)
     public void log(List<FriendLocation> locationList) {
@@ -165,5 +144,26 @@ public class DummyLocationService {
             if (timeInRange(friend.time, time, periodMinutes, periodSeconds))
                 returnList.add(friend);
         return returnList;
+    }
+
+    // This is only a data access object (DAO)
+    // You must extract data and place in your model
+    public static class FriendLocation {
+        public Date time;
+        public String id;
+        public String name;
+        public double latitude;
+        public double longitude;
+
+        @Override
+        public String toString() {
+            return String.format("Time=%s, id=%s, name=%s, lat=%.5f, long=%.5f", DateFormat.getTimeInstance(
+                    DateFormat.MEDIUM).format(time), id, name, latitude, longitude);
+        }
+    }
+
+    // singleton support
+    private static class LazyHolder {
+        static final DummyLocationService INSTANCE = new DummyLocationService();
     }
 }

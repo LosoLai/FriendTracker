@@ -55,14 +55,6 @@ public class ContactDataManager {
     private Context context;
     private Intent intent;
 
-    public class ContactQueryException extends Exception {
-        private static final long serialVersionUID = 1L;
-
-        public ContactQueryException(String message) {
-            super(message);
-        }
-    }
-
     /**
      * @param aContext The context through which the Android Contacts Picker Activity
      *                 was launched
@@ -130,6 +122,14 @@ public class ContactDataManager {
         }
 
         return email;
+    }
+
+    public class ContactQueryException extends Exception {
+        private static final long serialVersionUID = 1L;
+
+        public ContactQueryException(String message) {
+            super(message);
+        }
     }
 
 }
