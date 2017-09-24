@@ -1,6 +1,5 @@
 package com.example.loso.friendtracker.Service;
 
-import android.Manifest;
 import android.Manifest.permission;
 import android.app.Activity;
 import android.content.Context;
@@ -10,7 +9,6 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.example.loso.friendtracker.Model.Location;
 
@@ -21,7 +19,7 @@ import java.util.Date;
  */
 
 public class LocationService implements LocationListener {
-    private static final int MY_PERMISSIONS_REQUEST_LOCATION = 17;
+    public static final int MY_PERMISSIONS_REQUEST_LOCATION = 33;
     private static final String LOG_TAG = "LocationService";
     private com.example.loso.friendtracker.Model.Location currentLocation = new Location();
     private Activity activity;
@@ -71,19 +69,19 @@ public class LocationService implements LocationListener {
                 permissionCheckCoarse != PackageManager.PERMISSION_GRANTED) {
             //request permission
             ActivityCompat.requestPermissions(activity,
-                    new String[]{Manifest.permission_group.LOCATION},
+                    new String[]{permission.ACCESS_FINE_LOCATION},
                     MY_PERMISSIONS_REQUEST_LOCATION);
-            permissionCheckFine = ActivityCompat.checkSelfPermission(activity,
-                    permission.ACCESS_FINE_LOCATION);
-            permissionCheckCoarse = ActivityCompat.checkSelfPermission(activity,
-                    permission.ACCESS_COARSE_LOCATION);
+            ActivityCompat.requestPermissions(activity,
+                    new String[]{permission.ACCESS_COARSE_LOCATION},
+                    MY_PERMISSIONS_REQUEST_LOCATION);
         }
 
         if (permissionCheckFine == PackageManager.PERMISSION_GRANTED &&
                 permissionCheckCoarse == PackageManager.PERMISSION_GRANTED) {
+            Log.d(LOG_TAG, "checkPermissions() ok granted");
             return true;
         } else { //Still not granted
-            Toast.makeText(activity, "Requires access to location", Toast.LENGTH_SHORT).show();
+            Log.d(LOG_TAG, "checkPermissions() not granted");
             return false;
         }
     }

@@ -1,10 +1,8 @@
 package com.example.loso.friendtracker.View;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -35,6 +33,7 @@ import com.example.loso.friendtracker.Model.Meeting;
 import com.example.loso.friendtracker.Model.MeetingModel;
 import com.example.loso.friendtracker.R;
 import com.example.loso.friendtracker.Service.DataManager;
+import com.example.loso.friendtracker.Service.LocationService;
 
 import java.util.ArrayList;
 
@@ -173,14 +172,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-
-//        //Add dummy data to MeetingModel
-//        MeetingModel mMeetingModel = MeetingModel.getInstance();
-//        FriendModel friendModel = FriendModel.getInstance();
-//        friendModel.setFriends(DataManager.createDummyFriendList(getApplicationContext()));
-//        mMeetingModel.setMeetings(DataManager.createDummMeetingList());
-
-        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
     }
 
     public void addMeeting() {
@@ -208,7 +199,6 @@ public class MainActivity extends AppCompatActivity {
         } else { //Still not granted
             Toast.makeText(this, "Requires access to contacts", Toast.LENGTH_SHORT).show();
         }
-
     }
 
     /**
@@ -250,6 +240,15 @@ public class MainActivity extends AppCompatActivity {
 
                 } else {
                     Toast.makeText(this, "Requires access to contacts", Toast.LENGTH_SHORT).show();
+                    Log.d(LOG_TAG, "onRequestPermissionResult() - no to contacts");
+                }
+            }
+            case LocationService.MY_PERMISSIONS_REQUEST_LOCATION: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length <= 0
+                        || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(this, "Requires access to location", Toast.LENGTH_SHORT).show();
+                    Log.d(LOG_TAG, "onRequestPermissionResult() - no to location");
                 }
             }
         }
