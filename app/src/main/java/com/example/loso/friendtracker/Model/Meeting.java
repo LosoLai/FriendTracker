@@ -10,16 +10,20 @@ import java.util.Date;
  */
 
 public class Meeting {
-	private String ID;
+    private String ID;
     private String title = null;
     private Date startDate = null;
     private Date endDate = null;
     private GuestList friends = new GuestList();
     private Location location = null;
 
-	public Meeting(String id) {
-		ID = id;
-	}
+    private Meeting() {
+        // Can't have a meeting without an ID
+    }
+
+    public Meeting(String id) {
+        ID = id;
+    }
 
     public Meeting(String iD, String title) {
         ID = iD;
@@ -28,11 +32,11 @@ public class Meeting {
 
     public Meeting(String iD, String title, Date startDate, Date endDate, Location location) {
         ID = iD;
-		this.title = title;
+        this.title = title;
         this.startDate = startDate;
         this.endDate = endDate;
         this.location = location;
-	}
+    }
 
     public Meeting(String iD, String title, ArrayList<Friend> friends,
                    Location location) {
@@ -52,32 +56,33 @@ public class Meeting {
         this.location = location;
     }
 
+
     public String getID() {
-		return ID;
-	}
+        return ID;
+    }
 
-	public void setID(String iD) {
-		ID = iD;
-	}
+    public void setID(String iD) {
+        ID = iD;
+    }
 
-	public String getTitle() {
-		return title;
-	}
+    public String getTitle() {
+        return title;
+    }
 
-	public void setTitle(String title) {
-		this.title = title;
-	}
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
     public Date getStartDate() {
         return startDate;
-	}
+    }
 
     public void setStartDate(Date start) {
         this.startDate = start;
-	}
+    }
 
-	public Date getEndDate() {
-		return endDate;
+    public Date getEndDate() {
+        return endDate;
     }
 
     public void setEndDate(Date end) {
@@ -98,11 +103,11 @@ public class Meeting {
 
     public Location getLocation() {
         return location;
-	}
+    }
 
     public void setLocation(Location location) {
         this.location = location;
-	}
+    }
 
     public void setLocation(double lati, double longi) {
         location = new Location(lati, longi);

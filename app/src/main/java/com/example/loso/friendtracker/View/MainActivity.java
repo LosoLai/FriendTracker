@@ -6,36 +6,35 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.LocationManager;
 import android.os.Build;
+import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.annotation.RequiresApi;
-import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
-import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import com.example.loso.friendtracker.Model.Friend;
-import com.example.loso.friendtracker.Model.FriendModel;
-import com.example.loso.friendtracker.Model.MeetingModel;
-import com.example.loso.friendtracker.Database_SQLite.DatabaseHelper;
-import com.example.loso.friendtracker.Service.DataManager;
 import com.example.loso.friendtracker.Controller.FriendController;
 import com.example.loso.friendtracker.Controller.MeetingController;
+import com.example.loso.friendtracker.Database_SQLite.DatabaseHelper;
+import com.example.loso.friendtracker.Model.Friend;
+import com.example.loso.friendtracker.Model.FriendModel;
 import com.example.loso.friendtracker.Model.Meeting;
+import com.example.loso.friendtracker.Model.MeetingModel;
 import com.example.loso.friendtracker.R;
+import com.example.loso.friendtracker.Service.DataManager;
 
 import java.util.ArrayList;
 
@@ -191,7 +190,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
     private void startContactPicker() {
         int permissionCheck = ContextCompat.checkSelfPermission(this,
                 Manifest.permission.READ_CONTACTS);
@@ -215,6 +213,7 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Called when the contact picked returns
+     *
      * @author ermyasabebe
      */
     @Override

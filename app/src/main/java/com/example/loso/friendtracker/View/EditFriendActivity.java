@@ -22,9 +22,9 @@ import com.example.loso.friendtracker.R;
 import java.util.Calendar;
 
 public class EditFriendActivity extends AppCompatActivity {
+    final static int FRIEND_CHANGED = 127;
     private String friendID = "";
     private FriendController friendController;
-    final static int FRIEND_CHANGED = 127;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

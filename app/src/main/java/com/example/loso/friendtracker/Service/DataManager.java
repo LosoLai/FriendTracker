@@ -4,6 +4,7 @@ package com.example.loso.friendtracker.Service;
  * Created by Loso on 2017/8/19.
  * Repurposed by Lettisia George on 01/09/2017
  */
+
 import android.content.Context;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
@@ -31,7 +32,7 @@ public class DataManager {
 
         //create dummy friend list
         ArrayList<Friend> friends = new ArrayList<Friend>();
-        for(int i=1 ; i<10 ; i++) {
+        for (int i = 1; i < 10; i++) {
             String id = MeetingModel.createID();
             String name = "Friend" + i;
             String email = "Email" + i;
@@ -53,10 +54,9 @@ public class DataManager {
 
     public static ArrayList<Meeting> createDummMeetingList() {
         ArrayList<Meeting> meetings = new ArrayList<Meeting>();
-        ;
         for (int i = 0; i < 3; i++) {
             String title = "Meeting" + Integer.toString(i);
-            int[] dates = {6,4,7};
+            int[] dates = {6, 4, 7};
             ArrayList<Friend> friends = new ArrayList<>();
             friends.add(new Friend(MeetingModel.createID(), Integer.toString(i),
                     Integer.toString(i), null, null));

@@ -1,15 +1,13 @@
 package com.example.loso.friendtracker.Controller;
 
 
+import com.example.loso.friendtracker.Model.Friend;
 import com.example.loso.friendtracker.Model.Location;
 import com.example.loso.friendtracker.Model.Meeting;
-import com.example.loso.friendtracker.Model.Friend;
 import com.example.loso.friendtracker.Model.MeetingModel;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Calendar;
 
 /**
  * Created by Lettisia George on 31/08/2017.

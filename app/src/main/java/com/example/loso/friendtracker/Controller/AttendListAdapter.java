@@ -44,8 +44,7 @@ public class AttendListAdapter extends ArrayAdapter<Friend> {
         //Location fl = friend.getLocation();
         Location fl = FriendController.getFriendLocationsForTime(this.getContext(), friend.getName());
 
-        if (fl != null)
-        {
+        if (fl != null) {
             Log.d("FriendListAdapter", fl.toString());
             TextView tvLocation = (TextView) view.findViewById(R.id.tvAttendLocation);
 

@@ -12,21 +12,21 @@
 
         <TextView
             android:id="@+id/tvTitle"
-            android:layout_height="wrap_content"
             android:layout_width="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textStyle="bold"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
             android:paddingLeft="15dp"
-            android:layout_alignParentLeft="true" />
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/tvTitleContent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textStyle="bold"
             android:layout_alignBottom="@+id/tvTitle"
-            android:layout_centerHorizontal="true" />
+            android:layout_centerHorizontal="true"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textStyle="bold" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -36,11 +36,11 @@
 
         <TextView
             android:id="@+id/tvLocation"
-            android:layout_height="wrap_content"
             android:layout_width="wrap_content"
-            android:text="Location : "
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
             android:paddingLeft="15dp"
-            android:layout_alignParentLeft="true" />
+            android:text="Location : " />
 
         <TextView
             android:id="@+id/tvLocationContent"
@@ -57,11 +57,11 @@
 
         <TextView
             android:id="@+id/tvAttend"
-            android:layout_height="wrap_content"
             android:layout_width="wrap_content"
-            android:text="Friends Invited : "
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
             android:paddingLeft="15dp"
-            android:layout_alignParentLeft="true" />
+            android:text="Friends Invited : " />
 
         <TextView
             android:id="@+id/tvAttendNumber"
@@ -78,11 +78,11 @@
 
         <TextView
             android:id="@+id/tvStart"
-            android:layout_height="wrap_content"
             android:layout_width="wrap_content"
-            android:text="Start Time : "
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
             android:paddingLeft="15dp"
-            android:layout_alignParentLeft="true" />
+            android:text="Start Time : " />
 
         <TextView
             android:id="@+id/tvStartTime"
@@ -99,11 +99,11 @@
 
         <TextView
             android:id="@+id/tvEnd"
-            android:layout_height="wrap_content"
             android:layout_width="wrap_content"
-            android:text="End Time : "
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
             android:paddingLeft="15dp"
-            android:layout_alignParentLeft="true" />
+            android:text="End Time : " />
 
         <TextView
             android:id="@+id/tvEndTime"

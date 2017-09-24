@@ -32,6 +32,16 @@ public class FriendController {
         }
     }
 
+    public static Location getFriendLocationsForTime(Context context, String name) {
+        Location fl = DataManager.getFriendLocation(context, name, Calendar.getInstance().getTime());
+        if (fl == null) {
+            Log.d(LOG_TAG, "null");
+        } else {
+            Log.d(LOG_TAG, "Time: " + Calendar.getInstance().getTime() + " location: " + fl.toString());
+        }
+        return fl;
+    }
+
     public void updateFriendLocations(Context context) {
         DataManager dm = new DataManager();
         ArrayList<Friend> friends = friendModel.getFriends();
@@ -44,16 +54,6 @@ public class FriendController {
                 }
             }
         }
-    }
-
-    public static Location getFriendLocationsForTime(Context context, String name) {
-        Location fl = DataManager.getFriendLocation(context, name, Calendar.getInstance().getTime());
-        if (fl == null) {
-            Log.d(LOG_TAG, "null");
-        } else {
-            Log.d(LOG_TAG, "Time: " + Calendar.getInstance().getTime() + " location: " + fl.toString());
-        }
-        return fl;
     }
 
     public String getFriendName(String friendID) {
@@ -109,6 +109,7 @@ public class FriendController {
     public ArrayList<Friend> getFriendsList() {
         return friendModel.getFriends();
     }
+
     public void removeFriend(String friendID) {
         friendModel.removeFriend(friendID);
     }
