@@ -17,10 +17,6 @@ public class Meeting {
     private GuestList friends = new GuestList();
     private Location location = null;
 
-    private Meeting() {
-        // Can't have a meeting without an ID
-    }
-
 	public Meeting(String id) {
 		ID = id;
 	}
@@ -55,7 +51,6 @@ public class Meeting {
         this.friends.addGuests(friends);
         this.location = location;
     }
-
 
     public String getID() {
 		return ID;

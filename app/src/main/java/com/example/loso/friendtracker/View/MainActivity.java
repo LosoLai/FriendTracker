@@ -27,6 +27,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.example.loso.friendtracker.Model.Friend;
 import com.example.loso.friendtracker.Model.FriendModel;
 import com.example.loso.friendtracker.Model.MeetingModel;
 import com.example.loso.friendtracker.Database_SQLite.DatabaseHelper;
@@ -35,6 +36,8 @@ import com.example.loso.friendtracker.Controller.FriendController;
 import com.example.loso.friendtracker.Controller.MeetingController;
 import com.example.loso.friendtracker.Model.Meeting;
 import com.example.loso.friendtracker.R;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     private static final String LOG_TAG = "MainActivity";
@@ -57,6 +60,85 @@ public class MainActivity extends AppCompatActivity {
      */
     private ViewPager mViewPager;
 
+    //Added by LosoLai  24/09/2017
+    /**
+     * Database sync
+     * maintain original in memory model which is synced (loaded) in onStart()
+     * saved/persisted in onStop()
+     */
+    @Override
+    protected void onStart()
+    {
+        Log.i(LOG_TAG, "onStart()");
+        super.onStart();
+//        //Add dummy data to MeetingModel
+//        MeetingModel mMeetingModel = MeetingModel.getInstance();
+//        FriendModel friendModel = FriendModel.getInstance();
+
+//        db = new DatabaseHelper(this);
+//        db.deleteRows();
+//        // set friends
+//        for(int i=0 ; i<friendModel.getFriends().size() ; i++)
+//        {
+//            db.addFriend(friendModel.getFriends().get(i));
+//        }
+//        // set meetings
+//        for(int j=0 ; j<mMeetingModel.getMeetings().size() ; j++)
+//        {
+//            db.addMeeting(mMeetingModel.getMeetings().get(j));
+//        }
+
+        db = new DatabaseHelper(this);
+        FriendModel mFriendModel = FriendModel.getInstance();
+        boolean hasFriends = db.checkFriendDB(mFriendModel.getFriends());
+        //Add dummy data to Model
+        if(!hasFriends)
+            mFriendModel.setFriends(DataManager.createDummyFriendList(getApplicationContext()));
+
+        MeetingModel mMeetingModel = MeetingModel.getInstance();
+        boolean hasMeetings = db.checkMeetingDB(mMeetingModel.getMeetings());
+        //Add dummy data to Model
+        if(!hasMeetings)
+            mMeetingModel.setMeetings(DataManager.createDummMeetingList());
+        else //setting attendlist
+        {
+            int size = mMeetingModel.getMeetings().size();
+            for(int i=0 ; i<size ; i++)
+            {
+                Meeting meeting = mMeetingModel.getMeetings().get(i);
+                String meetingID = meeting.getID();
+                ArrayList<String> attendIDList = db.readDB_AttendListTable(meetingID);
+                for(int j=0 ; j<attendIDList.size() ; j++)
+                {
+                    Friend attend = mFriendModel.findFriendByID(attendIDList.get(j));
+                    meeting.addAttend(attend);
+                }
+            }
+        }
+    }
+
+    @Override
+    protected void onStop()
+    {
+        Log.i(LOG_TAG, "onStop()");
+        super.onStop();
+        //clean tables
+        db.deleteRows();
+        //saving data into db
+        FriendModel mFModel = FriendModel.getInstance();
+        MeetingModel mMModel = MeetingModel.getInstance();
+        // set friends
+        for(int i=0 ; i<mFModel.getFriends().size() ; i++)
+        {
+            db.addFriend(mFModel.getFriends().get(i));
+        }
+        // set meetings
+        for(int j=0 ; j<mMModel.getMeetings().size() ; j++)
+        {
+            db.addMeeting(mMModel.getMeetings().get(j));
+        }
+    }
+    //------------------------------------
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
@@ -93,34 +175,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //Add dummy data to MeetingModel
-        MeetingModel mMeetingModel = MeetingModel.getInstance();
-        FriendModel friendModel = FriendModel.getInstance();
-        friendModel.setFriends(DataManager.createDummyFriendList(getApplicationContext()));
-        mMeetingModel.setMeetings(DataManager.createDummMeetingList());
+//        //Add dummy data to MeetingModel
+//        MeetingModel mMeetingModel = MeetingModel.getInstance();
+//        FriendModel friendModel = FriendModel.getInstance();
+//        friendModel.setFriends(DataManager.createDummyFriendList(getApplicationContext()));
+//        mMeetingModel.setMeetings(DataManager.createDummMeetingList());
 
         LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-
-        //Add dummy data to Model
-        FriendModel mFModel = FriendModel.getInstance();
-        mFModel.setFriends(DataManager.createDummyFriendList(getApplicationContext()));
-        MeetingModel mMModel = MeetingModel.getInstance();
-        mMModel.setMeetings(DataManager.createDummMeetingList());
-
-        //testing----------------------------------------------------------------
-        //create database
-        db = new DatabaseHelper(this);
-        // set friends
-        for(int i=0 ; i<mFModel.getFriends().size() ; i++)
-        {
-            db.addFriend(mFModel.getFriends().get(i));
-        }
-        // set meetings
-        for(int j=0 ; j<mMModel.getMeetings().size() ; j++)
-        {
-            db.addMeeting(mMModel.getMeetings().get(j));
-        }
-        //------------------------------------------------------------------------
     }
 
     public void addMeeting() {
