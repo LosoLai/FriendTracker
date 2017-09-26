@@ -62,6 +62,17 @@ public class Location {
         return distance * 0.01;
     }
 
+    /**
+     * @param other Location to compare
+     * @return Location with mean latitude and longitude and latest of two times
+     */
+    public Location getMidPoint(Location other) {
+        double lati = (latitude + other.getLatitude()) / 2;
+        double longi = (longitude + other.getLongitude()) / 2;
+        Date laterTime = time.after(other.getTime()) ? time : other.getTime();
+        return new Location(laterTime, lati, longi);
+    }
+
     public double distance(Location there) {
         double lat1 = Math.toRadians(latitude);
         double long1 = Math.toRadians(longitude);
