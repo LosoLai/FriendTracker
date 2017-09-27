@@ -43,7 +43,6 @@ public class FriendController {
     }
 
     public void updateFriendLocations(Context context) {
-        DataManager dm = new DataManager();
         ArrayList<Friend> friends = friendModel.getFriends();
         if (friends != null) {
             for (Friend f : friends) {

@@ -9,6 +9,12 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.loso.friendtracker.View.MainActivity$PlaceholderFragment">
 
+    <TextView
+        android:id="@+id/tvCurrentLocation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Current Location" />
+
     <ListView
         android:id="@+id/friendlist"
         android:layout_width="match_parent"

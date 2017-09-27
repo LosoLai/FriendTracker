@@ -5,4 +5,5 @@
     <string name="title_activity_edit_friend">EditFriendActivity</string>
     <string name="title_activity_edit_meeting">EditMeetingActivity</string>
     <string name="title_activity_display_attends">DisplayAttendsListActivity</string>
+    <string name="title_activity_map">Map</string>
 </resources>

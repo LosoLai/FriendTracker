@@ -1,6 +1,5 @@
 package com.example.loso.friendtracker.Model;
 
-import java.text.DateFormat;
 import java.util.Date;
 import java.util.Random;
 
@@ -87,12 +86,7 @@ public class Location {
 
     @Override
     public String toString() {
-        return String.format("Time=%s, lat=%.5f, long=%.5f",
-                DateFormat.getTimeInstance(
-                        DateFormat.MEDIUM)
-                        .format(time),
-                latitude,
-                longitude);
+        return String.format("lat=%.5f, long=%.5f", latitude, longitude);
     }
 
     public double getLatitude() {
@@ -126,10 +120,11 @@ public class Location {
         Location loc3 = new Location(-37.809427, 144.953727);
         Location loc4 = new Location(-37.819427, 144.973727);
 
-        System.out.println("Changing Latitude " + loc1.distance(loc2));
-        System.out.println("Changing Longitude " + loc1.distance(loc3));
-        System.out.println("Changing Both " + loc1.distance(loc4));
-        System.out.println("Distance: 100km = " + distanceToDegrees(100) + " degrees");
+        System.out.println(generateRandomLocation(loc1, 3));
+        System.out.println(generateRandomLocation(loc2, 3));
+        System.out.println(generateRandomLocation(loc3, 4));
+        System.out.println(generateRandomLocation(loc4, 5));
+
     }*/
 
 }

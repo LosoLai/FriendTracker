@@ -9,8 +9,10 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
+import android.widget.TextView;
 
 import com.example.loso.friendtracker.Model.Location;
+import com.example.loso.friendtracker.R;
 
 import java.util.Date;
 
@@ -42,6 +44,9 @@ public class LocationService implements LocationListener {
         currentLocation.setTime(new Date(location.getTime()));
         currentLocation.setLatitude(location.getLatitude());
         currentLocation.setLongitude(location.getLongitude());
+
+        TextView tvCurrent = (TextView) activity.findViewById(R.id.tvCurrentLocation);
+        tvCurrent.setText(currentLocation.toString());
     }
 
     @Override

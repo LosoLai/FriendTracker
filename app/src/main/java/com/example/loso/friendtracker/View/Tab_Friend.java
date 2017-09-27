@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.loso.friendtracker.Controller.FriendController;
@@ -42,17 +43,6 @@ public class Tab_Friend extends Fragment implements Observer {
 
         Log.d(LOG_TAG, "OnCreateView()");
 
-//        View.OnClickListener listener = new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent displayContacts = new Intent(getActivity(), DisplayContacts.class);
-//                startActivity(displayContacts);
-//            }
-//        };
-//
-//        Button addFriend = (Button) rootView.findViewById(R.id.bAddFriend);
-//        addFriend.setOnClickListener(listener);
-
         return rootView;
     }
 
@@ -69,6 +59,9 @@ public class Tab_Friend extends Fragment implements Observer {
         fc.updateFriendLocations(this.getContext());
 
         LocationService locationService = new LocationService(this.getActivity());
+
+        TextView tvCurrent = (TextView) getView().findViewById(R.id.tvCurrentLocation);
+        tvCurrent.setText(locationService.getCurrentLocation().toString());
 
         adapter = new FriendListAdapter(rootView.getContext(), friends, locationService);
         ListView lvFriend = (ListView) rootView.findViewById(R.id.friendlist);
