@@ -10,7 +10,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.loso.friendtracker.Model.Location;
 import com.example.loso.friendtracker.R;
+import com.example.loso.friendtracker.Service.LocationService;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -24,11 +26,12 @@ public class Tab_Map extends Fragment implements OnMapReadyCallback {
     MapView mMapView;
     View mView;
     private GoogleMap mMap;
+    private LocationService locationService;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
+        locationService = new LocationService(getActivity());
         // Inflate the layout for this fragment
         mView = inflater.inflate(R.layout.tab_map, container, false);
         return mView;
@@ -63,10 +66,13 @@ public class Tab_Map extends Fragment implements OnMapReadyCallback {
         MapsInitializer.initialize((getContext()));
         googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 
+        Location current = locationService.getCurrentLocation();
+        LatLng here = new LatLng(current.getLatitude(), current.getLongitude());
 
         // Add a marker in Sydney and move the camera
         LatLng rmit = new LatLng(-37.809427, 144.963727);
-        mMap.addMarker(new MarkerOptions().position(rmit).title("Marker in rmit"));
+        mMap.addMarker(new MarkerOptions().position(rmit).title("Current Location"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(rmit));
+        mMap.moveCamera(CameraUpdateFactory.zoomTo(15));
     }
 }

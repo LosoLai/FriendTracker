@@ -39,6 +39,7 @@ public class Location {
      */
     public static Location generateRandomLocation(Location near, double within) {
         Random rand = new Random(System.currentTimeMillis());
+        within = distanceToDegrees(within);
         double lat = near.getLatitude() + rand.nextDouble() * 2 * within - within;
         double longi = near.getLongitude() + rand.nextDouble() * 2 * within - within;
         return new Location(lat, longi);
@@ -70,6 +71,21 @@ public class Location {
         double longi = (longitude + other.getLongitude()) / 2;
         Date laterTime = time.after(other.getTime()) ? time : other.getTime();
         return new Location(laterTime, lati, longi);
+    }
+
+    public Location getMidpoint(Location[] other) {
+        double lati = latitude;
+        double longi = longitude;
+
+        for (Location loc : other) {
+            lati += loc.getLatitude();
+            longi += loc.getLongitude();
+        }
+
+        lati = lati / (1 + other.length);
+        longi = longi / (1 + other.length);
+
+        return new Location(time, lati, longi);
     }
 
     public double distance(Location there) {

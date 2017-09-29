@@ -9,15 +9,15 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
-import android.widget.TextView;
 
 import com.example.loso.friendtracker.Model.Location;
-import com.example.loso.friendtracker.R;
 
 import java.util.Date;
 
 /**
  * Created by Lettisia George on 21/09/2017.
+ *
+ * Add default Location if no location found
  */
 
 public class LocationService implements LocationListener {
@@ -31,22 +31,29 @@ public class LocationService implements LocationListener {
         LocationManager locationManager = (LocationManager) activity.getSystemService(Context.LOCATION_SERVICE);
         if (checkPermissions()) {
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+
+            android.location.Location updatedLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            currentLocation.setLongitude(updatedLocation.getLongitude());
+            currentLocation.setLatitude(updatedLocation.getLatitude());
+            currentLocation.setTime(new Date(updatedLocation.getTime()));
+            Log.d(LOG_TAG, "constructor()" + currentLocation.toString());
         }
     }
 
     public com.example.loso.friendtracker.Model.Location getCurrentLocation() {
+        Log.d(LOG_TAG, "getCurrentLocation()" + currentLocation.toString());
         return currentLocation;
     }
 
     @Override
     public void onLocationChanged(android.location.Location location) {
-        Log.d(LOG_TAG, "onLocationChanged()");
+        Log.d(LOG_TAG, "onLocationChanged()" + location.toString());
         currentLocation.setTime(new Date(location.getTime()));
         currentLocation.setLatitude(location.getLatitude());
         currentLocation.setLongitude(location.getLongitude());
-
-        TextView tvCurrent = (TextView) activity.findViewById(R.id.tvCurrentLocation);
-        tvCurrent.setText(currentLocation.toString());
+        Log.d(LOG_TAG, "onLocationChanged()" + currentLocation.toString());
+        //  TextView tvCurrent = (TextView) activity.findViewById(R.id.tvCurrentLocation);
+        //  tvCurrent.setText(currentLocation.toString());
     }
 
     @Override

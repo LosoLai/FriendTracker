@@ -5,6 +5,10 @@ import java.util.Observable;
 
 /**
  * Created by Lettisia George on 16/09/2017.
+ *
+ * hashmap with friend as key and walk time as value.
+ *
+ * In service: go through all meeting guest lists to update walk times.
  */
 
 public class GuestList extends Observable {
