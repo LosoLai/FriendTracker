@@ -29,10 +29,12 @@ import com.example.loso.friendtracker.Controller.MeetingController;
 import com.example.loso.friendtracker.Database_SQLite.DatabaseHelper;
 import com.example.loso.friendtracker.Model.Friend;
 import com.example.loso.friendtracker.Model.FriendModel;
+import com.example.loso.friendtracker.Model.Location;
 import com.example.loso.friendtracker.Model.Meeting;
 import com.example.loso.friendtracker.Model.MeetingModel;
 import com.example.loso.friendtracker.R;
 import com.example.loso.friendtracker.Service.DataManager;
+import com.example.loso.friendtracker.Service.DistanceService;
 import com.example.loso.friendtracker.Service.LocationService;
 
 import java.util.ArrayList;
@@ -42,21 +44,6 @@ public class MainActivity extends AppCompatActivity {
     private static final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 17;
     private static final int PICK_CONTACTS = 100;
     private DatabaseHelper db;
-
-    /**
-     * The {@link android.support.v4.view.PagerAdapter} that will provide
-     * fragments for each of the sections. We use a
-     * {@link FragmentPagerAdapter} derivative, which will keep every
-     * loaded fragment in memory. If this becomes too memory intensive, it
-     * may be best to switch to a
-     * {@link android.support.v4.app.FragmentStatePagerAdapter}.
-     */
-    private SectionsPagerAdapter mSectionsPagerAdapter;
-
-    /**
-     * The {@link ViewPager} that will host the section contents.
-     */
-    private ViewPager mViewPager;
 
     //Added by LosoLai  24/09/2017
     /**
@@ -69,22 +56,9 @@ public class MainActivity extends AppCompatActivity {
     {
         Log.i(LOG_TAG, "onStart()");
         super.onStart();
-//        //Add dummy data to MeetingModel
-//        MeetingModel mMeetingModel = MeetingModel.getInstance();
-//        FriendModel friendModel = FriendModel.getInstance();
 
-//        db = new DatabaseHelper(this);
-//        db.deleteRows();
-//        // set friends
-//        for(int i=0 ; i<friendModel.getFriends().size() ; i++)
-//        {
-//            db.addFriend(friendModel.getFriends().get(i));
-//        }
-//        // set meetings
-//        for(int j=0 ; j<mMeetingModel.getMeetings().size() ; j++)
-//        {
-//            db.addMeeting(mMeetingModel.getMeetings().get(j));
-//        }
+        //call locationservice constructor to update current location in preferences.
+        Location currentLocation = new LocationService(this).getCurrentLocation();
 
         db = new DatabaseHelper(this);
         FriendModel mFriendModel = FriendModel.getInstance();
@@ -113,6 +87,10 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         }
+
+        // Start the DistanceService to calculate friend walking times
+        Intent intent = new Intent(this, DistanceService.class);
+        getApplicationContext().startService(intent);
     }
 
     @Override
@@ -148,10 +126,21 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        /*
+      The {@link android.support.v4.view.PagerAdapter} that will provide
+      fragments for each of the sections. We use a
+      {@link FragmentPagerAdapter} derivative, which will keep every
+      loaded fragment in memory. If this becomes too memory intensive, it
+      may be best to switch to a
+      {@link android.support.v4.app.FragmentStatePagerAdapter}.
+     */
+        SectionsPagerAdapter mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.container);
+        /*
+      The {@link ViewPager} that will host the section contents.
+     */
+        ViewPager mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
         final TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);

@@ -19,6 +19,7 @@ public class FriendModel extends Observable {
     private static FriendModel instance = null;
     private ArrayList<Friend> friends;
 
+
     private FriendModel() {
         friends = new ArrayList<>();
     }
@@ -127,6 +128,30 @@ public class FriendModel extends Observable {
             friend.setEmail(email);
             setChanged();
             notifyObservers();
+        }
+    }
+
+    public void updateFriendLocation(String friendID, Location location) {
+        Friend friend = findFriendByID(friendID);
+        if (friend != null) {
+            friend.setLocation(location);
+            setChanged();
+            notifyObservers(friend);
+        }
+    }
+
+    public Location getFriendLocation(String friendID) {
+        Friend friend = findFriendByID(friendID);
+        if (friend != null) {
+            return friend.getLocation();
+        }
+        return null;
+    }
+
+    public void updateFriendWalkTime(String friendID, double walkTime) {
+        Friend friend = findFriendByID(friendID);
+        if (friend != null) {
+            friend.setWalkTime(walkTime);
         }
     }
 }

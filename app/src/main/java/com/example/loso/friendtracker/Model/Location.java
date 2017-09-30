@@ -1,5 +1,6 @@
 package com.example.loso.friendtracker.Model;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.Random;
 
@@ -9,7 +10,9 @@ import java.util.Random;
  * @author Lettisia George
  */
 
-public class Location {
+public class Location implements Serializable {
+    public static final Location RMIT = new Location(-37.809427, 144.963727);
+    public static final Location NEAR_RMIT = new Location(-37.809427, 144.962727);
     // LatLong of RMIT: -37.809427, 144.963727
     private Date time;
     private double latitude;

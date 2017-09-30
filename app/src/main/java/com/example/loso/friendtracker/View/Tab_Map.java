@@ -1,9 +1,12 @@
 package com.example.loso.friendtracker.View;
 
 /**
+ * Shows a map with current locations of self and friends.
  * Created by Loso on 2017/8/19.
  */
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -14,7 +17,6 @@ import com.example.loso.friendtracker.Controller.FriendController;
 import com.example.loso.friendtracker.Model.Friend;
 import com.example.loso.friendtracker.Model.Location;
 import com.example.loso.friendtracker.R;
-import com.example.loso.friendtracker.Service.LocationService;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -31,12 +33,10 @@ public class Tab_Map extends Fragment implements OnMapReadyCallback {
     MapView mMapView;
     View mView;
     private GoogleMap mMap;
-    private LocationService locationService;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        locationService = new LocationService(getActivity());
         // Inflate the layout for this fragment
         mView = inflater.inflate(R.layout.tab_map, container, false);
         return mView;
@@ -54,7 +54,6 @@ public class Tab_Map extends Fragment implements OnMapReadyCallback {
         }
     }
 
-
     /**
      * Manipulates the map once available.
      * This callback is triggered when the map is ready to be used.
@@ -71,14 +70,16 @@ public class Tab_Map extends Fragment implements OnMapReadyCallback {
         MapsInitializer.initialize((getContext()));
         googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 
-        Location current = locationService.getCurrentLocation();
-        LatLng here = new LatLng(current.getLatitude(), current.getLongitude());
+        SharedPreferences pref = getActivity().getSharedPreferences("location", Context.MODE_PRIVATE);
+        LatLng here = new LatLng(pref.getFloat("latitude", (float) Location.RMIT.getLatitude()),
+                pref.getFloat("longitude", (float) Location.RMIT.getLongitude()));
 
         // Add a marker in Sydney and move the camera
         LatLng rmit = new LatLng(-37.809427, 144.963727);
         mMap.addMarker(new MarkerOptions().position(here).title("Current Location"));
 
         FriendController fc = new FriendController();
+        //fc.updateFriendLocations(getContext());
         ArrayList<Friend> friendList = fc.getFriendsList();
 
         for (Friend friend : friendList) {

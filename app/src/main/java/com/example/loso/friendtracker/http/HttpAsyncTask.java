@@ -14,11 +14,10 @@ import org.apache.http.impl.client.DefaultHttpClient;
 
 public class HttpAsyncTask extends AsyncTask {
     public static final String LOG_TAG = "HttpAsyncTask";
-    Activity activity = null;
     private String url;
 
     public HttpAsyncTask(Activity activity, String url) {
-        this.activity = activity;
+        Activity activity1 = activity;
         this.url = url;
     }
 

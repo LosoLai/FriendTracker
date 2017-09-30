@@ -13,6 +13,7 @@ import java.util.Observable;
  */
 
 public class GuestList extends Observable {
+    public static final double INVALID_WALK_TIME = -100.0;
     private HashMap<Friend, Double> guests = new HashMap<>();
 
     public GuestList() {
@@ -20,13 +21,13 @@ public class GuestList extends Observable {
 
     public GuestList(ArrayList<Friend> friends) {
         for (Friend f : friends) {
-            guests.put(f, 0.0);
+            guests.put(f, INVALID_WALK_TIME);
         }
 
     }
 
     public void addFriend(Friend friend) {
-        guests.put(friend, 0.0);
+        guests.put(friend, INVALID_WALK_TIME);
         setChanged();
         notifyObservers();
     }
@@ -55,7 +56,7 @@ public class GuestList extends Observable {
 
     public void addGuests(ArrayList<Friend> friends) {
         for (Friend f : friends) {
-            guests.put(f, 0.0);
+            guests.put(f, INVALID_WALK_TIME);
         }
         setChanged();
         notifyObservers();
@@ -68,7 +69,7 @@ public class GuestList extends Observable {
     public void setGuests(ArrayList<Friend> friends) {
         guests.clear();
         for (Friend f : friends) {
-            guests.put(f, 0.0);
+            guests.put(f, INVALID_WALK_TIME);
         }
         setChanged();
         notifyObservers();

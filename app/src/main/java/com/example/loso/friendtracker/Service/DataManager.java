@@ -76,7 +76,7 @@ public class DataManager {
         return grabFriendLocation(name, list);
     }
 
-    public static Location grabFriendLocation(String name, List<DummyLocationService.FriendLocation> locs) {
+    private static Location grabFriendLocation(String name, List<DummyLocationService.FriendLocation> locs) {
         Location found = null;
         for (DummyLocationService.FriendLocation fl : locs) {
             //Log.d(LOG_TAG, fl.name + "=" + name);
@@ -89,7 +89,7 @@ public class DataManager {
 
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-    public static List<DummyLocationService.FriendLocation> getFriendLocationsForTime(Context context, String name, Date time, int periodMinutes, int periodSeconds) {
+    private static List<DummyLocationService.FriendLocation> getFriendLocationsForTime(Context context, String name, Date time, int periodMinutes, int periodSeconds) {
         DummyLocationService dummyLocationService = DummyLocationService.getSingletonInstance(context);
         List<DummyLocationService.FriendLocation> matched = null;
         // 2 mins either side of 9:46:30 AM

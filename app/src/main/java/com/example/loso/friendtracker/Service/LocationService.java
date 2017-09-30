@@ -3,6 +3,7 @@ package com.example.loso.friendtracker.Service;
 import android.Manifest.permission;
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -15,9 +16,12 @@ import com.example.loso.friendtracker.Model.Location;
 import java.util.Date;
 
 /**
+ * Contains and updates the current device location.
+ *
+ * Defaults to Location.RMIT
+ *
  * Created by Lettisia George on 21/09/2017.
  *
- * Add default Location if no location found
  */
 
 public class LocationService implements LocationListener {
@@ -31,12 +35,9 @@ public class LocationService implements LocationListener {
         LocationManager locationManager = (LocationManager) activity.getSystemService(Context.LOCATION_SERVICE);
         if (checkPermissions()) {
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
-
-            android.location.Location updatedLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            currentLocation.setLongitude(updatedLocation.getLongitude());
-            currentLocation.setLatitude(updatedLocation.getLatitude());
-            currentLocation.setTime(new Date(updatedLocation.getTime()));
-            Log.d(LOG_TAG, "constructor()" + currentLocation.toString());
+            saveLocationPreference(locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER));
+        } else {
+            currentLocation = Location.RMIT;
         }
     }
 
@@ -47,13 +48,7 @@ public class LocationService implements LocationListener {
 
     @Override
     public void onLocationChanged(android.location.Location location) {
-        Log.d(LOG_TAG, "onLocationChanged()" + location.toString());
-        currentLocation.setTime(new Date(location.getTime()));
-        currentLocation.setLatitude(location.getLatitude());
-        currentLocation.setLongitude(location.getLongitude());
-        Log.d(LOG_TAG, "onLocationChanged()" + currentLocation.toString());
-        //  TextView tvCurrent = (TextView) activity.findViewById(R.id.tvCurrentLocation);
-        //  tvCurrent.setText(currentLocation.toString());
+        saveLocationPreference(location);
     }
 
     @Override
@@ -96,5 +91,19 @@ public class LocationService implements LocationListener {
             Log.d(LOG_TAG, "checkPermissions() not granted");
             return false;
         }
+    }
+
+    private void saveLocationPreference(android.location.Location updatedLocation) {
+        currentLocation.setLongitude(updatedLocation.getLongitude());
+        currentLocation.setLatitude(updatedLocation.getLatitude());
+        currentLocation.setTime(new Date(updatedLocation.getTime()));
+        Log.d(LOG_TAG, "constructor()" + currentLocation.toString());
+
+        SharedPreferences locationPref = activity.getSharedPreferences("location", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = locationPref.edit();
+        editor.putFloat("latitude", (float) currentLocation.getLatitude());
+        editor.putFloat("longitude", (float) currentLocation.getLongitude());
+        editor.putBoolean("changed", true);
+        editor.apply();
     }
 }

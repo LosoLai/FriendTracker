@@ -1,8 +1,11 @@
 package com.example.loso.friendtracker.View;
 
 /**
+ *
  * Created by Loso on 2017/8/19.
  * Modified to use MeetingModel class by Lettisia George 2017/9/1
+ *
+ * @author Lettisia George
  */
 
 import android.content.DialogInterface;
@@ -16,7 +19,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.loso.friendtracker.Controller.FriendController;
@@ -24,7 +26,6 @@ import com.example.loso.friendtracker.Controller.FriendListAdapter;
 import com.example.loso.friendtracker.Model.Friend;
 import com.example.loso.friendtracker.Model.FriendModel;
 import com.example.loso.friendtracker.R;
-import com.example.loso.friendtracker.Service.LocationService;
 
 import java.util.ArrayList;
 import java.util.Observable;
@@ -56,16 +57,13 @@ public class Tab_Friend extends Fragment implements Observer {
         mFriendModel.addObserver(this);
         ArrayList<Friend> friends = mFriendModel.getFriends();
         FriendController fc = new FriendController();
-        fc.updateFriendLocations(this.getContext());
+        //fc.updateFriendLocations(this.getContext());
 
-        LocationService locationService = new LocationService(this.getActivity());
-
-        TextView tvCurrent = (TextView) getView().findViewById(R.id.tvCurrentLocation);
-        tvCurrent.setText(locationService.getCurrentLocation().toString());
-
-        adapter = new FriendListAdapter(rootView.getContext(), friends, locationService);
+        adapter = new FriendListAdapter(rootView.getContext(), friends);
         ListView lvFriend = (ListView) rootView.findViewById(R.id.friendlist);
         lvFriend.setAdapter(adapter);
+
+        adapter.notifyDataSetChanged();
 
         lvFriend.setClickable(true);
         lvFriend.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -104,9 +102,11 @@ public class Tab_Friend extends Fragment implements Observer {
 
     @Override
     public void update(Observable o, Object arg) {
-        Log.d(LOG_TAG, "MADE IT TO UPDATE METHOD.");
-        FriendController fc = new FriendController();
-        fc.updateFriendLocations(this.getContext());
-        adapter.notifyDataSetChanged();
+        if (o instanceof FriendModel && adapter != null && !(arg instanceof Friend)) {
+            Log.d(LOG_TAG, "MADE IT TO UPDATE METHOD.");
+            //FriendController fc = new FriendController();
+            //fc.updateFriendLocations(this.getContext());
+            adapter.notifyDataSetChanged();
+        }
     }
 }

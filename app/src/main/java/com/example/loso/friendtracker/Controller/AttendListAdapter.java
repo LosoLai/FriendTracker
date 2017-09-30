@@ -27,7 +27,7 @@ public class AttendListAdapter extends ArrayAdapter<Friend> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         FriendController fc = new FriendController();
-        fc.updateFriendLocations(this.getContext());
+        //fc.updateFriendLocations(this.getContext());
 
         // Get the data item
         Friend friend = getItem(position);
@@ -42,7 +42,7 @@ public class AttendListAdapter extends ArrayAdapter<Friend> {
         tvName.setText(friend.getName());
 
         //Location fl = friend.getLocation();
-        Location fl = FriendController.getFriendLocationsForTime(this.getContext(), friend.getName());
+        Location fl = fc.getFriendLocationsForTime(this.getContext(), friend.getID());
 
         if (fl != null) {
             Log.d("FriendListAdapter", fl.toString());

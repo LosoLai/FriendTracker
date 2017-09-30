@@ -85,7 +85,7 @@ public class EditMeetingActivity extends AppCompatActivity {
 
         Calendar curDate = Calendar.getInstance();
         SimpleDateFormat sdf_Date = new SimpleDateFormat("yyyy-MM-dd");
-        SimpleDateFormat sdf_Time = new SimpleDateFormat("h:mm a");
+        SimpleDateFormat sdf_Time = new SimpleDateFormat("hh:mm a");
 
         if (dates[0] != null) {
             curDate.setTime(dates[0]);

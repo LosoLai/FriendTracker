@@ -43,7 +43,7 @@ public final class MeetingModel extends Observable {
     }
 
     public boolean removeMeeting(String meet) {
-        boolean done = meetings.remove(meet);
+        boolean done = meetings.remove(findMeetingByID(meet));
         if (done) {
             setChanged();
             notifyObservers();

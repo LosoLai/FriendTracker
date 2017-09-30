@@ -1,6 +1,7 @@
 package com.example.loso.friendtracker.Controller;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Locale;
 
 /**
  * Created by Loso on 2017/8/20.
@@ -27,10 +29,9 @@ public class MeetingListAdapter extends ArrayAdapter<Meeting> {
         super(context, 0, contacts);
     }
 
-    //// TODO: 16/09/2017 Massive problems here. should be calling a model but is operating
-    /// directly on meeting instead. Is this ok?
+    @NonNull
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, @NonNull ViewGroup parent) {
         // Get the data item
         Meeting meeting = getItem(position);
         // Check if an existing view is being reused, otherwise inflate the view
@@ -56,7 +57,7 @@ public class MeetingListAdapter extends ArrayAdapter<Meeting> {
             if (meeting.getFriends() == null) {
                 tvAttend.setText("0");
             } else {
-                tvAttend.setText(Integer.toString(friends.size()));
+                tvAttend.setText(String.format(Locale.ENGLISH, "%d", friends.size()));
             }
         }
 
