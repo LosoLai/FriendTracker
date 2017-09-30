@@ -2,6 +2,7 @@ package com.example.loso.friendtracker.Model;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 
 /**
  * Contains meeting data
@@ -89,7 +90,7 @@ public class Meeting {
         this.endDate = end;
     }
 
-    public ArrayList<Friend> getFriends() {
+    public HashMap<Friend, Double> getFriends() {
         return friends.getGuestList();
     }
 

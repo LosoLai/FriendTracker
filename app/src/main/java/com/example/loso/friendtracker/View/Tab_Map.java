@@ -10,6 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.loso.friendtracker.Controller.FriendController;
+import com.example.loso.friendtracker.Model.Friend;
 import com.example.loso.friendtracker.Model.Location;
 import com.example.loso.friendtracker.R;
 import com.example.loso.friendtracker.Service.LocationService;
@@ -18,8 +20,11 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.util.ArrayList;
 
 
 public class Tab_Map extends Fragment implements OnMapReadyCallback {
@@ -71,8 +76,23 @@ public class Tab_Map extends Fragment implements OnMapReadyCallback {
 
         // Add a marker in Sydney and move the camera
         LatLng rmit = new LatLng(-37.809427, 144.963727);
-        mMap.addMarker(new MarkerOptions().position(rmit).title("Current Location"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(rmit));
+        mMap.addMarker(new MarkerOptions().position(here).title("Current Location"));
+
+        FriendController fc = new FriendController();
+        ArrayList<Friend> friendList = fc.getFriendsList();
+
+        for (Friend friend : friendList) {
+            Location floc = friend.getLocation();
+            if (floc != null) {
+                LatLng friendloc = new LatLng(floc.getLatitude(), floc.getLongitude());
+                mMap.addMarker(new MarkerOptions().position(friendloc)
+                        .title(friend.getName())
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+            }
+        }
+
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(here));
         mMap.moveCamera(CameraUpdateFactory.zoomTo(15));
+
     }
 }

@@ -11,6 +11,7 @@ import com.example.loso.friendtracker.Model.Friend;
 import com.example.loso.friendtracker.R;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class DisplayAttendList extends AppCompatActivity {
     final static int ATTEND_CHANGED = 128;
@@ -28,7 +29,7 @@ public class DisplayAttendList extends AppCompatActivity {
         meetingID = getIntent().getStringExtra("meeting");
         meetingController = new MeetingController();
         friendController = new FriendController();
-        ArrayList<Friend> meeting_Attend = meetingController.getMeetingAttendees(meetingID);
+        HashMap<Friend, Double> meeting_Attend = meetingController.getMeetingAttendees(meetingID);
         ArrayList<Friend> friendslist = friendController.getFriendsList();
 
         ArrayList<Friend> filtered = new ArrayList<Friend>();
@@ -36,8 +37,7 @@ public class DisplayAttendList extends AppCompatActivity {
         for (int i = 0; i < friendslist.size(); i++) {
             boolean bSame = false;
             Friend friend = friendslist.get(i);
-            for (int j = 0; j < meeting_Attend.size(); j++) {
-                Friend attend = meeting_Attend.get(j);
+            for (Friend attend : meeting_Attend.keySet()) {
                 if (friend == attend) {
                     bSame = true;
                     break;

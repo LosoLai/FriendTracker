@@ -3,6 +3,7 @@ package com.example.loso.friendtracker.Model;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Observable;
 import java.util.UUID;
 
@@ -81,7 +82,7 @@ public final class MeetingModel extends Observable {
         }
     }
 
-    public ArrayList<Friend> getMeetingAttendees(String meetingID) {
+    public HashMap<Friend, Double> getMeetingAttendees(String meetingID) {
         Meeting meet = findMeetingByID(meetingID);
         if (meet != null) {
             return meet.getFriends();

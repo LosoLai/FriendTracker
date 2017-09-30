@@ -36,6 +36,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 
 
 public class EditMeetingActivity extends AppCompatActivity {
@@ -199,7 +200,7 @@ public class EditMeetingActivity extends AppCompatActivity {
     }
 
     public void setupAttendSection(final String meetingID) {
-        ArrayList<Friend> attends = meetingController.getMeetingAttendees(meetingID);
+        HashMap<Friend, Double> attends = meetingController.getMeetingAttendees(meetingID);
         FriendController friendController = new FriendController();
         ArrayList<Friend> friendslist = friendController.getFriendsList();
         final ArrayList<Friend> filtered = new ArrayList<Friend>();
@@ -208,9 +209,8 @@ public class EditMeetingActivity extends AppCompatActivity {
         {
             boolean bSame = false;
             Friend friend = friendslist.get(i);
-            for(int j=0 ; j<attends.size() ; j++)
+            for (Friend attend : attends.keySet())
             {
-                Friend attend = attends.get(j);
                 if(friend == attend) {
                     bSame = true;
                     break;
@@ -242,7 +242,7 @@ public class EditMeetingActivity extends AppCompatActivity {
         });
 
 
-        adapter = new FriendListAdapter(getApplicationContext(), attends);
+        adapter = new FriendListAdapter(getApplicationContext(), new ArrayList<>(attends.keySet()));
         ListView lvAttend = (ListView) findViewById(R.id.attendlist);
         lvAttend.setAdapter(adapter);
         lvAttend.setLongClickable(true);

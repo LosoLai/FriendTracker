@@ -6,8 +6,8 @@ import com.example.loso.friendtracker.Model.Location;
 import com.example.loso.friendtracker.Model.Meeting;
 import com.example.loso.friendtracker.Model.MeetingModel;
 
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 
 /**
  * Created by Lettisia George on 31/08/2017.
@@ -50,7 +50,7 @@ public class MeetingController {
         mMeetingModel.findMeetingByID(meetingID).addAttend(friend);
     }
 
-    public ArrayList<Friend> getMeetingAttendees(String meetingID) {
+    public HashMap<Friend, Double> getMeetingAttendees(String meetingID) {
         return mMeetingModel.getMeetingAttendees(meetingID);
     }
 

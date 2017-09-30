@@ -72,7 +72,7 @@ public class DataManager {
     }
 
     public static Location getFriendLocation(Context context, String name, Date time) {
-        List<DummyLocationService.FriendLocation> list = getFriendLocationsForTime(context, name, time, 2, 0);
+        List<DummyLocationService.FriendLocation> list = getFriendLocationsForTime(context, name, time, 1, 0);
         return grabFriendLocation(name, list);
     }
 

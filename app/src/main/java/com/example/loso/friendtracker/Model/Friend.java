@@ -5,6 +5,8 @@ import java.util.Date;
 /**
  * Contains contact information for a friend
  *
+ * Field walkTime is the walking time for the friend to the device's current location
+ *
  * @author Lettisia George
  */
 
@@ -15,6 +17,7 @@ public class Friend {
     private Date birthday;
     private String photo;
     private Location location;
+    private double walkTime;
 
     public Friend(String iD, String name, String email, Date birthday, Location location) {
         ID = iD;
@@ -23,6 +26,7 @@ public class Friend {
         this.birthday = birthday;
         this.location = location;
         this.photo = null;
+        this.walkTime = 0.0;
     }
 
     public Friend(String iD, String name, String email, Date birthday) {
@@ -32,6 +36,7 @@ public class Friend {
         this.birthday = birthday;
         this.location = null;
         this.photo = null;
+        this.walkTime = 0.0;
     }
 
     public Friend(String iD, String name, String email) {
@@ -41,6 +46,7 @@ public class Friend {
         this.birthday = null;
         this.photo = null;
         this.location = null;
+        this.walkTime = 0.0;
     }
 
     public String getID() {
@@ -89,5 +95,13 @@ public class Friend {
 
     public void setLocation(Location location) {
         this.location = location;
+    }
+
+    public double getWalkTime() {
+        return walkTime;
+    }
+
+    public void setWalkTime(double walkTime) {
+        this.walkTime = walkTime;
     }
 }

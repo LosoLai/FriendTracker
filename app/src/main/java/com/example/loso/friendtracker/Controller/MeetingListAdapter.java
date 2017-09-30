@@ -15,6 +15,7 @@ import com.example.loso.friendtracker.R;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 
 /**
  * Created by Loso on 2017/8/20.
@@ -50,7 +51,7 @@ public class MeetingListAdapter extends ArrayAdapter<Meeting> {
 
         TextView tvAttend = (TextView) view.findViewById(R.id.tvAttendNumber);
         if (tvAttend != null) {
-            ArrayList<Friend> friends = meeting.getFriends();
+            HashMap<Friend, Double> friends = meeting.getFriends();
 
             if (meeting.getFriends() == null) {
                 tvAttend.setText("0");

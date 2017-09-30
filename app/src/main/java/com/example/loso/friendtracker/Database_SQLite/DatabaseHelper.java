@@ -9,11 +9,9 @@ import android.database.sqlite.SQLiteOpenHelper;
 import com.example.loso.friendtracker.Model.Friend;
 import com.example.loso.friendtracker.Model.Meeting;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+import java.util.HashMap;
 
 /**
  * Created by Loso on 2017/9/16.
@@ -180,10 +178,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public boolean addAttendList(Meeting meeting) {
         SQLiteDatabase db = getWritableDatabase();
-        List<Friend> attendlist = meeting.getFriends();
-        for(int i=0 ; i<attendlist.size() ; i++)
-        {
-            Friend attend = attendlist.get(i);
+        HashMap<Friend, Double> attendlist = meeting.getFriends();
+        for (Friend attend : attendlist.keySet()) {
             if(attend == null)
                 continue;
             ContentValues contentValues = new ContentValues();
