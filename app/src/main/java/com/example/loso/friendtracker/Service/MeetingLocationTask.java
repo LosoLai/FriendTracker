@@ -3,7 +3,6 @@ package com.example.loso.friendtracker.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.os.Parcelable;
 import android.support.v4.content.LocalBroadcastManager;
 
 import com.example.loso.friendtracker.Model.Friend;
@@ -55,7 +54,6 @@ public class MeetingLocationTask extends AsyncTask<Void, Void, Void> {
     @Override
     protected void onPostExecute(Void unused) {
         Intent intent = new Intent(MEETING_LOCATION_TASK);
-        intent.putExtra(GUESTLIST, (Parcelable) guests);
         intent.putExtra(MAX_WALKTIME, maxWalk);
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
     }

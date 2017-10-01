@@ -21,6 +21,8 @@ import android.widget.Toast;
 
 import com.example.loso.friendtracker.Controller.MeetingController;
 import com.example.loso.friendtracker.Controller.MeetingListAdapter;
+import com.example.loso.friendtracker.Controller.MeetingSuggestionController;
+import com.example.loso.friendtracker.Model.Location;
 import com.example.loso.friendtracker.Model.Meeting;
 import com.example.loso.friendtracker.Model.MeetingComparator;
 import com.example.loso.friendtracker.Model.MeetingModel;
@@ -54,6 +56,9 @@ public class Tab_Meeting extends Fragment implements Observer {
         adapter = new MeetingListAdapter(rootView.getContext(), meetings);
         ListView lvMeeting = (ListView) rootView.findViewById(R.id.meetinglist);
         lvMeeting.setAdapter(adapter);
+
+        MeetingSuggestionController meetCon = new MeetingSuggestionController(getContext());
+        meetCon.getWalkingTime(Location.RMIT, Location.NEAR_RMIT);
 
         lvMeeting.setClickable(true);
         lvMeeting.setOnItemClickListener(new AdapterView.OnItemClickListener() {

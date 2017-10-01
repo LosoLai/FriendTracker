@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
 
 import com.example.loso.friendtracker.Model.Friend;
 import com.example.loso.friendtracker.Model.GuestList;
@@ -20,6 +21,7 @@ import java.util.ArrayList;
  */
 
 public class MeetingSuggestionController {
+    private static final String LOG_TAG = "MeetingSuggestion";
     private Context context;
     private Location midPoint;
     private GuestList guestList;
@@ -54,8 +56,8 @@ public class MeetingSuggestionController {
             @Override
             public void onReceive(Context context, Intent intent) {
                 Bundle bundle = intent.getExtras();
-                guestList = (GuestList) bundle.get(MeetingLocationTask.GUESTLIST);
                 maxWalkTime = bundle.getDouble(MeetingLocationTask.MAX_WALKTIME);
+                Log.d(LOG_TAG, "Max walk time: " + maxWalkTime);
             }
         }, intentFilter);
     }
