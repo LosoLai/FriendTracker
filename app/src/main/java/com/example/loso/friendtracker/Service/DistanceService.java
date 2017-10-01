@@ -8,8 +8,8 @@ import android.util.Log;
 
 import com.example.loso.friendtracker.Controller.FriendController;
 import com.example.loso.friendtracker.Model.Friend;
-import com.example.loso.friendtracker.Model.FriendModel;
 import com.example.loso.friendtracker.Model.Location;
+import com.example.loso.friendtracker.Model.WalkTime;
 
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
@@ -19,17 +19,15 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Observable;
-import java.util.Observer;
 
 
 /**
  * CLass to automatically update the walk times for friends.
  * <p>
- * Created by letti on 29/09/2017.
+ * Created by Lettisia George on 29/09/2017.
  */
 
-public class DistanceService extends IntentService implements Observer {
+public class DistanceService extends IntentService {
     private static final String LOG_TAG = "DistanceService";
     private static final String SERVICE_NAME = "DistanceService";
     private static final String ROOT_URL = "https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&mode=walking";
@@ -44,6 +42,20 @@ public class DistanceService extends IntentService implements Observer {
         super(SERVICE_NAME);
         friendController = new FriendController();
     }
+
+
+    @Override
+    protected void onHandleIntent(Intent intent) {
+        Log.d(LOG_TAG, "onHandleIntent()");
+        ArrayList<Friend> friends = friendController.getFriendsList();
+        for (Friend friend : friends) {
+            generateFriendWalkTimes(friend);
+        }
+
+        // hard coded friend for testing
+        // generateFriendWalkTimes(new Friend(FriendModel.createID(), "john","email"));
+    }
+
 
     private void updateCurrentLocation() {
         SharedPreferences sharedPreferences = this.getApplicationContext().getSharedPreferences("location", Context.MODE_PRIVATE);
@@ -60,38 +72,19 @@ public class DistanceService extends IntentService implements Observer {
     }
 
 
-    @Override
-    protected void onHandleIntent(Intent intent) {
-        Log.d(LOG_TAG, "onHandleIntent()");
-        ArrayList<Friend> friends = friendController.getFriendsList();
-        for (Friend friend : friends) {
-            generateFriendWalkTimes(friend);
-        }
-
-        // hard coded friend for testing
-        // generateFriendWalkTimes(new Friend(FriendModel.createID(), "john","email"));
-    }
-
-    @Override
-    public void update(Observable o, Object arg) {
-        updateCurrentLocation();
-        friendController.updateFriendLocations(getApplicationContext());
-        if (o instanceof FriendModel && arg instanceof Friend) {
-            generateFriendWalkTimes((Friend) arg);
-        }
-    }
-
     public void generateFriendWalkTimes(Friend friend) {
+        String walkString = "";
         updateCurrentLocation();
         friendController.updateFriendLocations(getApplicationContext());
         Location friendLocation = friend.getLocation();
         if (friendLocation != null) {
             String url = generateDistanceURL(currentLocation, friendLocation);
             Log.d(LOG_TAG, "URL: " + url);
-            double walkTime = parseWalkTime(accessURL(url));
+            WalkTime walkTime = parseWalkTime(accessURL(url));
             friendController.setWalkTime(friend.getID(), walkTime);
         }
     }
+
 
     public String accessURL(String url) {
         HttpClient httpclient = new DefaultHttpClient();
@@ -110,8 +103,9 @@ public class DistanceService extends IntentService implements Observer {
         return responseBody;
     }
 
-    public double parseWalkTime(String JSONresponse) {
-        double walkTime = Friend.INVALID_WALK_TIME;
+
+    public WalkTime parseWalkTime(String JSONresponse) {
+        WalkTime walkTime = new WalkTime();
         if (JSONresponse != null) {
             try {
                 JSONObject duration = new JSONObject(JSONresponse)
@@ -120,15 +114,16 @@ public class DistanceService extends IntentService implements Observer {
                         .getJSONArray("elements")
                         .getJSONObject(0)
                         .getJSONObject("duration");
-                walkTime = duration.getDouble("value");
+                walkTime = new WalkTime(duration.getDouble("value"), duration.getString("text"));
                 Log.d(LOG_TAG, "Walk time = " + walkTime);
             } catch (JSONException e) {
-                //     Log.e(LOG_TAG, e.getMessage());
+                Log.e(LOG_TAG, e.getMessage());
                 e.printStackTrace();
             }
         }
         return walkTime;
     }
+
 
     public String generateDistanceURL(Location start, Location finish) {
         StringBuilder sb = new StringBuilder(ROOT_URL);

@@ -11,14 +11,13 @@ import java.util.Date;
  */
 
 public class Friend {
-    public static final double INVALID_WALK_TIME = -100.0;
     private String ID;
     private String name;
     private String email;
     private Date birthday;
     private String photo;
     private Location location;
-    private double walkTime;
+    private WalkTime walkTime;
 
     public Friend(String iD, String name, String email, Date birthday, Location location) {
         ID = iD;
@@ -27,7 +26,7 @@ public class Friend {
         this.birthday = birthday;
         this.location = location;
         this.photo = null;
-        this.walkTime = INVALID_WALK_TIME;
+        this.walkTime = new WalkTime();
     }
 
     public Friend(String iD, String name, String email, Date birthday) {
@@ -37,7 +36,7 @@ public class Friend {
         this.birthday = birthday;
         this.location = null;
         this.photo = null;
-        this.walkTime = INVALID_WALK_TIME;
+        this.walkTime = new WalkTime();
     }
 
     public Friend(String iD, String name, String email) {
@@ -47,7 +46,7 @@ public class Friend {
         this.birthday = null;
         this.photo = null;
         this.location = null;
-        this.walkTime = INVALID_WALK_TIME;
+        this.walkTime = new WalkTime();
     }
 
     public String getID() {
@@ -98,11 +97,11 @@ public class Friend {
         this.location = location;
     }
 
-    public double getWalkTime() {
+    public WalkTime getWalkTime() {
         return walkTime;
     }
 
-    public void setWalkTime(double walkTime) {
+    public void setWalkTime(WalkTime walkTime) {
         this.walkTime = walkTime;
     }
 }

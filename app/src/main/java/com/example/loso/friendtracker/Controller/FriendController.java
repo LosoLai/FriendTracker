@@ -7,6 +7,7 @@ import android.util.Log;
 import com.example.loso.friendtracker.Model.Friend;
 import com.example.loso.friendtracker.Model.FriendModel;
 import com.example.loso.friendtracker.Model.Location;
+import com.example.loso.friendtracker.Model.WalkTime;
 import com.example.loso.friendtracker.Service.ContactDataManager;
 import com.example.loso.friendtracker.Service.DataManager;
 import com.example.loso.friendtracker.View.MainActivity;
@@ -20,6 +21,9 @@ import java.util.GregorianCalendar;
 
 /**
  * Created by Lettisia George on 31/08/2017.
+ *
+ * @author LosoLai
+ * @author Lettisia George
  */
 
 public class FriendController {
@@ -117,7 +121,7 @@ public class FriendController {
         friendModel.removeFriend(friend);
     }
 
-    public void setWalkTime(String id, double walkTime) {
+    public void setWalkTime(String id, WalkTime walkTime) {
         friendModel.updateFriendWalkTime(id, walkTime);
     }
 
