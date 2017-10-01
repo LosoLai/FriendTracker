@@ -2,9 +2,11 @@ package com.example.loso.friendtracker.View;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.provider.ContactsContract;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
@@ -43,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String LOG_TAG = "MainActivity";
     private static final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 17;
     private static final int PICK_CONTACTS = 100;
+    private static final int SETTINGS_RESULT = 0;
     private DatabaseHelper db;
 
     //Added by LosoLai  24/09/2017
@@ -259,6 +262,8 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            Intent i = new Intent(getApplicationContext(), UserSettingActivity.class);
+            this.startActivity(i);
             return true;
         }
 

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:title="@string/pref_notify"
+        android:key="pref_notify_settings">
+        <CheckBoxPreference
+            android:key="pref_meeting_notify_flag"
+            android:summary="@string/pref_summary_notify_flag"
+            android:title="@string/pref_title_notify_flag"
+            android:defaultValue="false" />
+        <Preference
+            android:key="pref_meeting_notify_time_limit"
+            android:dependency="pref_meeting_notify_flag"
+            android:summary="@string/pref_summary_meeting_notify_time_limit"
+            android:title="@string/pref_title_meeting_notify_time_limit" />
+    </PreferenceCategory>
+</PreferenceScreen>
