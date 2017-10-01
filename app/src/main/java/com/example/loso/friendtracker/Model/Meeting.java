@@ -90,12 +90,12 @@ public class Meeting {
         this.endDate = end;
     }
 
-    public HashMap<Friend, Double> getFriends() {
+    public HashMap<Friend, WalkTime> getFriends() {
         return friends.getGuestList();
     }
 
     public void setFriends(ArrayList<Friend> friends) {
-        if (friends == null) {
+        if (this.friends == null) {
             this.friends = new GuestList(friends);
         } else {
             this.friends.setGuests(friends);

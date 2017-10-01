@@ -29,6 +29,7 @@ import com.example.loso.friendtracker.Controller.MeetingController;
 import com.example.loso.friendtracker.Model.Friend;
 import com.example.loso.friendtracker.Model.Location;
 import com.example.loso.friendtracker.Model.MeetingModel;
+import com.example.loso.friendtracker.Model.WalkTime;
 import com.example.loso.friendtracker.R;
 
 import java.text.DateFormat;
@@ -200,7 +201,7 @@ public class EditMeetingActivity extends AppCompatActivity {
     }
 
     public void setupAttendSection(final String meetingID) {
-        HashMap<Friend, Double> attends = meetingController.getMeetingAttendees(meetingID);
+        HashMap<Friend, WalkTime> attends = meetingController.getMeetingAttendees(meetingID);
         FriendController friendController = new FriendController();
         ArrayList<Friend> friendslist = friendController.getFriendsList();
         final ArrayList<Friend> filtered = new ArrayList<Friend>();

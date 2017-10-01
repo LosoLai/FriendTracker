@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import com.example.loso.friendtracker.Model.Friend;
 import com.example.loso.friendtracker.Model.Meeting;
+import com.example.loso.friendtracker.Model.WalkTime;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -178,7 +179,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public boolean addAttendList(Meeting meeting) {
         SQLiteDatabase db = getWritableDatabase();
-        HashMap<Friend, Double> attendlist = meeting.getFriends();
+        HashMap<Friend, WalkTime> attendlist = meeting.getFriends();
         for (Friend attend : attendlist.keySet()) {
             if(attend == null)
                 continue;

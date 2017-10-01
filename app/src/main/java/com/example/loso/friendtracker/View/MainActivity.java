@@ -37,9 +37,9 @@ import com.example.loso.friendtracker.Model.Location;
 import com.example.loso.friendtracker.Model.Meeting;
 import com.example.loso.friendtracker.Model.MeetingModel;
 import com.example.loso.friendtracker.R;
+import com.example.loso.friendtracker.Service.CurrentLocationService;
 import com.example.loso.friendtracker.Service.DataManager;
-import com.example.loso.friendtracker.Service.DistanceService;
-import com.example.loso.friendtracker.Service.LocationService;
+import com.example.loso.friendtracker.Service.FriendWalkTimeService;
 import com.example.loso.friendtracker.Service.NetworkStatusReceiver;
 
 import java.util.ArrayList;
@@ -82,8 +82,8 @@ public class MainActivity extends AppCompatActivity {
             }
         }, intentFilter);
 
-        //call locationservice constructor to update current location in preferences.
-        Location currentLocation = new LocationService(this).getCurrentLocation();
+        //call CurrentLocationService constructor to update current location in preferences.
+        Location currentLocation = new CurrentLocationService(this).getCurrentLocation();
 
         db = new DatabaseHelper(this);
         FriendModel mFriendModel = FriendModel.getInstance();
@@ -113,8 +113,8 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        // Start the DistanceService to calculate friend walking times
-        Intent intent = new Intent(this, DistanceService.class);
+        // Start the FriendWalkTimeService to calculate friend walking times
+        Intent intent = new Intent(this, FriendWalkTimeService.class);
         getApplicationContext().startService(intent);
     }
 
@@ -257,7 +257,7 @@ public class MainActivity extends AppCompatActivity {
                     Log.d(LOG_TAG, "onRequestPermissionResult() - no to contacts");
                 }
             }
-            case LocationService.MY_PERMISSIONS_REQUEST_LOCATION: {
+            case CurrentLocationService.MY_PERMISSIONS_REQUEST_LOCATION: {
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length <= 0
                         || grantResults[0] != PackageManager.PERMISSION_GRANTED) {

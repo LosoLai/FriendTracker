@@ -13,21 +13,20 @@ import java.util.Observable;
  */
 
 public class GuestList extends Observable {
-    public static final double INVALID_WALK_TIME = -100.0;
-    private HashMap<Friend, Double> guests = new HashMap<>();
+    private HashMap<Friend, WalkTime> guests = new HashMap<>();
 
     public GuestList() {
     }
 
     public GuestList(ArrayList<Friend> friends) {
         for (Friend f : friends) {
-            guests.put(f, INVALID_WALK_TIME);
+            guests.put(f, new WalkTime());
         }
 
     }
 
     public void addFriend(Friend friend) {
-        guests.put(friend, INVALID_WALK_TIME);
+        guests.put(friend, new WalkTime());
         setChanged();
         notifyObservers();
     }
@@ -43,12 +42,12 @@ public class GuestList extends Observable {
     }
 
     // only to be used for save by Database helpers
-    public HashMap<Friend, Double> getGuestList() {
+    public HashMap<Friend, WalkTime> getGuestList() {
         return guests;
     }
 
     // only to be used for load by Database helpers
-    public void setGuests(HashMap<Friend, Double> friends) {
+    public void setGuests(HashMap<Friend, WalkTime> friends) {
         guests = friends;
         setChanged();
         notifyObservers();
@@ -56,22 +55,24 @@ public class GuestList extends Observable {
 
     public void addGuests(ArrayList<Friend> friends) {
         for (Friend f : friends) {
-            guests.put(f, INVALID_WALK_TIME);
+            guests.put(f, new WalkTime());
         }
         setChanged();
         notifyObservers();
     }
 
-    public HashMap<Friend, Double> getGuests() {
+    public HashMap<Friend, WalkTime> getGuests() {
         return guests;
     }
 
     public void setGuests(ArrayList<Friend> friends) {
         guests.clear();
         for (Friend f : friends) {
-            guests.put(f, INVALID_WALK_TIME);
+            guests.put(f, new WalkTime());
         }
         setChanged();
         notifyObservers();
     }
+
+
 }

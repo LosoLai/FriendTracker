@@ -82,7 +82,7 @@ public final class MeetingModel extends Observable {
         }
     }
 
-    public HashMap<Friend, Double> getMeetingAttendees(String meetingID) {
+    public HashMap<Friend, WalkTime> getMeetingAttendees(String meetingID) {
         Meeting meet = findMeetingByID(meetingID);
         if (meet != null) {
             return meet.getFriends();

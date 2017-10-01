@@ -8,6 +8,7 @@ import com.example.loso.friendtracker.Controller.AttendListAdapter;
 import com.example.loso.friendtracker.Controller.FriendController;
 import com.example.loso.friendtracker.Controller.MeetingController;
 import com.example.loso.friendtracker.Model.Friend;
+import com.example.loso.friendtracker.Model.WalkTime;
 import com.example.loso.friendtracker.R;
 
 import java.util.ArrayList;
@@ -29,7 +30,7 @@ public class DisplayAttendList extends AppCompatActivity {
         meetingID = getIntent().getStringExtra("meeting");
         meetingController = new MeetingController();
         friendController = new FriendController();
-        HashMap<Friend, Double> meeting_Attend = meetingController.getMeetingAttendees(meetingID);
+        HashMap<Friend, WalkTime> meeting_Attend = meetingController.getMeetingAttendees(meetingID);
         ArrayList<Friend> friendslist = friendController.getFriendsList();
 
         ArrayList<Friend> filtered = new ArrayList<Friend>();

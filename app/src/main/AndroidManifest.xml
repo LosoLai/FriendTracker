@@ -64,7 +64,7 @@
                 android:value="com.example.loso.friendtracker.View.MainActivity" />
         </activity>
 
-        <service android:name=".Service.DistanceService" />
+        <service android:name=".Service.FriendWalkTimeService" />
 
         <receiver
             android:name=".Service.NetworkStatusReceiver"
