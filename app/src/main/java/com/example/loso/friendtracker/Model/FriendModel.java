@@ -148,7 +148,7 @@ public class FriendModel extends Observable {
         return null;
     }
 
-    public void updateFriendWalkTime(String friendID, double walkTime) {
+    public void updateFriendWalkTime(String friendID, WalkTime walkTime) {
         Friend friend = findFriendByID(friendID);
         if (friend != null) {
             friend.setWalkTime(walkTime);

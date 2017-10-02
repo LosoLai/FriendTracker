@@ -1,12 +1,13 @@
 package com.example.loso.friendtracker.View;
 
 import android.Manifest;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.provider.ContactsContract;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
@@ -16,6 +17,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -35,11 +37,18 @@ import com.example.loso.friendtracker.Model.Location;
 import com.example.loso.friendtracker.Model.Meeting;
 import com.example.loso.friendtracker.Model.MeetingModel;
 import com.example.loso.friendtracker.R;
+import com.example.loso.friendtracker.Service.CurrentLocationService;
 import com.example.loso.friendtracker.Service.DataManager;
-import com.example.loso.friendtracker.Service.DistanceService;
-import com.example.loso.friendtracker.Service.LocationService;
+import com.example.loso.friendtracker.Service.FriendWalkTimeService;
+import com.example.loso.friendtracker.Service.NetworkStatusReceiver;
 
 import java.util.ArrayList;
+
+/**
+ * @author LosoLai
+ * @author Lettisia George
+ */
+
 
 public class MainActivity extends AppCompatActivity {
     private static final String LOG_TAG = "MainActivity";
@@ -60,8 +69,21 @@ public class MainActivity extends AppCompatActivity {
         Log.i(LOG_TAG, "onStart()");
         super.onStart();
 
-        //call locationservice constructor to update current location in preferences.
-        Location currentLocation = new LocationService(this).getCurrentLocation();
+
+        // Use this code in an activity when you need to do something about the network being connected or not.
+        IntentFilter intentFilter = new IntentFilter(NetworkStatusReceiver.NETWORK_CHANGE_DETECTED);
+        LocalBroadcastManager.getInstance(this).registerReceiver(new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                boolean connected = intent.getBooleanExtra(NetworkStatusReceiver.IS_NETWORK_CONNECTED, false);
+                String text = connected ? "Network Connected" : "Network Disconnected";
+                Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
+                Log.d(LOG_TAG, text);
+            }
+        }, intentFilter);
+
+        //call CurrentLocationService constructor to update current location in preferences.
+        Location currentLocation = new CurrentLocationService(this).getCurrentLocation();
 
         db = new DatabaseHelper(this);
         FriendModel mFriendModel = FriendModel.getInstance();
@@ -91,8 +113,8 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        // Start the DistanceService to calculate friend walking times
-        Intent intent = new Intent(this, DistanceService.class);
+        // Start the FriendWalkTimeService to calculate friend walking times
+        Intent intent = new Intent(this, FriendWalkTimeService.class);
         getApplicationContext().startService(intent);
     }
 
@@ -235,7 +257,7 @@ public class MainActivity extends AppCompatActivity {
                     Log.d(LOG_TAG, "onRequestPermissionResult() - no to contacts");
                 }
             }
-            case LocationService.MY_PERMISSIONS_REQUEST_LOCATION: {
+            case CurrentLocationService.MY_PERMISSIONS_REQUEST_LOCATION: {
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length <= 0
                         || grantResults[0] != PackageManager.PERMISSION_GRANTED) {

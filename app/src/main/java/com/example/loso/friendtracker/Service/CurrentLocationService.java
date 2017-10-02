@@ -24,13 +24,13 @@ import java.util.Date;
  *
  */
 
-public class LocationService implements LocationListener {
+public class CurrentLocationService implements LocationListener {
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 33;
-    private static final String LOG_TAG = "LocationService";
-    private com.example.loso.friendtracker.Model.Location currentLocation = new Location();
+    private static final String LOG_TAG = "CurrentLocationService";
+    private com.example.loso.friendtracker.Model.Location currentLocation = Location.RMIT;
     private Activity activity;
 
-    public LocationService(Activity activity) throws SecurityException {
+    public CurrentLocationService(Activity activity) throws SecurityException {
         this.activity = activity;
         LocationManager locationManager = (LocationManager) activity.getSystemService(Context.LOCATION_SERVICE);
         if (checkPermissions()) {

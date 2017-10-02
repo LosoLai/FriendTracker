@@ -6,6 +6,7 @@ package com.example.loso.friendtracker.View;
  */
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -17,6 +18,7 @@ import com.example.loso.friendtracker.Controller.FriendController;
 import com.example.loso.friendtracker.Model.Friend;
 import com.example.loso.friendtracker.Model.Location;
 import com.example.loso.friendtracker.R;
+import com.example.loso.friendtracker.Service.FriendWalkTimeService;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -45,6 +47,10 @@ public class Tab_Map extends Fragment implements OnMapReadyCallback {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        // Start the FriendWalkTimeService to calculate friend walking times
+        Intent intent = new Intent(getContext(), FriendWalkTimeService.class);
+        this.getContext().startService(intent);
 
         mMapView = (MapView) mView.findViewById(R.id.map);
         if (mMapView != null) {

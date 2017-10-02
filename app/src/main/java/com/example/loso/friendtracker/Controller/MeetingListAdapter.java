@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.example.loso.friendtracker.Model.Friend;
 import com.example.loso.friendtracker.Model.Location;
 import com.example.loso.friendtracker.Model.Meeting;
+import com.example.loso.friendtracker.Model.WalkTime;
 import com.example.loso.friendtracker.R;
 
 import java.text.DateFormat;
@@ -52,7 +53,7 @@ public class MeetingListAdapter extends ArrayAdapter<Meeting> {
 
         TextView tvAttend = (TextView) view.findViewById(R.id.tvAttendNumber);
         if (tvAttend != null) {
-            HashMap<Friend, Double> friends = meeting.getFriends();
+            HashMap<Friend, WalkTime> friends = meeting.getFriends();
 
             if (meeting.getFriends() == null) {
                 tvAttend.setText("0");

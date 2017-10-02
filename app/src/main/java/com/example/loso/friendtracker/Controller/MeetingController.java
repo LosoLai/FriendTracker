@@ -5,6 +5,7 @@ import com.example.loso.friendtracker.Model.Friend;
 import com.example.loso.friendtracker.Model.Location;
 import com.example.loso.friendtracker.Model.Meeting;
 import com.example.loso.friendtracker.Model.MeetingModel;
+import com.example.loso.friendtracker.Model.WalkTime;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -50,7 +51,7 @@ public class MeetingController {
         mMeetingModel.findMeetingByID(meetingID).addAttend(friend);
     }
 
-    public HashMap<Friend, Double> getMeetingAttendees(String meetingID) {
+    public HashMap<Friend, WalkTime> getMeetingAttendees(String meetingID) {
         return mMeetingModel.getMeetingAttendees(meetingID);
     }
 

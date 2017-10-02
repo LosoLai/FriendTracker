@@ -52,9 +52,9 @@ public class FriendListAdapter extends ArrayAdapter<Friend> {
         TextView tvName = (TextView) view.findViewById(R.id.tvName);
         tvName.setText(friend.getName());
 
-        if (friend.getWalkTime() != Friend.INVALID_WALK_TIME) {
+        if (!friend.getWalkTime().invalid()) {
             TextView tvWalkTime = (TextView) view.findViewById(R.id.tvWalkTime);
-            tvWalkTime.setText(String.format("%.0fs", friend.getWalkTime()));
+            tvWalkTime.setText(friend.getWalkTime().getStringTime());
         }
 
         //Location fl = friend.getLocation();
