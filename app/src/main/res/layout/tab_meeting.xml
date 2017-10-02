@@ -20,15 +20,21 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
-            android:text="Ascending" />
+            android:text="@string/text_btnAcs" />
 
         <Button
             android:id="@+id/btnDecs"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
-            android:text="Descending" />
+            android:text="@string/text_btnDecs" />
     </LinearLayout>
+
+    <Button
+        android:id="@+id/btnSuggestion"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/text_btnSuggestion" />
 
     <ListView
         android:id="@+id/meetinglist"
