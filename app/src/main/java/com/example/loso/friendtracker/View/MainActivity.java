@@ -28,6 +28,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.example.loso.friendtracker.Controller.DatabaseController;
 import com.example.loso.friendtracker.Controller.FriendController;
 import com.example.loso.friendtracker.Controller.MeetingController;
 import com.example.loso.friendtracker.Database_SQLite.DatabaseHelper;
@@ -55,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
     private static final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 17;
     private static final int PICK_CONTACTS = 100;
     private static final int SETTINGS_RESULT = 0;
-    private DatabaseHelper db;
+    private DatabaseController dbController;
 
     //Added by LosoLai  24/09/2017
     /**
@@ -85,33 +86,9 @@ public class MainActivity extends AppCompatActivity {
         //call CurrentLocationService constructor to update current location in preferences.
         Location currentLocation = new CurrentLocationService(this).getCurrentLocation();
 
-        db = new DatabaseHelper(this);
-        FriendModel mFriendModel = FriendModel.getInstance();
-        boolean hasFriends = db.checkFriendDB(mFriendModel.getFriends());
-        //Add dummy data to Model
-        if(!hasFriends)
-            mFriendModel.setFriends(DataManager.createDummyFriendList(getApplicationContext()));
-
-        MeetingModel mMeetingModel = MeetingModel.getInstance();
-        boolean hasMeetings = db.checkMeetingDB(mMeetingModel.getMeetings());
-        //Add dummy data to Model
-        if(!hasMeetings)
-            mMeetingModel.setMeetings(DataManager.createDummMeetingList());
-        else //setting attendlist
-        {
-            int size = mMeetingModel.getMeetings().size();
-            for(int i=0 ; i<size ; i++)
-            {
-                Meeting meeting = mMeetingModel.getMeetings().get(i);
-                String meetingID = meeting.getID();
-                ArrayList<String> attendIDList = db.readDB_AttendListTable(meetingID);
-                for(int j=0 ; j<attendIDList.size() ; j++)
-                {
-                    Friend attend = mFriendModel.findFriendByID(attendIDList.get(j));
-                    meeting.addAttend(attend);
-                }
-            }
-        }
+        //initial model staff
+        dbController = new DatabaseController(this);
+        dbController.setupDB();
 
         // Start the FriendWalkTimeService to calculate friend walking times
         Intent intent = new Intent(this, FriendWalkTimeService.class);
@@ -123,23 +100,10 @@ public class MainActivity extends AppCompatActivity {
     {
         Log.i(LOG_TAG, "onStop()");
         super.onStop();
-        //clean tables
-        db.deleteRows();
-        //saving data into db
-        FriendModel mFModel = FriendModel.getInstance();
-        MeetingModel mMModel = MeetingModel.getInstance();
-        // set friends
-        for(int i=0 ; i<mFModel.getFriends().size() ; i++)
-        {
-            db.addFriend(mFModel.getFriends().get(i));
-        }
-        // set meetings
-        for(int j=0 ; j<mMModel.getMeetings().size() ; j++)
-        {
-            db.addMeeting(mMModel.getMeetings().get(j));
-        }
+
+        //clean DB and store memory data into DB
+        dbController.closeDB();
     }
-    //------------------------------------
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
