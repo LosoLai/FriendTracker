@@ -1,7 +1,12 @@
 package com.example.loso.friendtracker.View;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.preference.CheckBoxPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
@@ -55,6 +60,21 @@ public class UserSettingActivity extends PreferenceActivity {
                     return true;
                 }
             });
+
+            //check alarm shuld be fire or not
+            AlarmManager alarmManager = (AlarmManager)getActivity().getSystemService(Context.ALARM_SERVICE);
+            Intent intent = new Intent(getActivity(), AlarmNotificationReceiver.class);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), 0, intent, 0);
+            if (checkBoxPreference.isChecked())
+            {
+                if(alarmManager != null)
+                    alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, SystemClock.elapsedRealtime()+3000, 3000, pendingIntent);
+            }
+            else
+            {
+                if(alarmManager != null)
+                    alarmManager.cancel(pendingIntent);
+            }
         }
     }
 }
