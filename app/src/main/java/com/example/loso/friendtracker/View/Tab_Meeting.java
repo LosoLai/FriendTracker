@@ -4,8 +4,10 @@ package com.example.loso.friendtracker.View;
  * Created by Loso on 2017/8/19.
  */
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -115,6 +117,21 @@ public class Tab_Meeting extends Fragment implements Observer {
             }
         });
 
+        Button btnSuggestion = (Button) rootView.findViewById(R.id.btnSuggestion);
+        btnSuggestion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //get current location
+                SharedPreferences locationPref = getActivity().getSharedPreferences("location", Context.MODE_PRIVATE);
+                double latitude = (double)locationPref.getFloat("latitude", 0);
+                double longitude = (double)locationPref.getFloat("longitude", 0);
+                Location current = new Location(latitude, longitude);
+
+                //MeetingSuggestionController
+                MeetingSuggestionController suggestionController = new MeetingSuggestionController(getContext());
+                suggestionController.createASuggestedMeeting(current);
+            }
+        });
     }
 
     @Override
