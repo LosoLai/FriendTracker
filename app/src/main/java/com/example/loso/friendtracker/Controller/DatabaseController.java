@@ -32,13 +32,34 @@ public class DatabaseController {
         //Add dummy data to Model
         if (!hasFriends) {
             mFriendModel.setFriends(DataManager.createDummyFriendList(context));
+            //then store in DB directly
+            int size = mFriendModel.getFriends().size();
+            for(int i=0 ; i<size ; i++)
+            {
+                Friend friend = mFriendModel.getFriends().get(i);
+                if(friend == null)
+                    continue;
+
+                db.addFriend(friend);
+            }
         }
 
         MeetingModel mMeetingModel = MeetingModel.getInstance();
         boolean hasMeetings = db.checkMeetingDB(mMeetingModel.getMeetings());
         //Add dummy data to Model
-        if (!hasMeetings)
+        if (!hasMeetings) {
             mMeetingModel.setMeetings(DataManager.createDummMeetingList());
+            //then store in DB directly
+            int size = mMeetingModel.getMeetings().size();
+            for(int i=0 ; i<size ; i++)
+            {
+                Meeting meeting = mMeetingModel.getMeetings().get(i);
+                if(meeting == null)
+                    continue;
+
+                db.addMeeting(meeting);
+            }
+        }
         else //setting attendlist
         {
             int size = mMeetingModel.getMeetings().size();
@@ -52,6 +73,11 @@ public class DatabaseController {
                 }
             }
         }
+    }
+
+    //need to update db when memory updated
+    public void updateDB() {
+
     }
 
     public void closeDB() {
