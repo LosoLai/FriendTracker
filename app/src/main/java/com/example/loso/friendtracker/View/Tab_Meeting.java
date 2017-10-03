@@ -152,9 +152,9 @@ public class Tab_Meeting extends Fragment implements Observer {
         LayoutInflater layoutInflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View customView = layoutInflater.inflate(R.layout.popup_suggestion,null);
 
-        ListView suggestInfo = (ListView) customView.findViewById(R.id.suggestmeeting);
-        MeetingListAdapter suggestAdapter = new MeetingListAdapter(customView.getContext(), suggestion);
-        suggestInfo.setAdapter(suggestAdapter);
+//        ListView suggestInfo = (ListView) customView.findViewById(R.id.suggestmeeting);
+//        MeetingListAdapter suggestAdapter = new MeetingListAdapter(customView.getContext(), suggestion);
+//        suggestInfo.setAdapter(suggestAdapter);
 
         Button accept = (Button) customView.findViewById(R.id.btnAccept);
         Button ignore = (Button) customView.findViewById(R.id.btnIgnore);
