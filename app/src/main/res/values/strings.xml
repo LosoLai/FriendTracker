@@ -16,4 +16,10 @@
     <string name="text_btnSuggestion">Suggest Now</string>
     <string name="text_btnAcs">Ascending</string>
     <string name="text_btnDecs">Descending</string>
+    <string name="text_btnAccept">Accept</string>
+    <string name="text_btnIgnore">Ignore</string>
+    <string name="text_title">Title :</string>
+    <string name="text_location">Location :</string>
+    <string name="text_attend">Attend :</string>
+    <string name="text_start_date">Start Date :</string>
 </resources>

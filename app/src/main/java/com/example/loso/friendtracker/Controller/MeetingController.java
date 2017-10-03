@@ -61,6 +61,11 @@ public class MeetingController {
         return meet;
     }
 
+    public Meeting createTempMeeting() {
+        Meeting meet = new Meeting(MeetingModel.createID());
+        return meet;
+    }
+
     public String getMeetingTitle(String meetingID) {
         return mMeetingModel.findMeetingByID(meetingID).getTitle();
     }

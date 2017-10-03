@@ -13,12 +13,15 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.PopupWindow;
 import android.widget.Toast;
 
 import com.example.loso.friendtracker.Controller.MeetingController;
@@ -118,6 +121,7 @@ public class Tab_Meeting extends Fragment implements Observer {
         });
 
         Button btnSuggestion = (Button) rootView.findViewById(R.id.btnSuggestion);
+        final ArrayList<Meeting> suggestion = new ArrayList<Meeting>();
         btnSuggestion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -129,7 +133,9 @@ public class Tab_Meeting extends Fragment implements Observer {
 
                 //MeetingSuggestionController
                 MeetingSuggestionController suggestionController = new MeetingSuggestionController(getContext());
-                suggestionController.createASuggestedMeeting(current);
+                suggestion.add(suggestionController.createASuggestedMeeting(current));
+
+                setPopUpWindow(suggestion);
             }
         });
     }
@@ -138,5 +144,34 @@ public class Tab_Meeting extends Fragment implements Observer {
     public void update(Observable o, Object arg) {
         Log.d(LOG_TAG, "MADE IT TO UPDATE METHOD.");
         adapter.notifyDataSetChanged();
+    }
+
+    public void setPopUpWindow(final ArrayList<Meeting> suggestion)
+    {
+        //instantiate the popup.xml layout file
+        LayoutInflater layoutInflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View customView = layoutInflater.inflate(R.layout.popup_suggestion,null);
+
+        ListView suggestInfo = (ListView) customView.findViewById(R.id.suggestmeeting);
+        MeetingListAdapter suggestAdapter = new MeetingListAdapter(customView.getContext(), suggestion);
+        suggestInfo.setAdapter(suggestAdapter);
+
+        Button accept = (Button) customView.findViewById(R.id.btnAccept);
+        Button ignore = (Button) customView.findViewById(R.id.btnIgnore);
+
+        //instantiate popup window
+        PopupWindow popupWindow = new PopupWindow(customView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
+        //display the popup window
+        LinearLayout linearLayout1 = (LinearLayout) rootView.findViewById(R.id.linearLayout_meeting);
+        popupWindow.showAtLocation(linearLayout1, Gravity.CENTER, 0, 0);
+
+//        //close the popup window on button click
+//        closePopupBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                popupWindow.dismiss();
+//            }
+//        });
     }
 }

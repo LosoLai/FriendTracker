@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:background="#000"
+    android:padding="10px">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Meeting Suggestion"
+        android:textColor="#fff"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/text_title"
+            android:textColor="#fff"/>
+
+        <TextView
+            android:id="@+id/text_suggest_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/text_title"
+            android:textColor="#fff"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/text_location"
+            android:textColor="#fff"/>
+
+        <TextView
+            android:id="@+id/text_suggest_location"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/text_location"
+            android:textColor="#fff"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="1">
+
+        <Button
+            android:id="@+id/btnAccept"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:text="@string/text_btnAccept" />
+
+        <Button
+            android:id="@+id/btnIgnore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:text="@string/text_btnIgnore" />
+    </LinearLayout>
+</LinearLayout>
