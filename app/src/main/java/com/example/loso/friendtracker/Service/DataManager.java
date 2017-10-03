@@ -11,6 +11,7 @@ import android.support.annotation.RequiresApi;
 import android.util.Log;
 
 import com.example.loso.friendtracker.Model.Friend;
+import com.example.loso.friendtracker.Model.FriendModel;
 import com.example.loso.friendtracker.Model.Location;
 import com.example.loso.friendtracker.Model.Meeting;
 import com.example.loso.friendtracker.Model.MeetingModel;
@@ -32,7 +33,7 @@ public class DataManager {
 
         //create dummy friend list
         ArrayList<Friend> friends = new ArrayList<Friend>();
-        for (int i = 1; i < 10; i++) {
+        for (int i = 1; i < 5; i++) {
             String id = MeetingModel.createID();
             String name = "Friend" + i;
             String email = "Email" + i;
@@ -54,18 +55,17 @@ public class DataManager {
 
     public static ArrayList<Meeting> createDummMeetingList() {
         ArrayList<Meeting> meetings = new ArrayList<Meeting>();
+        FriendModel mFriendModel = FriendModel.getInstance();
         for (int i = 0; i < 3; i++) {
             String title = "Meeting" + Integer.toString(i);
-            int[] dates = {6, 4, 7};
             ArrayList<Friend> friends = new ArrayList<>();
-            friends.add(new Friend(MeetingModel.createID(), Integer.toString(i),
-                    Integer.toString(i), null, null));
-            Meeting item = new Meeting(MeetingModel.createID(), "Meeting" + Integer.toString(i),
-                    friends, null);
+            friends.add(mFriendModel.getFriends().get(i));
+            Meeting item = new Meeting(MeetingModel.createID(), title, friends, null);
             Calendar cal = Calendar.getInstance();
-            cal.set(2017, 9, dates[i], 10, 30);
-            Date date = cal.getTime();
-            item.setStartDate(date);
+            long time = cal.getTime().getTime();
+            time += i * 5 * 60 * 1000; // 5mins
+            cal.setTimeInMillis(time);
+            item.setStartDate(cal.getTime());
             meetings.add(item);
         }
         return meetings;

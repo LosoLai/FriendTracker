@@ -58,6 +58,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             return false;
 
         getFriends(cursor, feriendList);
+        if (feriendList.size() == 0)
+            return false;
+
         return true;
     }
     private void getFriends(Cursor cursor, ArrayList<Friend> feriendList) {
@@ -87,6 +90,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             return false;
 
         getMeetings(cursor, meetingList);
+        if (meetingList.size() == 0)
+            return false;
+
         return true;
     }
     private void getMeetings(Cursor cursor, ArrayList<Meeting> meetingList) {
