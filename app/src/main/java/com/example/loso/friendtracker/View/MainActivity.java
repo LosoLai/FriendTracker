@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.net.ConnectivityManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -31,19 +32,12 @@ import android.widget.Toast;
 import com.example.loso.friendtracker.Controller.DatabaseController;
 import com.example.loso.friendtracker.Controller.FriendController;
 import com.example.loso.friendtracker.Controller.MeetingController;
-import com.example.loso.friendtracker.Database_SQLite.DatabaseHelper;
-import com.example.loso.friendtracker.Model.Friend;
-import com.example.loso.friendtracker.Model.FriendModel;
 import com.example.loso.friendtracker.Model.Location;
 import com.example.loso.friendtracker.Model.Meeting;
-import com.example.loso.friendtracker.Model.MeetingModel;
 import com.example.loso.friendtracker.R;
 import com.example.loso.friendtracker.Service.CurrentLocationService;
-import com.example.loso.friendtracker.Service.DataManager;
 import com.example.loso.friendtracker.Service.FriendWalkTimeService;
 import com.example.loso.friendtracker.Service.NetworkStatusReceiver;
-
-import java.util.ArrayList;
 
 /**
  * @author LosoLai
@@ -72,10 +66,13 @@ public class MainActivity extends AppCompatActivity {
 
 
         // Use this code in an activity when you need to do something about the network being connected or not.
-        IntentFilter intentFilter = new IntentFilter(NetworkStatusReceiver.NETWORK_CHANGE_DETECTED);
-        LocalBroadcastManager.getInstance(this).registerReceiver(new BroadcastReceiver() {
+        IntentFilter intentFilter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        getApplicationContext().registerReceiver(new NetworkStatusReceiver(), intentFilter);
+
+        LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
+                Log.i(LOG_TAG, "entered onReceive()");
                 boolean connected = intent.getBooleanExtra(NetworkStatusReceiver.IS_NETWORK_CONNECTED, false);
                 String text = connected ? "Network Connected" : "Network Disconnected";
                 Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
@@ -135,18 +132,20 @@ public class MainActivity extends AppCompatActivity {
         final TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 int selectedTabPosition = tabLayout.getSelectedTabPosition();
                 Log.d(LOG_TAG, "Tab position: " + Integer.toString(selectedTabPosition));
                 if (selectedTabPosition == 0) {
+                    fab.setVisibility(View.VISIBLE);
                     startContactPicker();
                 } else if (selectedTabPosition == 1) {
+                    fab.setVisibility(View.VISIBLE);
                     addMeeting();
                 } else {
-                    // map view - do nothing
+                    fab.setVisibility(View.INVISIBLE);
                 }
             }
         });

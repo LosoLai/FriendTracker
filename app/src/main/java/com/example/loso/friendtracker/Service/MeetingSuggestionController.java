@@ -1,20 +1,20 @@
-package com.example.loso.friendtracker.Controller;
+package com.example.loso.friendtracker.Service;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
+import com.example.loso.friendtracker.Controller.FriendController;
+import com.example.loso.friendtracker.Controller.MeetingController;
 import com.example.loso.friendtracker.Model.Friend;
 import com.example.loso.friendtracker.Model.GuestList;
 import com.example.loso.friendtracker.Model.Location;
 import com.example.loso.friendtracker.Model.Meeting;
 import com.example.loso.friendtracker.Model.WalkTime;
-import com.example.loso.friendtracker.Service.MeetingLocationTask;
 
 import java.util.ArrayList;
 import java.util.Calendar;

@@ -26,12 +26,12 @@ import android.widget.Toast;
 
 import com.example.loso.friendtracker.Controller.MeetingController;
 import com.example.loso.friendtracker.Controller.MeetingListAdapter;
-import com.example.loso.friendtracker.Controller.MeetingSuggestionController;
 import com.example.loso.friendtracker.Model.Location;
 import com.example.loso.friendtracker.Model.Meeting;
 import com.example.loso.friendtracker.Model.MeetingComparator;
 import com.example.loso.friendtracker.Model.MeetingModel;
 import com.example.loso.friendtracker.R;
+import com.example.loso.friendtracker.Service.MeetingSuggestionController;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -139,6 +139,7 @@ public class Tab_Meeting extends Fragment implements Observer {
             }
         });
     }
+
 
     @Override
     public void update(Observable o, Object arg) {

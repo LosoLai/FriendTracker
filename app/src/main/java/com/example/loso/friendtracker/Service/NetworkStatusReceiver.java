@@ -21,6 +21,7 @@ public class NetworkStatusReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
+        Log.i(LOG_TAG, "entered onReceive()");
         ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
         boolean isConnected = networkInfo != null && networkInfo.isConnected();
@@ -28,7 +29,6 @@ public class NetworkStatusReceiver extends BroadcastReceiver {
         Intent networkStatus = new Intent(NETWORK_CHANGE_DETECTED);
         networkStatus.putExtra(IS_NETWORK_CONNECTED, isConnected);
         LocalBroadcastManager.getInstance(context).sendBroadcast(networkStatus);
-
-        Log.d(LOG_TAG, isConnected ? "connected" : "disconnected");
+        Log.i(LOG_TAG, isConnected ? "connected" : "disconnected");
     }
 }
