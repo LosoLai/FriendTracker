@@ -15,6 +15,7 @@ import com.example.loso.friendtracker.Model.Location;
 import com.example.loso.friendtracker.Model.Meeting;
 import com.example.loso.friendtracker.Model.WalkTime;
 import com.example.loso.friendtracker.Service.MeetingLocationTask;
+import com.example.loso.friendtracker.Service.WalkigTimeCallBack;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -48,6 +49,9 @@ public class MeetingSuggestionController {
             if(near == null)
                 near = current;
 
+            if(current.getLocation() == null || current.getWalkTime().getNumericTime() < 0)
+                continue;
+
             if(current.getWalkTime().getNumericTime() < near.getWalkTime().getNumericTime())
                 near = current;
         }
@@ -59,8 +63,9 @@ public class MeetingSuggestionController {
 
         //create a suggestion meeting
         MeetingController meetingController = new MeetingController();
-        Meeting suggest = meetingController.createTempMeeting();
+        final Meeting suggest = meetingController.createTempMeeting();
         suggest.setTitle("Suggestion_" + near.getName());
+        suggest.setLocation(midPoint);
         suggest.addAttend(near);
         Calendar current = Calendar.getInstance();
         long start = current.getTimeInMillis() + (long)near.getWalkTime().getNumericTime();

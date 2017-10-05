@@ -61,6 +61,10 @@ public class MeetingController {
         return meet;
     }
 
+    public void addMeetingIntoList(Meeting meeting) {
+        mMeetingModel.addMeeting(meeting);
+    }
+
     public Meeting createTempMeeting() {
         Meeting meet = new Meeting(MeetingModel.createID());
         return meet;

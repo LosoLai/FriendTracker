@@ -22,11 +22,13 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.loso.friendtracker.Controller.MeetingController;
 import com.example.loso.friendtracker.Controller.MeetingListAdapter;
 import com.example.loso.friendtracker.Controller.MeetingSuggestionController;
+import com.example.loso.friendtracker.Model.Friend;
 import com.example.loso.friendtracker.Model.Location;
 import com.example.loso.friendtracker.Model.Meeting;
 import com.example.loso.friendtracker.Model.MeetingComparator;
@@ -35,6 +37,7 @@ import com.example.loso.friendtracker.R;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -152,26 +155,64 @@ public class Tab_Meeting extends Fragment implements Observer {
         LayoutInflater layoutInflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View customView = layoutInflater.inflate(R.layout.popup_suggestion,null);
 
-//        ListView suggestInfo = (ListView) customView.findViewById(R.id.suggestmeeting);
-//        MeetingListAdapter suggestAdapter = new MeetingListAdapter(customView.getContext(), suggestion);
-//        suggestInfo.setAdapter(suggestAdapter);
-
         Button accept = (Button) customView.findViewById(R.id.btnAccept);
         Button ignore = (Button) customView.findViewById(R.id.btnIgnore);
 
         //instantiate popup window
-        PopupWindow popupWindow = new PopupWindow(customView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        final PopupWindow popupWindow = new PopupWindow(customView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        final Meeting meeting = suggestion.get(0);
+        if(meeting != null)
+            displaySuggestionInfo(customView, meeting);
+        popupWindow.update();
 
         //display the popup window
         LinearLayout linearLayout1 = (LinearLayout) rootView.findViewById(R.id.linearLayout_meeting);
         popupWindow.showAtLocation(linearLayout1, Gravity.CENTER, 0, 0);
 
-//        //close the popup window on button click
-//        closePopupBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                popupWindow.dismiss();
-//            }
-//        });
+        //close the popup window on button click
+        ignore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popupWindow.dismiss();
+            }
+        });
+
+        accept.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(meeting != null)
+                {
+                    MeetingController meetingController = new MeetingController();
+                    meetingController.addMeetingIntoList(meeting);
+
+                    popupWindow.dismiss();
+                }
+            }
+        });
+    }
+
+    public void displaySuggestionInfo(View customView, Meeting meeting) {
+        TextView title = (TextView) customView.findViewById(R.id.text_suggest_title);
+        TextView location = (TextView) customView.findViewById(R.id.text_suggest_location);
+        TextView attend = (TextView) customView.findViewById(R.id.text_suggest_attend);
+        TextView startDate = (TextView) customView.findViewById(R.id.text_suggest_startdate);
+
+        if(title != null && meeting.getTitle() != null)
+            title.append(meeting.getTitle());
+
+        if(location != null && meeting.getLocation() != null)
+            location.append(meeting.getLocation().toString());
+
+        if(attend != null && meeting.getFriends() != null)
+        {
+            Iterator<Friend> itr = meeting.getFriends().keySet().iterator();
+            if(itr.hasNext()){
+                Friend friend = itr.next();
+                attend.append(friend.getName());
+            }
+        }
+
+        if(startDate != null && meeting.getStartDate() != null)
+            startDate.append(meeting.getStartDate().toString());
     }
 }
