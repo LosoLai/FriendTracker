@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
+import com.example.loso.friendtracker.Controller.FriendController;
+import com.example.loso.friendtracker.Controller.MeetingController;
 import com.example.loso.friendtracker.Model.Friend;
 import com.example.loso.friendtracker.Model.GuestList;
 import com.example.loso.friendtracker.Model.Location;
@@ -39,9 +41,6 @@ public class MeetingSuggestionController {
 
     public Meeting createASuggestedMeeting(Location currentLocation)
     {
-        MeetingController meetingController = new MeetingController();
-        final Meeting suggest = meetingController.createTempMeeting();
-
         //get friend list
         FriendController friendController = new FriendController();
         ArrayList<Friend> friends = friendController.getFriendsList();
@@ -65,6 +64,8 @@ public class MeetingSuggestionController {
             midPoint = currentLocation.getMidPoint(near.getLocation());
 
         //create a suggestion meeting
+        MeetingController meetingController = new MeetingController();
+        Meeting suggest = meetingController.createTempMeeting();
         suggest.setTitle("Suggestion_" + near.getName());
         suggest.setLocation(midPoint);
         suggest.addAttend(near);

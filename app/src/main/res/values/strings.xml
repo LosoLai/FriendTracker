@@ -10,9 +10,9 @@
     <string name="title_user_pref">User Setting</string>
     <string name="pref_notify">Notification</string>
     <string name="pref_title_notify_flag">Meeting notification</string>
-    <string name="pref_summary_notify_flag">Turn on the meeting notification to display upcomig meetings</string>
+    <string name="pref_summary_notify_flag">Turn on the meeting notification to display reminders for upcoming meetings</string>
     <string name="pref_title_meeting_notify_time_limit">Meeting notification time</string>
-    <string name="pref_summary_meeting_notify_time_limit">Setting the time that notifying the upcoming meetings</string>
+    <string name="pref_summary_meeting_notify_time_limit">How long before the mee the upcoming meetings</string>
     <string name="text_btnSuggestion">Suggest Now</string>
     <string name="text_btnAcs">Ascending</string>
     <string name="text_btnDecs">Descending</string>

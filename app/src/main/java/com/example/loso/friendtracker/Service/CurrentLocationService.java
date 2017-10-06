@@ -35,7 +35,12 @@ public class CurrentLocationService implements LocationListener {
         LocationManager locationManager = (LocationManager) activity.getSystemService(Context.LOCATION_SERVICE);
         if (checkPermissions()) {
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
-            saveLocationPreference(locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER));
+            android.location.Location currLoc = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            if (currLoc != null) {
+                saveLocationPreference(currLoc);
+            } else {
+                currentLocation = Location.RMIT;
+            }
         } else {
             currentLocation = Location.RMIT;
         }

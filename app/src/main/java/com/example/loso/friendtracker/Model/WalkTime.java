@@ -33,7 +33,7 @@ public class WalkTime {
     }
 
     public boolean invalid() {
-        return numericTime == INVALID_WALK_TIME || stringTime == INVALID_WALK_STRING;
+        return numericTime == INVALID_WALK_TIME || stringTime.equals(INVALID_WALK_STRING);
     }
 
     public String getStringTime() {
