@@ -12,6 +12,18 @@
             android:key="pref_meeting_notify_time_limit"
             android:dependency="pref_meeting_notify_flag"
             android:summary="@string/pref_summary_meeting_notify_time_limit"
-            android:title="@string/pref_title_meeting_notify_time_limit" />
+            android:title="@string/pref_title_meeting_notify_time_limit"
+            android:defaultValue="25" />
+        <CheckBoxPreference
+            android:key="pref_meeting_suggestion_flag"
+            android:summary="@string/pref_summary_suggestion_flag"
+            android:title="@string/pref_title_suggestion_flag"
+            android:defaultValue="false" />
+        <Preference
+            android:key="pref_meeting_suggestion_time_limit"
+            android:dependency="pref_meeting_suggestion_flag"
+            android:summary="@string/pref_summary_meeting_suggestion_time_limit"
+            android:title="@string/pref_title_meeting_suggestion_time_limit"
+            android:defaultValue="5" />
     </PreferenceCategory>
 </PreferenceScreen>

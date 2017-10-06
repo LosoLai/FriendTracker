@@ -69,7 +69,8 @@
 
         <service android:name=".Service.FriendWalkTimeService" />
 
-        <receiver android:name=".View.AlarmNotificationReceiver" />
+        <receiver android:name=".Service.AlarmNotificationReceiver" />
+        <receiver android:name=".Service.AlarmSuggestionReceiver" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").

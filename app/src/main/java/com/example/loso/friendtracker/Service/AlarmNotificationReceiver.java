@@ -1,4 +1,4 @@
-package com.example.loso.friendtracker.View;
+package com.example.loso.friendtracker.Service;
 
 import android.app.Notification;
 import android.app.NotificationManager;

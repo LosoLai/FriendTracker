@@ -22,4 +22,8 @@
     <string name="text_location">Location :</string>
     <string name="text_attend">Attend :</string>
     <string name="text_start_date">Start Date :</string>
+    <string name="pref_summary_suggestion_flag">Turn on the meeting suggestion to display reminders for the nearest friend</string>
+    <string name="pref_title_suggestion_flag">Meeting Suggestion</string>
+    <string name="pref_summary_meeting_suggestion_time_limit">The frequency to do suggestion</string>
+    <string name="pref_title_meeting_suggestion_time_limit">Suggestion frequency</string>
 </resources>
