@@ -52,6 +52,7 @@ public class Tab_Friend extends Fragment implements Observer {
         super.onActivityCreated(savedInstanceState);
 
         Log.d(LOG_TAG, "onActivityCreated()");
+
         // ListView
         FriendModel mFriendModel = FriendModel.getInstance();
         mFriendModel.addObserver(this);

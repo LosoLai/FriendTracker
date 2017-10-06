@@ -53,37 +53,44 @@ public class MainActivity extends AppCompatActivity {
     private DatabaseController dbController;
 
     //Added by LosoLai  24/09/2017
+
     /**
      * Database sync
      * maintain original in memory model which is synced (loaded) in onStart()
      * saved/persisted in onStop()
      */
     @Override
-    protected void onStart()
-    {
+    protected void onStart() {
         Log.i(LOG_TAG, "onStart()");
         super.onStart();
 
 
-        // Use this code in an activity when you need to do something about the network being connected or not.
+        // Start the broadcast receiver that monitors network connectivity
         IntentFilter intentFilter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
         getApplicationContext().registerReceiver(new NetworkStatusReceiver(), intentFilter);
 
-        LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(new BroadcastReceiver() {
+
+        // This code chunk could potentially be moved to where meeting suggestion functionality is:
+        IntentFilter intentFilter1 = new IntentFilter(NetworkStatusReceiver.NETWORK_CHANGE_DETECTED);
+        LocalBroadcastManager.getInstance(this).registerReceiver(new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
                 Log.i(LOG_TAG, "entered onReceive()");
                 boolean connected = intent.getBooleanExtra(NetworkStatusReceiver.IS_NETWORK_CONNECTED, false);
                 String text = connected ? "Network Connected" : "Network Disconnected";
-                Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, text, Toast.LENGTH_LONG).show();
+
+                if (connected) {
+                    // TODO @Loso Start suggest now function when network becomes reconnected.
+                }
                 Log.d(LOG_TAG, text);
             }
-        }, intentFilter);
+        }, intentFilter1);
 
-        //call CurrentLocationService constructor to update current location in preferences.
+        // call CurrentLocationService constructor to update current location in preferences.
         Location currentLocation = new CurrentLocationService(this).getCurrentLocation();
 
-        //initial model staff
+        // initial model setup from DB
         dbController = new DatabaseController(this);
         dbController.setupDB();
 
@@ -93,8 +100,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onStop()
-    {
+    protected void onStop() {
         Log.i(LOG_TAG, "onStop()");
         super.onStop();
 
@@ -110,22 +116,12 @@ public class MainActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
-        /*
-      The {@link android.support.v4.view.PagerAdapter} that will provide
-      fragments for each of the sections. We use a
-      {@link FragmentPagerAdapter} derivative, which will keep every
-      loaded fragment in memory. If this becomes too memory intensive, it
-      may be best to switch to a
-      {@link android.support.v4.app.FragmentStatePagerAdapter}.
-     */
         SectionsPagerAdapter mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
-        /*
-      The {@link ViewPager} that will host the section contents.
-     */
         ViewPager mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
@@ -139,16 +135,36 @@ public class MainActivity extends AppCompatActivity {
                 int selectedTabPosition = tabLayout.getSelectedTabPosition();
                 Log.d(LOG_TAG, "Tab position: " + Integer.toString(selectedTabPosition));
                 if (selectedTabPosition == 0) {
-                    fab.setVisibility(View.VISIBLE);
                     startContactPicker();
                 } else if (selectedTabPosition == 1) {
-                    fab.setVisibility(View.VISIBLE);
                     addMeeting();
+                }
+            }
+        });
+
+        TabLayout.OnTabSelectedListener onTabSelectedListener = new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                int selectedTabPosition = tab.getPosition();
+                FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+                Log.d(LOG_TAG, "Tab position: " + Integer.toString(selectedTabPosition));
+                if (selectedTabPosition == 0) {
+                    fab.setVisibility(View.VISIBLE);
+                } else if (selectedTabPosition == 1) {
+                    fab.setVisibility(View.VISIBLE);
                 } else {
                     fab.setVisibility(View.INVISIBLE);
                 }
             }
-        });
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+            }
+        };
     }
 
     public void addMeeting() {
@@ -177,6 +193,7 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this, "Requires access to contacts", Toast.LENGTH_SHORT).show();
         }
     }
+
 
     /**
      * Called when the contact picked returns
