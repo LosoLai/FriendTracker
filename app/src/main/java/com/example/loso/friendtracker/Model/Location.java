@@ -1,6 +1,7 @@
 package com.example.loso.friendtracker.Model;
 
 import java.io.Serializable;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
 
@@ -22,7 +23,8 @@ public class Location implements Serializable {
     }
 
     public Location(double lat, double longi) {
-        this.time = null;
+        Calendar curret = Calendar.getInstance();
+        this.time = curret.getTime();
         latitude = lat;
         longitude = longi;
     }

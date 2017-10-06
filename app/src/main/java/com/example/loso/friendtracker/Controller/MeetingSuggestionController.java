@@ -39,6 +39,9 @@ public class MeetingSuggestionController {
 
     public Meeting createASuggestedMeeting(Location currentLocation)
     {
+        MeetingController meetingController = new MeetingController();
+        final Meeting suggest = meetingController.createTempMeeting();
+
         //get friend list
         FriendController friendController = new FriendController();
         ArrayList<Friend> friends = friendController.getFriendsList();
@@ -62,18 +65,33 @@ public class MeetingSuggestionController {
             midPoint = currentLocation.getMidPoint(near.getLocation());
 
         //create a suggestion meeting
-        MeetingController meetingController = new MeetingController();
-        final Meeting suggest = meetingController.createTempMeeting();
         suggest.setTitle("Suggestion_" + near.getName());
         suggest.setLocation(midPoint);
         suggest.addAttend(near);
         Calendar current = Calendar.getInstance();
-        long start = current.getTimeInMillis() + (long)near.getWalkTime().getNumericTime();
-        long end = start + DEFAULT_MEETING_DURATION;
-        Date startDate = new Date(start);
-        Date endDate = new Date(end);
+        final Date startDate = new Date(current.getTimeInMillis());
+        final Date endDate = new Date(current.getTimeInMillis());
         suggest.setStartDate(startDate);
         suggest.setEndDate(endDate);
+
+        //get two locations walkingTime
+        MeetingLocationTask meetingLocationTask = new MeetingLocationTask(new WalkigTimeCallBack<WalkTime>() {
+            @Override
+            public void onSuccess(WalkTime object) {
+                double maxWalk = object.getNumericTime();
+                long start = suggest.getStartDate().getTime() + (long)(maxWalk * 1000);
+                long end = start + DEFAULT_MEETING_DURATION;
+                suggest.setStartDate(new Date(start));
+                suggest.setEndDate(new Date(end));
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+
+            }
+        }, midPoint, near.getLocation(), currentLocation);
+        meetingLocationTask.execute();
+
 
         return suggest;
     }

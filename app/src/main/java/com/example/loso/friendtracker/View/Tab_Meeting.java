@@ -33,6 +33,7 @@ import com.example.loso.friendtracker.Model.Location;
 import com.example.loso.friendtracker.Model.Meeting;
 import com.example.loso.friendtracker.Model.MeetingComparator;
 import com.example.loso.friendtracker.Model.MeetingModel;
+import com.example.loso.friendtracker.Model.WalkTime;
 import com.example.loso.friendtracker.R;
 
 import java.util.ArrayList;
@@ -125,6 +126,8 @@ public class Tab_Meeting extends Fragment implements Observer {
 
         Button btnSuggestion = (Button) rootView.findViewById(R.id.btnSuggestion);
         final ArrayList<Meeting> suggestion = new ArrayList<Meeting>();
+        MeetingController meetingController = new MeetingController();
+        final Meeting suggest = meetingController.createTempMeeting();
         btnSuggestion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

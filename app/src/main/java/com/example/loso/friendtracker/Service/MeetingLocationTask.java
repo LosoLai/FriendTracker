@@ -18,15 +18,28 @@ public class MeetingLocationTask extends AsyncTask<Void, Void, Void> {
     public static final String MEETING_LOCATION_TASK = "MeetingLocationTask";
     public static final String MAX_WALKTIME = "MaxWalk";
     public static final String GUESTLIST = "GuestList";
+    private WalkigTimeCallBack<WalkTime> mCallBack;
     private GuestList guests;
     private Location midPoint;
+    private Location[] twoPoints = new Location[2];
     private Context context;
+    private WalkTime walkTime;
     private double maxWalk;
 
     public MeetingLocationTask(Context context, GuestList guestList, Location midPoint) {
         this.context = context;
         guests = guestList;
         this.midPoint = midPoint;
+        mCallBack = null;
+    }
+
+    public MeetingLocationTask(WalkigTimeCallBack<WalkTime> callBack, Location midPoint, Location friend, Location current) {
+        this.context = null;
+        guests = null;
+        twoPoints[0] = friend;
+        twoPoints[1] = current;
+        this.midPoint = midPoint;
+        this.mCallBack = callBack;
     }
 
 
@@ -34,17 +47,38 @@ public class MeetingLocationTask extends AsyncTask<Void, Void, Void> {
     protected Void doInBackground(Void... unused) {
         maxWalk = 0.0;
         DistanceFinder distance = new DistanceFinder();
-        for (Friend friend : guests.getGuestList().keySet()) {
-            Location friendLocation = friend.getLocation();
-            if (friendLocation != null) {
-                String url = distance.generateDistanceURL(friendLocation, midPoint);
-                String response = distance.accessURL(url);
-                WalkTime walkTime = distance.parseWalkTime(response);
-                guests.getGuestList().put(friend, walkTime);
+        if(guests != null)
+        {
+            for (Friend friend : guests.getGuestList().keySet()) {
+                Location friendLocation = friend.getLocation();
+                if (friendLocation != null) {
+                    String url = distance.generateDistanceURL(friendLocation, midPoint);
+                    String response = distance.accessURL(url);
+                    walkTime = distance.parseWalkTime(response);
+                    guests.getGuestList().put(friend, walkTime);
 
-                if (walkTime.getNumericTime() > maxWalk) {
-                    maxWalk = walkTime.getNumericTime();
+                    if (walkTime.getNumericTime() > maxWalk) {
+                        maxWalk = walkTime.getNumericTime();
+                    }
                 }
+            }
+        }
+        else
+        {
+            if(twoPoints[0] != null && twoPoints[1] != null)
+            {
+                String url = distance.generateDistanceURL(twoPoints[0], midPoint);
+                String response = distance.accessURL(url);
+                WalkTime walkTime_friend = distance.parseWalkTime(response);
+                double walkTime = walkTime_friend.getNumericTime();
+
+                url = distance.generateDistanceURL(twoPoints[1], midPoint);
+                response = distance.accessURL(url);
+                WalkTime walkTime_current = distance.parseWalkTime(response);
+                if(walkTime > walkTime_current.getNumericTime())
+                    mCallBack.onSuccess(walkTime_friend);
+                else
+                    mCallBack.onSuccess(walkTime_current);
             }
         }
         return null;
@@ -57,6 +91,4 @@ public class MeetingLocationTask extends AsyncTask<Void, Void, Void> {
         intent.putExtra(MAX_WALKTIME, maxWalk);
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
     }
-
-
 }
