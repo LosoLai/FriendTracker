@@ -1,6 +1,9 @@
 package com.example.loso.friendtracker.Controller;
 
+import android.content.SharedPreferences;
+
 import com.example.loso.friendtracker.Model.Location;
+import com.example.loso.friendtracker.View.UserSettingActivity;
 
 /**
  * Created by Loso on 2017/10/8.
@@ -69,5 +72,18 @@ public class PreferenceController {
 
     public void setCurrentLocation(Location currentLocation) {
         this.currentLocation = currentLocation;
+    }
+
+    public void loadSharedPreference(final SharedPreferences prefs)
+    {
+        String time = prefs.getString(UserSettingActivity.MyPreferenceFragment.MEETING_NOTIFICATION_TIME, "9");
+        int remainderTime = Integer.parseInt(time);
+        setReminderTime(remainderTime);
+        time = prefs.getString(UserSettingActivity.MyPreferenceFragment.MEETING_NOTIFICATION_SNOOZE, "1");
+        int snooze = Integer.parseInt(time);
+        setSnooze(snooze);
+        time = prefs.getString(UserSettingActivity.MyPreferenceFragment.MEETING_SUGGESTION_TIME, "30");
+        int suggestion = Integer.parseInt(time);
+        setSuggestion(suggestion);
     }
 }

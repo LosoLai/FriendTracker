@@ -26,11 +26,14 @@ public class AlarmSuggestionReceiver extends BroadcastReceiver {
         MeetingSuggestionController meetingSuggestionController = MeetingSuggestionController.getInstance();
         Meeting suggest = meetingSuggestionController.createASuggestedMeeting(preferenceController.getCurrentLocation());
 
-        Intent settingIntent = new Intent(context, UserSettingActivity.class);
-        PendingIntent preSetting = PendingIntent.getActivity(context, 0, settingIntent, 0);
+//        Intent settingIntent = new Intent(context, UserSettingActivity.class);
+//        PendingIntent preSetting = PendingIntent.getActivity(context, 0, settingIntent, 0);
 
         Intent cancleIntent = new Intent(context, ActionCancelSuggestionActivity.class);
         PendingIntent actionCancle = PendingIntent.getActivity(context, ALARM_SUGGESTION_ID, cancleIntent, 0);
+
+        Intent cleanIntent = new Intent(context, ActionCleanSuggestionActivity.class);
+        PendingIntent actionNo = PendingIntent.getActivity(context, ALARM_SUGGESTION_ID, cleanIntent, 0);
 
         Intent acceptIntent = new Intent(context, ActionAcceptSuggestionActivity.class);
         PendingIntent actionYes = PendingIntent.getActivity(context, ALARM_SUGGESTION_ID, acceptIntent, 0);
@@ -40,6 +43,7 @@ public class AlarmSuggestionReceiver extends BroadcastReceiver {
                 .setDefaults(Notification.DEFAULT_ALL)
                 .setWhen(System.currentTimeMillis())
                 .addAction(R.mipmap.ic_launcher_round, "YES", actionYes)
+                .addAction(R.mipmap.ic_launcher_round, "NO", actionNo)
                 .addAction(R.mipmap.ic_launcher_round, "CANCLE", actionCancle)
                 .setSmallIcon(R.mipmap.ic_launcher)
                 //.setContentIntent(preSetting)

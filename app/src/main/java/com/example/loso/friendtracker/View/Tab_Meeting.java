@@ -147,9 +147,7 @@ public class Tab_Meeting extends Fragment implements Observer {
                 AlarmManager alarmManager = (AlarmManager)getActivity().getSystemService(Context.ALARM_SERVICE);
                 Intent intent = new Intent(getActivity(), AlarmSuggestionReceiver.class);
                 PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), AlarmSuggestionReceiver.ALARM_SUGGESTION_ID, intent, 0);
-                //test
-                int time = 3000;
-                //int time = preferenceController.getSuggestion() * 1000;
+                int time = preferenceController.getSuggestion() * 1000;
                 alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()+time, time, pendingIntent);
 
 

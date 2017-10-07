@@ -91,6 +91,6 @@ public class MeetingSuggestionController {
         meetingLocationTask.execute();
 
         suggestion = suggest;
-        return suggest;
+        return suggestion;
     }
 }

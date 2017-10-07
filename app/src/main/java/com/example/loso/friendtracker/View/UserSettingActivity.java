@@ -34,11 +34,11 @@ public class UserSettingActivity extends PreferenceActivity {
 
     public static class MyPreferenceFragment extends PreferenceFragment
     {
-        private static final String MEETING_NOTIFICATION = "pref_meeting_notify_flag";
-        private static final String MEETING_NOTIFICATION_TIME = "pref_meeting_notify_time_limit";
-        private static final String MEETING_NOTIFICATION_SNOOZE = "pref_meeting_notify_snooze_time_limit";
-        private static final String MEETING_SUGGESTION = "pref_meeting_suggestion_flag";
-        private static final String MEETING_SUGGESTION_TIME = "pref_meeting_suggestion_time_limit";
+        public static final String MEETING_NOTIFICATION = "pref_meeting_notify_flag";
+        public static final String MEETING_NOTIFICATION_TIME = "pref_meeting_notify_time_limit";
+        public static final String MEETING_NOTIFICATION_SNOOZE = "pref_meeting_notify_snooze_time_limit";
+        public static final String MEETING_SUGGESTION = "pref_meeting_suggestion_flag";
+        public static final String MEETING_SUGGESTION_TIME = "pref_meeting_suggestion_time_limit";
 
         @Override
         public void onCreate(final Bundle savedInstanceState)
@@ -48,15 +48,15 @@ public class UserSettingActivity extends PreferenceActivity {
 
             final SharedPreferences prefs = android.preference.PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
             final PreferenceController preferenceController = PreferenceController.getInstance();
-            String time = prefs.getString(MEETING_NOTIFICATION_TIME, "9");
-            int remainderTime = Integer.parseInt(time);
-            preferenceController.setReminderTime(remainderTime);
-            time = prefs.getString(MEETING_NOTIFICATION_SNOOZE, "1");
-            int snooze = Integer.parseInt(time);
-            preferenceController.setSnooze(snooze);
-            time = prefs.getString(MEETING_SUGGESTION_TIME, "30");
-            int suggestion = Integer.parseInt(time);
-            preferenceController.setSuggestion(suggestion);
+//            String time = prefs.getString(MEETING_NOTIFICATION_TIME, "9");
+//            int remainderTime = Integer.parseInt(time);
+//            preferenceController.setReminderTime(remainderTime);
+//            time = prefs.getString(MEETING_NOTIFICATION_SNOOZE, "1");
+//            int snooze = Integer.parseInt(time);
+//            preferenceController.setSnooze(snooze);
+//            time = prefs.getString(MEETING_SUGGESTION_TIME, "30");
+//            int suggestion = Integer.parseInt(time);
+//            preferenceController.setSuggestion(suggestion);
 
             setMeetingNotification(prefs, preferenceController);
             setMeetingSuggestion(prefs, preferenceController);

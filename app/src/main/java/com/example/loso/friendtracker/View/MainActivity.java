@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.os.Build;
@@ -33,6 +34,7 @@ import android.widget.Toast;
 import com.example.loso.friendtracker.Controller.DatabaseController;
 import com.example.loso.friendtracker.Controller.FriendController;
 import com.example.loso.friendtracker.Controller.MeetingController;
+import com.example.loso.friendtracker.Controller.PreferenceController;
 import com.example.loso.friendtracker.Model.Location;
 import com.example.loso.friendtracker.Model.Meeting;
 import com.example.loso.friendtracker.R;
@@ -98,6 +100,11 @@ public class MainActivity extends AppCompatActivity {
         // Start the FriendWalkTimeService to calculate friend walking times
         Intent intent = new Intent(this, FriendWalkTimeService.class);
         getApplicationContext().startService(intent);
+
+        //iitial PrefereceCtrller
+        final SharedPreferences prefs = android.preference.PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        final PreferenceController preferenceController = PreferenceController.getInstance();
+        preferenceController.loadSharedPreference(prefs);
     }
 
     @Override

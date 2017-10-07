@@ -90,6 +90,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.loso.friendtracker.View.MainActivity" />
         </activity>
+        <activity
+            android:name=".Alarm.ActionCleanSuggestionActivity"
+            android:parentActivityName=".View.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.loso.friendtracker.View.MainActivity" />
+        </activity>
 
         <service android:name=".Service.FriendWalkTimeService" />
 
