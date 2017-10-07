@@ -4,11 +4,14 @@ package com.example.loso.friendtracker.View;
  * Created by Loso on 2017/8/19.
  */
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
@@ -25,8 +28,10 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.loso.friendtracker.Alarm.AlarmSuggestionReceiver;
 import com.example.loso.friendtracker.Controller.MeetingController;
 import com.example.loso.friendtracker.Controller.MeetingListAdapter;
+import com.example.loso.friendtracker.Controller.PreferenceController;
 import com.example.loso.friendtracker.Model.Friend;
 import com.example.loso.friendtracker.Model.Location;
 import com.example.loso.friendtracker.Model.Meeting;
@@ -135,12 +140,25 @@ public class Tab_Meeting extends Fragment implements Observer {
                 double latitude = (double)locationPref.getFloat("latitude", 0);
                 double longitude = (double)locationPref.getFloat("longitude", 0);
                 Location current = new Location(latitude, longitude);
+                PreferenceController preferenceController = PreferenceController.getInstance();
+                preferenceController.setCurrentLocation(current);
 
-                //MeetingSuggestionController
-                MeetingSuggestionController suggestionController = new MeetingSuggestionController(getContext());
-                suggestion.add(suggestionController.createASuggestedMeeting(current));
+                //active suggesti alarm
+                AlarmManager alarmManager = (AlarmManager)getActivity().getSystemService(Context.ALARM_SERVICE);
+                Intent intent = new Intent(getActivity(), AlarmSuggestionReceiver.class);
+                PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), AlarmSuggestionReceiver.ALARM_SUGGESTION_ID, intent, 0);
+                //test
+                int time = 3000;
+                //int time = preferenceController.getSuggestion() * 1000;
+                alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()+time, time, pendingIntent);
 
-                setPopUpWindow(suggestion);
+
+//
+//                //MeetingSuggestionController
+//                MeetingSuggestionController suggestionController = new MeetingSuggestionController(getContext());
+//                suggestion.add(suggestionController.createASuggestedMeeting(current));
+
+                //setPopUpWindow(suggestion);
             }
         });
     }

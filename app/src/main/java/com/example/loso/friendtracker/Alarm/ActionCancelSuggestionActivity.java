@@ -1,21 +1,17 @@
-package com.example.loso.friendtracker.View;
+package com.example.loso.friendtracker.Alarm;
 
 import android.app.Activity;
 import android.app.AlarmManager;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.example.loso.friendtracker.Service.AlarmNotificationReceiver;
-import com.example.loso.friendtracker.Service.AlarmSuggestionReceiver;
-
 /**
  * Created by Loso on 2017/10/7.
  */
 
-public class ActionCancleSuggestionActivity extends Activity {
+public class ActionCancelSuggestionActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

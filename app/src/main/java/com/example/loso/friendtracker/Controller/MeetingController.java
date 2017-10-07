@@ -80,12 +80,9 @@ public class MeetingController {
         return mMeetingModel.getMeetingTimes(meetingID);
     }
 
-    public String getUpcommingMeeting() {
+    public Meeting getUpcommingMeeting() {
         MeetingComparator comp = new MeetingComparator(MeetingComparator.ORDER_ACS);
         Collections.sort(mMeetingModel.getMeetings(), comp);
-        Meeting upcoming = mMeetingModel.getMeetings().get(0);
-        String str = "Title : " + upcoming.getTitle() + "\n" +
-                     "StartDate : " + upcoming.getStartDate().toString() + "\n";
-        return str;
+        return mMeetingModel.getMeetings().get(0);
     }
 }

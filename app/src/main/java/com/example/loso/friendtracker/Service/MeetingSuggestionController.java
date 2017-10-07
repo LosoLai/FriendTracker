@@ -21,13 +21,19 @@ import java.util.Date;
 public class MeetingSuggestionController {
     public static final long DEFAULT_MEETING_DURATION = 60 * 60 * 1000; // 60 mins
     private static final String LOG_TAG = "MeetingSuggestion";
-    private Context context;
-    private Location midPoint;
-    private GuestList guestList;
-    private double maxWalkTime;
+    private static MeetingSuggestionController instance;
+    private Meeting suggestion;
 
-    public MeetingSuggestionController(Context context) {
-        this.context = context;
+    public static MeetingSuggestionController getInstance()
+    {
+        if(instance == null)
+            instance = new MeetingSuggestionController();
+
+        return instance;
+    }
+    public Meeting getSuggestion()
+    {
+        return suggestion;
     }
 
     public Meeting createASuggestedMeeting(Location currentLocation)
@@ -84,7 +90,7 @@ public class MeetingSuggestionController {
         }, midPoint, near.getLocation(), currentLocation);
         meetingLocationTask.execute();
 
-
+        suggestion = suggest;
         return suggest;
     }
 }

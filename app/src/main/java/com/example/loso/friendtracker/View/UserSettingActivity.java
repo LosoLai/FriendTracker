@@ -8,16 +8,18 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.preference.CheckBoxPreference;
+import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
-import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.widget.Toast;
 
+import com.example.loso.friendtracker.Controller.PreferenceController;
+import com.example.loso.friendtracker.Controller.MeetingController;
 import com.example.loso.friendtracker.R;
-import com.example.loso.friendtracker.Service.AlarmNotificationReceiver;
-import com.example.loso.friendtracker.Service.AlarmSuggestionReceiver;
+import com.example.loso.friendtracker.Alarm.AlarmNotificationReceiver;
+import com.example.loso.friendtracker.Alarm.AlarmSuggestionReceiver;
 
 /**
  * Created by Loso on 2017/10/1.
@@ -33,7 +35,10 @@ public class UserSettingActivity extends PreferenceActivity {
     public static class MyPreferenceFragment extends PreferenceFragment
     {
         private static final String MEETING_NOTIFICATION = "pref_meeting_notify_flag";
+        private static final String MEETING_NOTIFICATION_TIME = "pref_meeting_notify_time_limit";
+        private static final String MEETING_NOTIFICATION_SNOOZE = "pref_meeting_notify_snooze_time_limit";
         private static final String MEETING_SUGGESTION = "pref_meeting_suggestion_flag";
+        private static final String MEETING_SUGGESTION_TIME = "pref_meeting_suggestion_time_limit";
 
         @Override
         public void onCreate(final Bundle savedInstanceState)
@@ -41,26 +46,49 @@ public class UserSettingActivity extends PreferenceActivity {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.preferences);
 
-            setMeetingNotification();
-            setMeetingSuggestion();
+            final SharedPreferences prefs = android.preference.PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
+            final PreferenceController preferenceController = PreferenceController.getInstance();
+            String time = prefs.getString(MEETING_NOTIFICATION_TIME, "9");
+            int remainderTime = Integer.parseInt(time);
+            preferenceController.setReminderTime(remainderTime);
+            time = prefs.getString(MEETING_NOTIFICATION_SNOOZE, "1");
+            int snooze = Integer.parseInt(time);
+            preferenceController.setSnooze(snooze);
+            time = prefs.getString(MEETING_SUGGESTION_TIME, "30");
+            int suggestion = Integer.parseInt(time);
+            preferenceController.setSuggestion(suggestion);
+
+            setMeetingNotification(prefs, preferenceController);
+            setMeetingSuggestion(prefs, preferenceController);
         }
 
-        public void setMeetingNotification()
+        public void setMeetingNotification(final SharedPreferences prefs, final PreferenceController preferenceController)
         {
             final CheckBoxPreference checkBoxPreference = (CheckBoxPreference) findPreference("pref_meeting_notify_flag");
             checkBoxPreference.setOnPreferenceChangeListener(new CheckBoxPreference.OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
                     boolean checked = Boolean.valueOf(newValue.toString());
+                    preferenceController.setReminderFlag(checked);
 
                     //check alarm shuld be fire or not
                     AlarmManager alarmManager = (AlarmManager)getActivity().getSystemService(Context.ALARM_SERVICE);
                     Intent intent = new Intent(getActivity(), AlarmNotificationReceiver.class);
                     PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), AlarmNotificationReceiver.ALARM_NOTIFY_ID, intent, 0);
 
+                    //get upcomming meeting info
+                    MeetingController meetingController = new MeetingController();
+                    long meetingTime = meetingController.getUpcommingMeeting().getStartDate().getTime();
+                    //get time limit value
+                    String time = prefs.getString(MEETING_NOTIFICATION_TIME, "");
+                    int duration = Integer.parseInt(time) * 60 * 1000;
+                    long reminderTime = meetingTime - duration;
+
                     if(checked) {
                         if(alarmManager != null)
-                            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, SystemClock.elapsedRealtime()+3000, 3000, pendingIntent);
+                            //test
+                            alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()+5000, pendingIntent);
+                            //alarmManager.set(AlarmManager.RTC_WAKEUP, reminderTime, pendingIntent);
                         Toast.makeText(getActivity(), "Active reminder", Toast.LENGTH_SHORT).show();
                     }
                     else {
@@ -70,31 +98,48 @@ public class UserSettingActivity extends PreferenceActivity {
                     }
 
                     checkBoxPreference.setChecked(checked);
-                    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
                     SharedPreferences.Editor editor = prefs.edit();
                     editor.putBoolean(MEETING_NOTIFICATION, checked);
                     editor.apply();
                     return true;
                 }
             });
+
+            final EditTextPreference editTextPreference = (EditTextPreference) findPreference("pref_meeting_notify_time_limit");
+            editTextPreference.setOnPreferenceChangeListener(new EditTextPreference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    int time = Integer.parseInt(newValue.toString());
+                    preferenceController.setReminderTime(time);
+
+                    SharedPreferences.Editor editor = prefs.edit();
+                    editor.putInt(MEETING_NOTIFICATION_TIME, time);
+                    editor.apply();
+                    return true;
+                }
+            });
         }
 
-        public void setMeetingSuggestion()
+        public void setMeetingSuggestion(final SharedPreferences prefs, final PreferenceController preferenceController)
         {
             final CheckBoxPreference checkBoxPreference = (CheckBoxPreference) findPreference("pref_meeting_suggestion_flag");
             checkBoxPreference.setOnPreferenceChangeListener(new CheckBoxPreference.OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
                     boolean checked = Boolean.valueOf(newValue.toString());
+                    preferenceController.setSuggestionFlag(checked);
 
                     //check alarm shuld be fire or not
                     AlarmManager alarmManager = (AlarmManager)getActivity().getSystemService(Context.ALARM_SERVICE);
                     Intent intent = new Intent(getActivity(), AlarmSuggestionReceiver.class);
                     PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), AlarmSuggestionReceiver.ALARM_SUGGESTION_ID, intent, 0);
 
+                    //get time limit
+                    int time = prefs.getInt(MEETING_SUGGESTION_TIME, 30) * 1000;
+
                     if(checked) {
                         if(alarmManager != null)
-                            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, SystemClock.elapsedRealtime()+3000, 3000, pendingIntent);
+                            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, SystemClock.elapsedRealtime()+time, time, pendingIntent);
                         Toast.makeText(getActivity(), "Active suggestion", Toast.LENGTH_SHORT).show();
                     }
                     else {
@@ -104,7 +149,6 @@ public class UserSettingActivity extends PreferenceActivity {
                     }
 
                     checkBoxPreference.setChecked(checked);
-                    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
                     SharedPreferences.Editor editor = prefs.edit();
                     editor.putBoolean(MEETING_SUGGESTION, checked);
                     editor.apply();

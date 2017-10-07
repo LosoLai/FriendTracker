@@ -124,4 +124,10 @@ public class Meeting {
 		if(this.friends != null)
             friends.addFriend(friend);
 	}
+
+	@Override
+    public String toString() {
+        return "Title : " + this.getTitle() + "\n" +
+                "StartDate : " + this.getStartDate().toString() + "\n";
+    }
 }

@@ -1,4 +1,4 @@
-package com.example.loso.friendtracker.Service;
+package com.example.loso.friendtracker.Alarm;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -23,16 +23,20 @@ public class AlarmNotificationReceiver extends BroadcastReceiver {
         Intent settingIntent = new Intent(context, UserSettingActivity.class);
         PendingIntent preSetting = PendingIntent.getActivity(context, 0, settingIntent, 0);
 
+        Intent snoozeIntent = new Intent(context, ActionSnoozeReminderActivity.class);
+        PendingIntent snooze = PendingIntent.getActivity(context, ALARM_NOTIFY_ID, snoozeIntent, 0);
+
         //get upcomming meeting info
         MeetingController meetingController = new MeetingController();
-        String meetingInfo = meetingController.getUpcommingMeeting();
+        String meetingInfo = meetingController.getUpcommingMeeting().toString();
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
         builder.setAutoCancel(true)
                 .setDefaults(Notification.DEFAULT_ALL)
                 .setWhen(System.currentTimeMillis())
+                .addAction(R.mipmap.ic_launcher_round, "SNOOZE", snooze)
                 .setSmallIcon(R.mipmap.ic_launcher)
-                .setContentIntent(preSetting)
+                //.setContentIntent(preSetting)
                 .setContentTitle("Meeting Reminder:")
                 .setContentText(meetingInfo)
                 .setDefaults(Notification.DEFAULT_LIGHTS | Notification.DEFAULT_SOUND)

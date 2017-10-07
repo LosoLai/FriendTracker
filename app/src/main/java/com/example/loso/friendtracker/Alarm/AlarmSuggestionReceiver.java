@@ -1,4 +1,4 @@
-package com.example.loso.friendtracker.Service;
+package com.example.loso.friendtracker.Alarm;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -8,8 +8,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.NotificationCompat;
 
+import com.example.loso.friendtracker.Controller.PreferenceController;
+import com.example.loso.friendtracker.Model.Meeting;
 import com.example.loso.friendtracker.R;
-import com.example.loso.friendtracker.View.ActionCancleSuggestionActivity;
+import com.example.loso.friendtracker.Service.MeetingSuggestionController;
 import com.example.loso.friendtracker.View.UserSettingActivity;
 
 /**
@@ -20,22 +22,29 @@ public class AlarmSuggestionReceiver extends BroadcastReceiver {
     public static final int ALARM_SUGGESTION_ID = 2;
     @Override
     public void onReceive(Context context, Intent intent) {
+        PreferenceController preferenceController = PreferenceController.getInstance();
+        MeetingSuggestionController meetingSuggestionController = MeetingSuggestionController.getInstance();
+        Meeting suggest = meetingSuggestionController.createASuggestedMeeting(preferenceController.getCurrentLocation());
+
         Intent settingIntent = new Intent(context, UserSettingActivity.class);
         PendingIntent preSetting = PendingIntent.getActivity(context, 0, settingIntent, 0);
 
-        Intent cancleIntent = new Intent(context, ActionCancleSuggestionActivity.class);
+        Intent cancleIntent = new Intent(context, ActionCancelSuggestionActivity.class);
         PendingIntent actionCancle = PendingIntent.getActivity(context, ALARM_SUGGESTION_ID, cancleIntent, 0);
+
+        Intent acceptIntent = new Intent(context, ActionAcceptSuggestionActivity.class);
+        PendingIntent actionYes = PendingIntent.getActivity(context, ALARM_SUGGESTION_ID, acceptIntent, 0);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
         builder.setAutoCancel(true)
                 .setDefaults(Notification.DEFAULT_ALL)
                 .setWhen(System.currentTimeMillis())
-                .addAction(R.drawable.common_google_signin_btn_icon_light_normal, "NO", null)
-                .addAction(R.drawable.common_google_signin_btn_icon_light_normal, "CANCLE", actionCancle)
+                .addAction(R.mipmap.ic_launcher_round, "YES", actionYes)
+                .addAction(R.mipmap.ic_launcher_round, "CANCLE", actionCancle)
                 .setSmallIcon(R.mipmap.ic_launcher)
-                .setContentIntent(preSetting)
-                .setContentTitle("Alarm Actived!")
-                .setContentText("This is a meeting suggestion.")
+                //.setContentIntent(preSetting)
+                .setContentTitle("Meeting Suggestion")
+                .setContentText(suggest.toString())
                 .setDefaults(Notification.DEFAULT_LIGHTS | Notification.DEFAULT_SOUND)
                 .setContentInfo("Info");
 

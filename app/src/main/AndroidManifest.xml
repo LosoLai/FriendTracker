@@ -67,7 +67,23 @@
                 android:value="com.example.loso.friendtracker.View.MainActivity" />
         </activity>
         <activity
-            android:name=".View.ActionCancleSuggestionActivity"
+            android:name=".Alarm.ActionCancelSuggestionActivity"
+            android:parentActivityName=".View.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.loso.friendtracker.View.MainActivity" />
+        </activity>
+        <activity
+            android:name=".Alarm.ActionSnoozeReminderActivity"
+            android:parentActivityName=".View.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.loso.friendtracker.View.MainActivity" />
+        </activity>
+        <activity
+            android:name=".Alarm.ActionAcceptSuggestionActivity"
             android:parentActivityName=".View.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
@@ -77,8 +93,8 @@
 
         <service android:name=".Service.FriendWalkTimeService" />
 
-        <receiver android:name=".Service.AlarmNotificationReceiver" />
-        <receiver android:name=".Service.AlarmSuggestionReceiver" />
+        <receiver android:name=".Alarm.AlarmNotificationReceiver" />
+        <receiver android:name=".Alarm.AlarmSuggestionReceiver" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
