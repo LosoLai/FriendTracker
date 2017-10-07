@@ -120,10 +120,21 @@ public final class MeetingModel extends Observable {
         return dates;
     }
 
+    public void addGuest(String meetingID, Friend friend) {
+        Meeting meet = findMeetingByID(meetingID);
+        if (meet != null) {
+            meet.addAttend(friend);
+            setChanged();
+            notifyObservers();
+        }
+    }
+
     public void removeGuest(String meetingID, String friendID) {
         Meeting meet = findMeetingByID(meetingID);
         if (meet != null) {
             meet.removeAttend(friendID);
+            setChanged();
+            notifyObservers();
         }
     }
 
