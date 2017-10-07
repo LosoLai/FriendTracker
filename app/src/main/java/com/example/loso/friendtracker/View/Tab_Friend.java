@@ -73,7 +73,6 @@ public class Tab_Friend extends Fragment implements Observer {
                 Log.d(LOG_TAG, "OnItemClickListener reached ok");
                 Friend friend = adapter.getItem(position);
                 startActivity(new Intent(getActivity(), EditFriendActivity.class).putExtra("friend", friend.getID()));
-
             }
         });
 
@@ -103,11 +102,7 @@ public class Tab_Friend extends Fragment implements Observer {
 
     @Override
     public void update(Observable o, Object arg) {
-        if (o instanceof FriendModel && adapter != null && !(arg instanceof Friend)) {
-            Log.d(LOG_TAG, "MADE IT TO UPDATE METHOD.");
-            //FriendController fc = new FriendController();
-            //fc.updateFriendLocations(this.getContext());
-            adapter.notifyDataSetChanged();
-        }
+        Log.d(LOG_TAG, "MADE IT TO UPDATE METHOD.");
+        adapter.notifyDataSetChanged();
     }
 }

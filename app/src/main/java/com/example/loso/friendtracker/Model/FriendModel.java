@@ -135,8 +135,6 @@ public class FriendModel extends Observable {
         Friend friend = findFriendByID(friendID);
         if (friend != null) {
             friend.setLocation(location);
-            setChanged();
-            notifyObservers(friend);
         }
     }
 

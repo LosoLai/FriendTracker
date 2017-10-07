@@ -73,7 +73,7 @@ public class UserSettingActivity extends PreferenceActivity {
                     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
                     SharedPreferences.Editor editor = prefs.edit();
                     editor.putBoolean(MEETING_NOTIFICATION, checked);
-                    editor.commit();
+                    editor.apply();
                     return true;
                 }
             });
@@ -107,7 +107,7 @@ public class UserSettingActivity extends PreferenceActivity {
                     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
                     SharedPreferences.Editor editor = prefs.edit();
                     editor.putBoolean(MEETING_SUGGESTION, checked);
-                    editor.commit();
+                    editor.apply();
                     return true;
                 }
             });
