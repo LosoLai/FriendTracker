@@ -8,12 +8,19 @@
             android:summary="@string/pref_summary_notify_flag"
             android:title="@string/pref_title_notify_flag"
             android:defaultValue="false" />
-        <Preference
+        <EditTextPreference
             android:key="pref_meeting_notify_time_limit"
             android:dependency="pref_meeting_notify_flag"
             android:summary="@string/pref_summary_meeting_notify_time_limit"
-            android:title="@string/pref_title_meeting_notify_time_limit"
-            android:defaultValue="25" />
+            android:title="@string/pref_title_meeting_notify_time_limit" />
+        <ListPreference
+            android:key="pref_meeting_notify_snooze_time_limit"
+            android:dependency="pref_meeting_notify_flag"
+            android:title="@string/pref_title_meeting_notify_snooze_time_limit"
+            android:summary="@string/pref_summary_meeting_notify_snooze_time_limit"
+            android:defaultValue="1"
+            android:entries="@array/snozzelistArray"
+            android:entryValues="@array/snozzelistValues" />
         <CheckBoxPreference
             android:key="pref_meeting_suggestion_flag"
             android:summary="@string/pref_summary_suggestion_flag"
@@ -24,6 +31,6 @@
             android:dependency="pref_meeting_suggestion_flag"
             android:summary="@string/pref_summary_meeting_suggestion_time_limit"
             android:title="@string/pref_title_meeting_suggestion_time_limit"
-            android:defaultValue="5" />
+            android:defaultValue="30" />
     </PreferenceCategory>
 </PreferenceScreen>

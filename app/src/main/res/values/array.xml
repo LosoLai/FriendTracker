@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="snozzelistArray">
+        <item>1 MIN</item>
+        <item>5 MINS</item>
+        <item>10 MINS</item>
+    </string-array>
+
+    <string-array name="snozzelistValues">
+        <item>1</item>
+        <item>5</item>
+        <item>10</item>
+    </string-array>
+</resources>
