@@ -4,9 +4,11 @@ package com.example.loso.friendtracker.Controller;
 import com.example.loso.friendtracker.Model.Friend;
 import com.example.loso.friendtracker.Model.Location;
 import com.example.loso.friendtracker.Model.Meeting;
+import com.example.loso.friendtracker.Model.MeetingComparator;
 import com.example.loso.friendtracker.Model.MeetingModel;
 import com.example.loso.friendtracker.Model.WalkTime;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -74,8 +76,16 @@ public class MeetingController {
         return mMeetingModel.findMeetingByID(meetingID).getTitle();
     }
 
-
     public Date[] getMeetingTimes(String meetingID) {
         return mMeetingModel.getMeetingTimes(meetingID);
+    }
+
+    public String getUpcommingMeeting() {
+        MeetingComparator comp = new MeetingComparator(MeetingComparator.ORDER_ACS);
+        Collections.sort(mMeetingModel.getMeetings(), comp);
+        Meeting upcoming = mMeetingModel.getMeetings().get(0);
+        String str = "Title : " + upcoming.getTitle() + "\n" +
+                     "StartDate : " + upcoming.getStartDate().toString() + "\n";
+        return str;
     }
 }
