@@ -27,9 +27,9 @@ public class AttendListAdapter extends ArrayAdapter<Friend> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         FriendController fc = new FriendController();
-        //fc.updateFriendLocations(this.getContext());
 
         // Get the data item
+
         Friend friend = getItem(position);
         // Check if an existing view is being reused, otherwise inflate the view
         View view = convertView;
