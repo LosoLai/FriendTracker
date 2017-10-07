@@ -31,7 +31,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="15dp"
-            android:text="Add Attend From Friends"
+            android:text="@string/add_attendees_from_friends"
             android:textAlignment="center"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="#FFFFFF"

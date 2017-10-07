@@ -35,7 +35,7 @@ public class AlarmSuggestionReceiver extends BroadcastReceiver {
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setContentIntent(preSetting)
                 .setContentTitle("Alarm Actived!")
-                .setContentText("This is meeting suggestion.")
+                .setContentText("This is a meeting suggestion.")
                 .setDefaults(Notification.DEFAULT_LIGHTS | Notification.DEFAULT_SOUND)
                 .setContentInfo("Info");
 

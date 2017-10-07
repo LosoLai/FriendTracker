@@ -32,15 +32,17 @@ import com.example.loso.friendtracker.Model.MeetingModel;
 import com.example.loso.friendtracker.Model.WalkTime;
 import com.example.loso.friendtracker.R;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
+import java.util.Observable;
+import java.util.Observer;
 
 
-public class EditMeetingActivity extends AppCompatActivity {
+public class EditMeetingActivity extends AppCompatActivity implements Observer {
     private static final String LOG_TAG = "EditMeetingActivity";
     private String meetingID = "";
     private MeetingController meetingController;
@@ -61,6 +63,10 @@ public class EditMeetingActivity extends AppCompatActivity {
         meetingID = getIntent().getStringExtra("meeting");
         meetingController = new MeetingController();
 
+        Log.i(LOG_TAG, "In onCreate(). MeetingID = " + meetingID);
+
+        MeetingModel.getInstance().addObserver(this);
+
         // initialise DatePickerDIalog so birthday can be selected
         setupDatePickDialog();
 
@@ -73,8 +79,8 @@ public class EditMeetingActivity extends AppCompatActivity {
 
         Location location = meetingController.getMeetingLocation(meetingID);
         if (location != null) {
-            etLat.setText(Double.toString(location.getLatitude()));
-            etLong.setText(Double.toString(location.getLongitude()));
+            etLat.setText(String.format(Locale.ENGLISH, "%.3f", location.getLatitude()));
+            etLong.setText(String.format(Locale.ENGLISH, "%.3f", location.getLongitude()));
         }
 
         TextView startDate = (TextView) findViewById(R.id.tvMeetStartDate);
@@ -204,24 +210,23 @@ public class EditMeetingActivity extends AppCompatActivity {
         HashMap<Friend, WalkTime> attends = meetingController.getMeetingAttendees(meetingID);
         FriendController friendController = new FriendController();
         ArrayList<Friend> friendslist = friendController.getFriendsList();
-        final ArrayList<Friend> filtered = new ArrayList<Friend>();
+        final ArrayList<Friend> filtered = new ArrayList<>();
         // filter friends
-        for(int i=0 ; i<friendslist.size() ; i++)
-        {
+        for (int i = 0; i < friendslist.size(); i++) {
             boolean bSame = false;
             Friend friend = friendslist.get(i);
-            for (Friend attend : attends.keySet())
-            {
-                if(friend == attend) {
+            for (Friend attend : attends.keySet()) {
+                if (friend.equals(attend)) {
                     bSame = true;
                     break;
                 }
             }
 
-            if(!bSame)
+            if (!bSame)
                 filtered.add(friend);
         }
 
+        final ArrayList<Friend> listViewAttends = new ArrayList<>(attends.keySet());
         attend_adapter = new AttendListAdapter(this, filtered);
         final Spinner spAttend = (Spinner) findViewById(R.id.spinner_Attend);
         spAttend.setAdapter(attend_adapter);
@@ -231,8 +236,10 @@ public class EditMeetingActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 final Friend attend = (Friend) parent.getItemAtPosition(position);
+                Log.i(LOG_TAG, "enteredOnItemSelected() " + meetingID + " " + attend.getID());
                 meetingController.addAttend(meetingID, attend);
                 filtered.remove(attend);
+                listViewAttends.add(attend);
                 adapter.notifyDataSetChanged();
             }
 
@@ -242,8 +249,7 @@ public class EditMeetingActivity extends AppCompatActivity {
             }
         });
 
-
-        adapter = new FriendListAdapter(getApplicationContext(), new ArrayList<>(attends.keySet()));
+        adapter = new FriendListAdapter(getApplicationContext(), listViewAttends);
         ListView lvAttend = (ListView) findViewById(R.id.attendlist);
         lvAttend.setAdapter(adapter);
         lvAttend.setLongClickable(true);
@@ -260,6 +266,8 @@ public class EditMeetingActivity extends AppCompatActivity {
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
                                 meetingController.removeAttend(meetingID, friend.getID());
+                                listViewAttends.remove(friend);
+                                filtered.add(friend);
                                 Toast.makeText(EditMeetingActivity.this, "Guest Removed",
                                         Toast.LENGTH_SHORT).show();
                             }
@@ -275,10 +283,6 @@ public class EditMeetingActivity extends AppCompatActivity {
         final TextView endDate = (TextView) findViewById(R.id.tvMeetEndDate);
         final TextView startTime = (TextView) findViewById(R.id.tvMeetStartTime);
         final TextView endTime = (TextView) findViewById(R.id.tvMeetEndTime);
-
-
-        final DateFormat sdf = SimpleDateFormat.getDateInstance();
-
 
         final DatePickerDialog.OnDateSetListener startDateListener = new DatePickerDialog.OnDateSetListener() {
             @Override
@@ -329,8 +333,7 @@ public class EditMeetingActivity extends AppCompatActivity {
                         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                         dialog.show();
                     }
-                }
-        );
+                });
 
         timeStartButton.setOnClickListener(
                 new View.OnClickListener() {
@@ -346,8 +349,7 @@ public class EditMeetingActivity extends AppCompatActivity {
                         timePickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                         timePickerDialog.show();
                     }
-                }
-        );
+                });
 
         dateEndButton.setOnClickListener(
                 new View.OnClickListener() {
@@ -365,8 +367,7 @@ public class EditMeetingActivity extends AppCompatActivity {
                         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                         dialog.show();
                     }
-                }
-        );
+                });
 
         timeEndButton.setOnClickListener(
                 new View.OnClickListener() {
@@ -382,7 +383,12 @@ public class EditMeetingActivity extends AppCompatActivity {
                         timePickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                         timePickerDialog.show();
                     }
-                }
-        );
+                });
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+        attend_adapter.notifyDataSetChanged();
+        adapter.notifyDataSetChanged();
     }
 }

@@ -9,7 +9,7 @@
         android:id="@+id/tvAttendLocation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Location"
+        android:text="@string/location"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textColor="#000000" />
 
@@ -17,9 +17,8 @@
         android:id="@+id/tvAttendName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
         android:layout_marginBottom="10dp"
-        android:text="FriendName"
+        android:text="@string/name"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="#000000"
         android:textStyle="bold" />

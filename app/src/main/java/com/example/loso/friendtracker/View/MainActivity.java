@@ -10,6 +10,7 @@ import android.net.ConnectivityManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
@@ -142,12 +143,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        TabLayout.OnTabSelectedListener onTabSelectedListener = new TabLayout.OnTabSelectedListener() {
+        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 int selectedTabPosition = tab.getPosition();
                 FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-                Log.d(LOG_TAG, "Tab position: " + Integer.toString(selectedTabPosition));
+                Log.i(LOG_TAG, "Tab position: " + Integer.toString(selectedTabPosition));
                 if (selectedTabPosition == 0) {
                     fab.setVisibility(View.VISIBLE);
                 } else if (selectedTabPosition == 1) {
@@ -164,7 +165,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
             }
-        };
+        });
     }
 
     public void addMeeting() {
@@ -197,8 +198,6 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Called when the contact picked returns
-     *
-     * @author ermyasabebe
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -222,7 +221,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode,
-                                           String permissions[], int[] grantResults) {
+                                           @NonNull String permissions[], @NonNull int[] grantResults) {
         switch (requestCode) {
             case MY_PERMISSIONS_REQUEST_READ_CONTACTS: {
                 // If request is cancelled, the result arrays are empty.

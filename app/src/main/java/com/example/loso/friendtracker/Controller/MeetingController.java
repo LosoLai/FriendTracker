@@ -47,10 +47,10 @@ public class MeetingController {
         return mMeetingModel.findMeetingByID(meetingID).getLocation();
     }
     public void removeAttend(String meetingID, Friend friend) {
-        mMeetingModel.findMeetingByID(meetingID).removeAttend(friend.getID());
+        mMeetingModel.removeGuest(meetingID, friend.getID());
     }
     public void addAttend(String meetingID, Friend friend) {
-        mMeetingModel.findMeetingByID(meetingID).addAttend(friend);
+        mMeetingModel.addGuest(meetingID, friend);
     }
 
     public HashMap<Friend, WalkTime> getMeetingAttendees(String meetingID) {
