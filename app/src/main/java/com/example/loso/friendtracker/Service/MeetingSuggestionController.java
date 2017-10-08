@@ -72,8 +72,10 @@ public class MeetingSuggestionController {
 
         //get mid location
         Location midPoint = null;
-        if(near != null && near.getLocation() != null)
-            midPoint = currentLocation.getMidPoint(near.getLocation());
+        if(near == null || near.getLocation() == null)
+            return null;
+
+        midPoint = currentLocation.getMidPoint(near.getLocation());
 
         //create a suggestion meeting
         MeetingController meetingController = new MeetingController();
