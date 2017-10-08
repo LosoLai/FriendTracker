@@ -36,10 +36,10 @@ public class AlarmSuggestionReceiver extends BroadcastReceiver {
 
 
         Meeting suggest;
-        if(meetingSuggestionController.getStatus() == MeetingSuggestionController.INITIAL)
-            suggest = meetingSuggestionController.createASuggestedMeeting(currentLocation);
-        else
-            suggest = meetingSuggestionController.getSuggestion();
+//        if(meetingSuggestionController.getStatus() == MeetingSuggestionController.INITIAL)
+        suggest = meetingSuggestionController.createASuggestedMeeting(currentLocation);
+//        else
+//            suggest = meetingSuggestionController.getSuggestion();
 
         if(suggest == null)
             return;

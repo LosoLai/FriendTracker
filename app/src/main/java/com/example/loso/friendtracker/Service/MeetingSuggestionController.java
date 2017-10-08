@@ -3,12 +3,15 @@ package com.example.loso.friendtracker.Service;
 import com.example.loso.friendtracker.Controller.FriendController;
 import com.example.loso.friendtracker.Controller.MeetingController;
 import com.example.loso.friendtracker.Model.Friend;
+import com.example.loso.friendtracker.Model.FriendComparator;
 import com.example.loso.friendtracker.Model.Location;
 import com.example.loso.friendtracker.Model.Meeting;
+import com.example.loso.friendtracker.Model.MeetingComparator;
 import com.example.loso.friendtracker.Model.WalkTime;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 
 /**
@@ -23,6 +26,7 @@ public class MeetingSuggestionController {
     private static final String LOG_TAG = "MeetingSuggestion";
     private static MeetingSuggestionController instance;
     private Meeting suggestion;
+    private int index;
     private int status;
 
     public static MeetingSuggestionController getInstance()
@@ -48,24 +52,16 @@ public class MeetingSuggestionController {
     public Meeting createASuggestedMeeting(Location currentLocation)
     {
         if(status == NO)
-            return suggestion;
+            index++;
 
         //get friend list
         FriendController friendController = new FriendController();
         ArrayList<Friend> friends = friendController.getFriendsList();
-        Friend near = null;
-        for(int i=0 ; i<friends.size() ; i++)
-        {
-            Friend current = friends.get(i);
-            if(near == null)
-                near = current;
-
-            if(current.getLocation() == null || current.getWalkTime().getNumericTime() < 0)
-                continue;
-
-            if(current.getWalkTime().getNumericTime() < near.getWalkTime().getNumericTime())
-                near = current;
-        }
+        FriendComparator comp = new FriendComparator();
+        Collections.sort(friends, comp);
+        if(index >= friends.size())
+            index = 0;
+        Friend near = friends.get(index);
 
         //create a suggestion meeting
         MeetingController meetingController = new MeetingController();
