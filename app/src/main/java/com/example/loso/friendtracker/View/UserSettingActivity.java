@@ -78,8 +78,8 @@ public class UserSettingActivity extends PreferenceActivity {
                     if(checked) {
                         if(alarmManager != null)
                             //test
-                            alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()+5000, pendingIntent);
-                            //alarmManager.set(AlarmManager.RTC_WAKEUP, reminderTime, pendingIntent);
+                            //alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()+5000, pendingIntent);
+                            alarmManager.set(AlarmManager.RTC_WAKEUP, reminderTime, pendingIntent);
                         Toast.makeText(getActivity(), "Active reminder", Toast.LENGTH_SHORT).show();
                     }
                     else {

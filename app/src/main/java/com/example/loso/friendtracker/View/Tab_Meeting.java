@@ -11,7 +11,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
@@ -149,8 +148,8 @@ public class Tab_Meeting extends Fragment implements Observer {
                 Intent intent = new Intent(getActivity(), AlarmSuggestionReceiver.class);
                 PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), AlarmSuggestionReceiver.ALARM_SUGGESTION_ID, intent, 0);
                 int time = preferenceController.getSuggestion() * 1000;
-                alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), time, pendingIntent);
-                Toast.makeText(getActivity(), "Active suggestion", Toast.LENGTH_SHORT).show();
+                alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 1000, time, pendingIntent);
+                //Toast.makeText(getActivity(), "Active suggestion", Toast.LENGTH_SHORT).show();
 
 //
 //                //MeetingSuggestionController

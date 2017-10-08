@@ -56,7 +56,7 @@ public class MeetingListAdapter extends ArrayAdapter<Meeting> {
         Location fl = meeting.getLocation();
         if (fl != null) {
             TextView tvLocation = (TextView) view.findViewById(R.id.tvLocationContent);
-            tvLocation.setText("(" + fl.getLatitude() + ", " + fl.getLongitude() + ")");
+            tvLocation.setText(String.format(Locale.ENGLISH, "(%.3f,%.3f)", fl.getLatitude(), fl.getLongitude()));
         }
 
         TextView tvAttend = (TextView) view.findViewById(R.id.tvAttendNumber);
