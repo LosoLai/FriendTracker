@@ -25,6 +25,8 @@ public class ActionAcceptSuggestionActivity extends Activity {
 
         MeetingController meetingController = new MeetingController();
         meetingController.addMeetingIntoList(suggestion);
+        meetingSuggestionController.setStatus(MeetingSuggestionController.YES);
+
         NotificationManager notificationManager = (NotificationManager)getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.cancel(AlarmSuggestionReceiver.ALARM_SUGGESTION_ID);
         finish();

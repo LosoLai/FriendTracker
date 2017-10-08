@@ -20,9 +20,13 @@ import java.util.Date;
 
 public class MeetingSuggestionController {
     public static final long DEFAULT_MEETING_DURATION = 60 * 60 * 1000; // 60 mins
+    public static final int INITIAL = 0;
+    public static final int NO = 1;
+    public static final int YES = 2;
     private static final String LOG_TAG = "MeetingSuggestion";
     private static MeetingSuggestionController instance;
     private Meeting suggestion;
+    private int status;
 
     public static MeetingSuggestionController getInstance()
     {
@@ -36,8 +40,19 @@ public class MeetingSuggestionController {
         return suggestion;
     }
 
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
     public Meeting createASuggestedMeeting(Location currentLocation)
     {
+        if(status == NO)
+            return suggestion;
+
         //get friend list
         FriendController friendController = new FriendController();
         ArrayList<Friend> friends = friendController.getFriendsList();
@@ -79,8 +94,10 @@ public class MeetingSuggestionController {
                 double maxWalk = object.getNumericTime();
                 long start = suggest.getStartDate().getTime() + (long)(maxWalk * 1000);
                 long end = start + DEFAULT_MEETING_DURATION;
-                suggest.setStartDate(new Date(start));
-                suggest.setEndDate(new Date(end));
+                suggest.getStartDate().setTime(start);
+                suggest.getEndDate().setTime(end);
+
+                suggestion = suggest;
             }
 
             @Override
@@ -90,7 +107,6 @@ public class MeetingSuggestionController {
         }, midPoint, near.getLocation(), currentLocation);
         meetingLocationTask.execute();
 
-        suggestion = suggest;
         return suggestion;
     }
 }

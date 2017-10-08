@@ -2,6 +2,7 @@ package com.example.loso.friendtracker.Alarm;
 
 import android.app.Activity;
 import android.app.AlarmManager;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
@@ -30,6 +31,9 @@ public class ActionSnoozeReminderActivity extends Activity {
 
         alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime()
                 + snooze, pendingIntent);
+
+        NotificationManager notificationManager = (NotificationManager)getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.cancel(AlarmNotificationReceiver.ALARM_NOTIFY_ID);
         finish(); // since finish() is called in onCreate(), onDestroy() will be called immediately
     }
 }

@@ -20,11 +20,19 @@ import com.example.loso.friendtracker.View.UserSettingActivity;
 
 public class AlarmSuggestionReceiver extends BroadcastReceiver {
     public static final int ALARM_SUGGESTION_ID = 2;
+    private Meeting suggest;
     @Override
     public void onReceive(Context context, Intent intent) {
         PreferenceController preferenceController = PreferenceController.getInstance();
         MeetingSuggestionController meetingSuggestionController = MeetingSuggestionController.getInstance();
-        Meeting suggest = meetingSuggestionController.createASuggestedMeeting(preferenceController.getCurrentLocation());
+
+        if(meetingSuggestionController.getStatus() == MeetingSuggestionController.INITIAL)
+            suggest = meetingSuggestionController.createASuggestedMeeting(preferenceController.getCurrentLocation());
+        else
+            suggest = meetingSuggestionController.getSuggestion();
+
+        if(suggest == null)
+            return;
 
 //        Intent settingIntent = new Intent(context, UserSettingActivity.class);
 //        PendingIntent preSetting = PendingIntent.getActivity(context, 0, settingIntent, 0);
