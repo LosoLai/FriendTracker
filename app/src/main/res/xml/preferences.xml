@@ -1,36 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory
-        android:title="@string/pref_notify"
-        android:key="pref_notify_settings">
+        android:key="pref_notify_settings"
+        android:title="@string/pref_notify">
         <CheckBoxPreference
+            android:defaultValue="false"
             android:key="pref_meeting_notify_flag"
             android:summary="@string/pref_summary_notify_flag"
-            android:title="@string/pref_title_notify_flag"
-            android:defaultValue="false" />
+            android:title="@string/pref_title_notify_flag" />
         <EditTextPreference
-            android:key="pref_meeting_notify_time_limit"
             android:dependency="pref_meeting_notify_flag"
+            android:key="pref_meeting_notify_time_limit"
             android:summary="@string/pref_summary_meeting_notify_time_limit"
             android:title="@string/pref_title_meeting_notify_time_limit" />
         <ListPreference
-            android:key="pref_meeting_notify_snooze_time_limit"
-            android:dependency="pref_meeting_notify_flag"
-            android:title="@string/pref_title_meeting_notify_snooze_time_limit"
-            android:summary="@string/pref_summary_meeting_notify_snooze_time_limit"
             android:defaultValue="1"
-            android:entries="@array/snozzelistArray"
-            android:entryValues="@array/snozzelistValues" />
+            android:dependency="pref_meeting_notify_flag"
+            android:entries="@array/snoozelistArray"
+            android:entryValues="@array/snoozelistValues"
+            android:key="pref_meeting_notify_snooze_time_limit"
+            android:summary="@string/pref_summary_meeting_notify_snooze_time_limit"
+            android:title="@string/pref_title_meeting_notify_snooze_time_limit" />
         <CheckBoxPreference
+            android:defaultValue="false"
             android:key="pref_meeting_suggestion_flag"
             android:summary="@string/pref_summary_suggestion_flag"
-            android:title="@string/pref_title_suggestion_flag"
-            android:defaultValue="false" />
+            android:title="@string/pref_title_suggestion_flag" />
         <Preference
-            android:key="pref_meeting_suggestion_time_limit"
+            android:defaultValue="30"
             android:dependency="pref_meeting_suggestion_flag"
+            android:key="pref_meeting_suggestion_time_limit"
             android:summary="@string/pref_summary_meeting_suggestion_time_limit"
-            android:title="@string/pref_title_meeting_suggestion_time_limit"
-            android:defaultValue="30" />
+            android:title="@string/pref_title_meeting_suggestion_time_limit" />
     </PreferenceCategory>
 </PreferenceScreen>

@@ -127,7 +127,11 @@ public class Meeting {
 
 	@Override
     public String toString() {
-        return "Title : " + this.getTitle() + "\n" +
-                "StartDate : " + this.getStartDate().toString() + "\n";
+        if (this.getTitle() != null && this.getEndDate() != null) {
+            return "Title : " + this.getTitle() + "\n" +
+                    "StartDate : " + this.getStartDate().toString() + "\n";
+        } else {
+            return " ";
+        }
     }
 }

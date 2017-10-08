@@ -6,13 +6,15 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.NotificationCompat;
 
 import com.example.loso.friendtracker.Controller.PreferenceController;
+import com.example.loso.friendtracker.Model.Location;
 import com.example.loso.friendtracker.Model.Meeting;
 import com.example.loso.friendtracker.R;
 import com.example.loso.friendtracker.Service.MeetingSuggestionController;
-import com.example.loso.friendtracker.View.UserSettingActivity;
+import com.google.android.gms.maps.model.LatLng;
 
 /**
  * Created by Loso on 2017/10/2.
@@ -20,14 +22,22 @@ import com.example.loso.friendtracker.View.UserSettingActivity;
 
 public class AlarmSuggestionReceiver extends BroadcastReceiver {
     public static final int ALARM_SUGGESTION_ID = 2;
-    private Meeting suggest;
+
     @Override
     public void onReceive(Context context, Intent intent) {
         PreferenceController preferenceController = PreferenceController.getInstance();
         MeetingSuggestionController meetingSuggestionController = MeetingSuggestionController.getInstance();
 
+
+        SharedPreferences pref = context.getSharedPreferences("location", Context.MODE_PRIVATE);
+        LatLng here = new LatLng(pref.getFloat("latitude", (float) Location.RMIT.getLatitude()),
+                pref.getFloat("longitude", (float) Location.RMIT.getLongitude()));
+        Location currentLocation = new Location(here);
+
+
+        Meeting suggest;
         if(meetingSuggestionController.getStatus() == MeetingSuggestionController.INITIAL)
-            suggest = meetingSuggestionController.createASuggestedMeeting(preferenceController.getCurrentLocation());
+            suggest = meetingSuggestionController.createASuggestedMeeting(currentLocation);
         else
             suggest = meetingSuggestionController.getSuggestion();
 
@@ -38,7 +48,7 @@ public class AlarmSuggestionReceiver extends BroadcastReceiver {
 //        PendingIntent preSetting = PendingIntent.getActivity(context, 0, settingIntent, 0);
 
         Intent cancleIntent = new Intent(context, ActionCancelSuggestionActivity.class);
-        PendingIntent actionCancle = PendingIntent.getActivity(context, ALARM_SUGGESTION_ID, cancleIntent, 0);
+        PendingIntent actionCancel = PendingIntent.getActivity(context, ALARM_SUGGESTION_ID, cancleIntent, 0);
 
         Intent cleanIntent = new Intent(context, ActionCleanSuggestionActivity.class);
         PendingIntent actionNo = PendingIntent.getActivity(context, ALARM_SUGGESTION_ID, cleanIntent, 0);
@@ -52,7 +62,7 @@ public class AlarmSuggestionReceiver extends BroadcastReceiver {
                 .setWhen(System.currentTimeMillis())
                 .addAction(R.mipmap.ic_launcher_round, "YES", actionYes)
                 .addAction(R.mipmap.ic_launcher_round, "NO", actionNo)
-                .addAction(R.mipmap.ic_launcher_round, "CANCLE", actionCancle)
+                .addAction(R.mipmap.ic_launcher_round, "CANCEL", actionCancel)
                 .setSmallIcon(R.mipmap.ic_launcher)
                 //.setContentIntent(preSetting)
                 .setContentTitle("Meeting Suggestion")

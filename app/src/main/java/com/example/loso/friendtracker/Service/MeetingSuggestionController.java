@@ -1,11 +1,8 @@
 package com.example.loso.friendtracker.Service;
 
-import android.content.Context;
-
 import com.example.loso.friendtracker.Controller.FriendController;
 import com.example.loso.friendtracker.Controller.MeetingController;
 import com.example.loso.friendtracker.Model.Friend;
-import com.example.loso.friendtracker.Model.GuestList;
 import com.example.loso.friendtracker.Model.Location;
 import com.example.loso.friendtracker.Model.Meeting;
 import com.example.loso.friendtracker.Model.WalkTime;
@@ -19,10 +16,10 @@ import java.util.Date;
  */
 
 public class MeetingSuggestionController {
-    public static final long DEFAULT_MEETING_DURATION = 60 * 60 * 1000; // 60 mins
     public static final int INITIAL = 0;
     public static final int NO = 1;
     public static final int YES = 2;
+    private static final long DEFAULT_MEETING_DURATION = 60 * 60 * 1000; // 60 mins
     private static final String LOG_TAG = "MeetingSuggestion";
     private static MeetingSuggestionController instance;
     private Meeting suggestion;
@@ -70,16 +67,17 @@ public class MeetingSuggestionController {
                 near = current;
         }
 
-        //get mid location
-        Location midPoint = null;
-        if(near == null || near.getLocation() == null)
-            return null;
-
-        midPoint = currentLocation.getMidPoint(near.getLocation());
-
         //create a suggestion meeting
         MeetingController meetingController = new MeetingController();
         final Meeting suggest = meetingController.createTempMeeting();
+
+        Location midPoint = null;
+        if (near != null && near.getLocation() != null && currentLocation != null) {
+            midPoint = currentLocation.getMidPoint(near.getLocation());
+        } else {
+            return suggest;
+        }
+
         suggest.setTitle("Suggestion_" + near.getName());
         suggest.setLocation(midPoint);
         suggest.addAttend(near);

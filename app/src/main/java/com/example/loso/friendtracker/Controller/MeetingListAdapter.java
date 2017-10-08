@@ -35,15 +35,23 @@ public class MeetingListAdapter extends ArrayAdapter<Meeting> {
     public View getView(int position, View convertView, @NonNull ViewGroup parent) {
         // Get the data item
         Meeting meeting = getItem(position);
+
         // Check if an existing view is being reused, otherwise inflate the view
         View view = convertView;
         if (view == null) {
             LayoutInflater inflater = LayoutInflater.from(getContext());
             view = inflater.inflate(R.layout.adapter_meeting_item, parent, false);
         }
+
+        if (meeting == null) {
+            return view;
+        }
+
         // Populate the data into the template view using the data object
         TextView tvTitle = (TextView) view.findViewById(R.id.tvTitleContent);
-        tvTitle.setText(meeting.getTitle());
+        if (meeting.getTitle() != null) {
+            tvTitle.setText(meeting.getTitle());
+        }
 
         Location fl = meeting.getLocation();
         if (fl != null) {

@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
                 Log.i(LOG_TAG, "entered onReceive()");
                 boolean connected = intent.getBooleanExtra(NetworkStatusReceiver.IS_NETWORK_CONNECTED, false);
                 String text = connected ? "Network Connected" : "Network Disconnected";
-                Toast.makeText(context, text, Toast.LENGTH_LONG).show();
+                Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
 
                 if (connected) {
                     // TODO @Loso Start suggest now function when network becomes reconnected.
@@ -101,8 +101,13 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, FriendWalkTimeService.class);
         getApplicationContext().startService(intent);
 
-        //iitial PrefereceCtrller
+        // Initialise PreferenceController
         final SharedPreferences prefs = android.preference.PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+
+//        SharedPreferences.Editor editor = prefs.edit();
+//        editor.clear();
+//        editor.apply();
+
         final PreferenceController preferenceController = PreferenceController.getInstance();
         preferenceController.loadSharedPreference(prefs);
     }
