@@ -36,6 +36,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Observable;
@@ -65,10 +66,7 @@ public class EditMeetingActivity extends AppCompatActivity implements Observer {
 
         Log.i(LOG_TAG, "In onCreate(). MeetingID = " + meetingID);
 
-        MeetingModel.getInstance().addObserver(this);
-
-        // initialise DatePickerDIalog so birthday can be selected
-        setupDatePickDialog();
+        //MeetingModel.getInstance().addObserver(this);
 
         EditText editTitle = (EditText) findViewById(R.id.editTextTitle);
 
@@ -79,9 +77,12 @@ public class EditMeetingActivity extends AppCompatActivity implements Observer {
 
         Location location = meetingController.getMeetingLocation(meetingID);
         if (location != null) {
-            etLat.setText(String.format(Locale.ENGLISH, "%.3f", location.getLatitude()));
-            etLong.setText(String.format(Locale.ENGLISH, "%.3f", location.getLongitude()));
+            etLat.setText(String.format("%.3f", location.getLatitude()));
+            etLong.setText(String.format("%.3f", location.getLongitude()));
         }
+
+        // initialise DatePickerDIalog so birthday can be selected
+        setupDatePickDialog();
 
         TextView startDate = (TextView) findViewById(R.id.tvMeetStartDate);
         TextView endDate = (TextView) findViewById(R.id.tvMeetEndDate);
@@ -284,31 +285,38 @@ public class EditMeetingActivity extends AppCompatActivity implements Observer {
         final TextView startTime = (TextView) findViewById(R.id.tvMeetStartTime);
         final TextView endTime = (TextView) findViewById(R.id.tvMeetEndTime);
 
+        final SimpleDateFormat sdf_Date = new SimpleDateFormat("yyyy-MM-dd");
+        final SimpleDateFormat sdf_Time = new SimpleDateFormat("hh:mm a");
+
         final DatePickerDialog.OnDateSetListener startDateListener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int day) {
-                startDate.setText(year + "/" + Integer.toString(month + 1) + "/" + day);
+                Date start = new GregorianCalendar(year, month, day).getTime();
+                startDate.setText(sdf_Date.format(start.getTime()));
             }
         };
 
         final TimePickerDialog.OnTimeSetListener startTimeListener = new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                startTime.setText(hourOfDay + ":" + minute);
+                Date time = new GregorianCalendar(0,0,0,hourOfDay,minute).getTime();
+                startTime.setText(sdf_Time.format(time.getTime()));
             }
         };
 
         final DatePickerDialog.OnDateSetListener endDateListner = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int day) {
-                endDate.setText(year + "/" + Integer.toString(month + 1) + "/" + day);
+                Date end = new GregorianCalendar(year, month, day).getTime();
+                endDate.setText(sdf_Date.format(end));
             }
         };
 
         final TimePickerDialog.OnTimeSetListener endTimeListener = new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                endTime.setText(hourOfDay + ":" + minute);
+                Date time = new GregorianCalendar(0,0,0,hourOfDay,minute).getTime();
+                endTime.setText(sdf_Time.format(time.getTime()));
             }
         };
 

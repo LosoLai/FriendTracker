@@ -6,6 +6,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.SystemClock;
 
@@ -24,6 +25,13 @@ public class ActionCancelReminderActivity extends Activity {
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, AlarmNotificationReceiver.ALARM_NOTIFY_ID, intent, 0);
         AlarmManager alarmManager = (AlarmManager)this.getSystemService(Context.ALARM_SERVICE);
         alarmManager.cancel(pendingIntent);
+
+        //set sharepreferece
+        SharedPreferences prefs = android.preference.PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putBoolean("pref_meeting_notify_flag", false);
+        editor.apply();
+
         NotificationManager notificationManager = (NotificationManager)getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.cancel(AlarmNotificationReceiver.ALARM_NOTIFY_ID);
         finish(); // since finish() is called in onCreate(), onDestroy() will be called immediately
