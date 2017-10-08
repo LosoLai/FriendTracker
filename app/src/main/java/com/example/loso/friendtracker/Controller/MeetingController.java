@@ -8,6 +8,7 @@ import com.example.loso.friendtracker.Model.MeetingComparator;
 import com.example.loso.friendtracker.Model.MeetingModel;
 import com.example.loso.friendtracker.Model.WalkTime;
 
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -81,8 +82,17 @@ public class MeetingController {
     }
 
     public Meeting getUpcommingMeeting() {
+        Calendar calendar = Calendar.getInstance();
+        long time = calendar.getTimeInMillis();
         MeetingComparator comp = new MeetingComparator(MeetingComparator.ORDER_ACS);
         Collections.sort(mMeetingModel.getMeetings(), comp);
-        return mMeetingModel.getMeetings().get(0);
+        Meeting meeting = null;
+        for (int i=0 ; i<mMeetingModel.getMeetings().size() ; i++)
+        {
+            meeting = mMeetingModel.getMeetings().get(i);
+            if(meeting != null && time <= meeting.getEndDate().getTime())
+                return meeting;
+        }
+        return meeting;
     }
 }

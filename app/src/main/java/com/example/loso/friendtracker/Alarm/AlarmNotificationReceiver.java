@@ -20,21 +20,25 @@ public class AlarmNotificationReceiver extends BroadcastReceiver {
     public static final int ALARM_NOTIFY_ID = 1;
     @Override
     public void onReceive(Context context, Intent intent) {
+        //get upcomming meeting info
+        MeetingController meetingController = new MeetingController();
+        String meetingInfo = meetingController.getUpcommingMeeting().toString();
+
         Intent settingIntent = new Intent(context, UserSettingActivity.class);
         PendingIntent preSetting = PendingIntent.getActivity(context, 0, settingIntent, 0);
 
         Intent snoozeIntent = new Intent(context, ActionSnoozeReminderActivity.class);
         PendingIntent snooze = PendingIntent.getActivity(context, ALARM_NOTIFY_ID, snoozeIntent, 0);
 
-        //get upcomming meeting info
-        MeetingController meetingController = new MeetingController();
-        String meetingInfo = meetingController.getUpcommingMeeting().toString();
+        Intent cancelIntent = new Intent(context, ActionCancelReminderActivity.class);
+        PendingIntent cancel = PendingIntent.getActivity(context, ALARM_NOTIFY_ID, cancelIntent, 0);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
         builder.setAutoCancel(true)
                 .setDefaults(Notification.DEFAULT_ALL)
                 .setWhen(System.currentTimeMillis())
                 .addAction(R.mipmap.ic_launcher_round, "SNOOZE", snooze)
+                .addAction(R.mipmap.ic_launcher_round, "CANCEL", cancel)
                 .setSmallIcon(R.mipmap.ic_launcher)
                 //.setContentIntent(preSetting)
                 .setContentTitle("Meeting Reminder:")
