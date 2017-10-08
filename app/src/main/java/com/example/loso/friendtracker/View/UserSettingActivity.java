@@ -15,11 +15,11 @@ import android.preference.PreferenceFragment;
 import android.support.annotation.Nullable;
 import android.widget.Toast;
 
-import com.example.loso.friendtracker.Controller.PreferenceController;
-import com.example.loso.friendtracker.Controller.MeetingController;
-import com.example.loso.friendtracker.R;
 import com.example.loso.friendtracker.Alarm.AlarmNotificationReceiver;
 import com.example.loso.friendtracker.Alarm.AlarmSuggestionReceiver;
+import com.example.loso.friendtracker.Controller.MeetingController;
+import com.example.loso.friendtracker.Controller.PreferenceController;
+import com.example.loso.friendtracker.R;
 
 /**
  * Created by Loso on 2017/10/1.
@@ -48,15 +48,6 @@ public class UserSettingActivity extends PreferenceActivity {
 
             final SharedPreferences prefs = android.preference.PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
             final PreferenceController preferenceController = PreferenceController.getInstance();
-//            String time = prefs.getString(MEETING_NOTIFICATION_TIME, "9");
-//            int remainderTime = Integer.parseInt(time);
-//            preferenceController.setReminderTime(remainderTime);
-//            time = prefs.getString(MEETING_NOTIFICATION_SNOOZE, "1");
-//            int snooze = Integer.parseInt(time);
-//            preferenceController.setSnooze(snooze);
-//            time = prefs.getString(MEETING_SUGGESTION_TIME, "30");
-//            int suggestion = Integer.parseInt(time);
-//            preferenceController.setSuggestion(suggestion);
 
             setMeetingNotification(prefs, preferenceController);
             setMeetingSuggestion(prefs, preferenceController);
@@ -64,7 +55,7 @@ public class UserSettingActivity extends PreferenceActivity {
 
         public void setMeetingNotification(final SharedPreferences prefs, final PreferenceController preferenceController)
         {
-            final CheckBoxPreference checkBoxPreference = (CheckBoxPreference) findPreference("pref_meeting_notify_flag");
+            final CheckBoxPreference checkBoxPreference = (CheckBoxPreference) findPreference(MEETING_SUGGESTION);
             checkBoxPreference.setOnPreferenceChangeListener(new CheckBoxPreference.OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -80,8 +71,8 @@ public class UserSettingActivity extends PreferenceActivity {
                     MeetingController meetingController = new MeetingController();
                     long meetingTime = meetingController.getUpcommingMeeting().getStartDate().getTime();
                     //get time limit value
-                    String time = prefs.getString(MEETING_NOTIFICATION_TIME, "");
-                    int duration = Integer.parseInt(time) * 60 * 1000;
+                    String time = prefs.getString(MEETING_NOTIFICATION_TIME, "9");
+                    int duration = Integer.valueOf(time) * 60 * 1000;
                     long reminderTime = meetingTime - duration;
 
                     if(checked) {
@@ -105,7 +96,7 @@ public class UserSettingActivity extends PreferenceActivity {
                 }
             });
 
-            final EditTextPreference editTextPreference = (EditTextPreference) findPreference("pref_meeting_notify_time_limit");
+            final EditTextPreference editTextPreference = (EditTextPreference) findPreference(MEETING_NOTIFICATION_TIME);
             editTextPreference.setOnPreferenceChangeListener(new EditTextPreference.OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -113,7 +104,7 @@ public class UserSettingActivity extends PreferenceActivity {
                     preferenceController.setReminderTime(time);
 
                     SharedPreferences.Editor editor = prefs.edit();
-                    editor.putInt(MEETING_NOTIFICATION_TIME, time);
+                    editor.putString(MEETING_NOTIFICATION_TIME, Integer.toString(time));
                     editor.apply();
                     return true;
                 }
@@ -122,7 +113,7 @@ public class UserSettingActivity extends PreferenceActivity {
 
         public void setMeetingSuggestion(final SharedPreferences prefs, final PreferenceController preferenceController)
         {
-            final CheckBoxPreference checkBoxPreference = (CheckBoxPreference) findPreference("pref_meeting_suggestion_flag");
+            final CheckBoxPreference checkBoxPreference = (CheckBoxPreference) findPreference(MEETING_SUGGESTION);
             checkBoxPreference.setOnPreferenceChangeListener(new CheckBoxPreference.OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -135,17 +126,17 @@ public class UserSettingActivity extends PreferenceActivity {
                     PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), AlarmSuggestionReceiver.ALARM_SUGGESTION_ID, intent, 0);
 
                     //get time limit
-                    int time = prefs.getInt(MEETING_SUGGESTION_TIME, 30) * 1000;
+                    int time = Integer.valueOf(prefs.getString(MEETING_SUGGESTION_TIME, "30")) * 1000;
 
                     if(checked) {
                         if(alarmManager != null)
                             alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, SystemClock.elapsedRealtime()+time, time, pendingIntent);
-                        Toast.makeText(getActivity(), "Active suggestion", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "Suggestion Active", Toast.LENGTH_SHORT).show();
                     }
                     else {
                         if(alarmManager != null)
                             alarmManager.cancel(pendingIntent);
-                        Toast.makeText(getActivity(), "Inactive suggestion", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "Suggestion Inactive", Toast.LENGTH_SHORT).show();
                     }
 
                     checkBoxPreference.setChecked(checked);

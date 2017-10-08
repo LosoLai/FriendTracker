@@ -52,20 +52,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public boolean checkFriendDB(ArrayList<Friend> feriendList) {
+    public boolean checkFriendDB(ArrayList<Friend> friendList) {
         Cursor cursor = readDB_FriendTable();
         if(cursor == null)
             return false;
 
-        getFriends(cursor, feriendList);
-        if (feriendList.size() == 0)
-            return false;
+        getFriends(cursor, friendList);
+        return friendList.size() != 0;
 
-        return true;
     }
-    private void getFriends(Cursor cursor, ArrayList<Friend> feriendList) {
-        if(feriendList != null)
-            feriendList.clear();
+
+    private void getFriends(Cursor cursor, ArrayList<Friend> friendList) {
+        if (friendList != null)
+            friendList.clear();
 
         if (cursor.moveToFirst()) {
             do {
@@ -73,7 +72,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 Date date = new Date(time);
                 Friend friend = new Friend(cursor.getString(0), cursor.getString(1),
                                             cursor.getString(2), date);
-                feriendList.add(friend);
+                friendList.add(friend);
             } while (cursor.moveToNext());
         }
     }
@@ -156,8 +155,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         ContentValues contentValues = new ContentValues();
         contentValues.put("friend_id", friend.getID());
         contentValues.put("name", friend.getName());
-        contentValues.put("email", friend.getEmail());
-        contentValues.put("date", friend.getBirthday().getTime());
+        if (friend.getEmail() != null)
+            contentValues.put("email", friend.getEmail());
+        if (friend.getBirthday() != null)
+            contentValues.put("date", friend.getBirthday().getTime());
         //contentValues.put("date", String.valueOf(friend.getBirthday()));
         db.insert("friend", null, contentValues);
         db.close();
@@ -183,7 +184,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return true;
     }
 
-    public boolean addAttendList(Meeting meeting) {
+    private boolean addAttendList(Meeting meeting) {
         SQLiteDatabase db = getWritableDatabase();
         HashMap<Friend, WalkTime> attendlist = meeting.getFriends();
         for (Friend attend : attendlist.keySet()) {

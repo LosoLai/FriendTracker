@@ -38,7 +38,7 @@ import com.example.loso.friendtracker.Model.Meeting;
 import com.example.loso.friendtracker.Model.MeetingComparator;
 import com.example.loso.friendtracker.Model.MeetingModel;
 import com.example.loso.friendtracker.R;
-import com.example.loso.friendtracker.Service.MeetingSuggestionController;
+import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -136,10 +136,11 @@ public class Tab_Meeting extends Fragment implements Observer {
             @Override
             public void onClick(View v) {
                 //get current location
-                SharedPreferences locationPref = getActivity().getSharedPreferences("location", Context.MODE_PRIVATE);
-                double latitude = (double)locationPref.getFloat("latitude", 0);
-                double longitude = (double)locationPref.getFloat("longitude", 0);
-                Location current = new Location(latitude, longitude);
+                SharedPreferences pref = getActivity().getSharedPreferences("location", Context.MODE_PRIVATE);
+                LatLng here = new LatLng(pref.getFloat("latitude", (float) Location.RMIT.getLatitude()),
+                        pref.getFloat("longitude", (float) Location.RMIT.getLongitude()));
+                Location current = new Location(here);
+
                 PreferenceController preferenceController = PreferenceController.getInstance();
                 preferenceController.setCurrentLocation(current);
 

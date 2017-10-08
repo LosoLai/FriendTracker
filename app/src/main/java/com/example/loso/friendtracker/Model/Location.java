@@ -1,5 +1,7 @@
 package com.example.loso.friendtracker.Model;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
@@ -33,6 +35,12 @@ public class Location implements Serializable {
         this.time = time;
         latitude = lat;
         longitude = longi;
+    }
+
+    public Location(LatLng here) {
+        this.time = null;
+        latitude = here.latitude;
+        longitude = here.longitude;
     }
 
     /**
@@ -74,7 +82,7 @@ public class Location implements Serializable {
     public Location getMidPoint(Location other) {
         double lati = (latitude + other.getLatitude()) / 2;
         double longi = (longitude + other.getLongitude()) / 2;
-        Date laterTime = time.after(other.getTime()) ? time : other.getTime();
+        Date laterTime = new Date();
         return new Location(laterTime, lati, longi);
     }
 

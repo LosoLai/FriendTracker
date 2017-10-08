@@ -28,6 +28,11 @@ public class DatabaseController {
 
     public void setupDB() {
         FriendModel mFriendModel = FriendModel.getInstance();
+        boolean isModelPopulated = (mFriendModel.getFriends().size() > 0);
+        if (isModelPopulated) {
+            return;
+        }
+
         boolean hasFriends = db.checkFriendDB(mFriendModel.getFriends());
         //Add dummy data to Model
         if (!hasFriends) {
@@ -45,6 +50,11 @@ public class DatabaseController {
         }
 
         MeetingModel mMeetingModel = MeetingModel.getInstance();
+        boolean isMeetingModelPopulated = (mMeetingModel.getMeetings().size() > 0);
+        if (isMeetingModelPopulated) {
+            return;
+        }
+
         boolean hasMeetings = db.checkMeetingDB(mMeetingModel.getMeetings());
         //Add dummy data to Model
         if (!hasMeetings) {
