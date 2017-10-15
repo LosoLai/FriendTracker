@@ -17,7 +17,6 @@ import android.widget.Toast;
 
 import com.example.loso.friendtracker.Alarm.AlarmNotificationReceiver;
 import com.example.loso.friendtracker.Alarm.AlarmSuggestionReceiver;
-import com.example.loso.friendtracker.Alarm.MeetingReminderManager;
 import com.example.loso.friendtracker.Controller.MeetingController;
 import com.example.loso.friendtracker.Controller.PreferenceController;
 import com.example.loso.friendtracker.R;
