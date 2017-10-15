@@ -23,6 +23,8 @@ public class ActionCancelSuggestionActivity extends Activity {
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, AlarmSuggestionReceiver.ALARM_SUGGESTION_ID, intent, 0);
         AlarmManager alarmManager = (AlarmManager)this.getSystemService(Context.ALARM_SERVICE);
         alarmManager.cancel(pendingIntent);
+        MeetingSuggestionManager meetingSuggestionManager = MeetingSuggestionManager.getInstance();
+        meetingSuggestionManager.disableMeetingSuggestion(alarmManager, pendingIntent);
         MeetingSuggestionController meetingSuggestionController = MeetingSuggestionController.getInstance();
         meetingSuggestionController.setStatus(MeetingSuggestionController.INITIAL);
 

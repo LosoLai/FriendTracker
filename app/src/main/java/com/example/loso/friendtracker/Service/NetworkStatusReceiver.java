@@ -9,6 +9,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.example.loso.friendtracker.Alarm.MeetingSuggestionManager;
+import com.example.loso.friendtracker.Controller.PreferenceController;
 
 import static android.content.Context.CONNECTIVITY_SERVICE;
 
@@ -30,6 +31,7 @@ public class NetworkStatusReceiver extends BroadcastReceiver {
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
         boolean isConnected;
         MeetingSuggestionManager meetingSuggestionManager = MeetingSuggestionManager.getInstance();
+        PreferenceController preferenceController = PreferenceController.getInstance();
         if (networkInfo != null) {
             if (isFirstConnect) {
                 isConnected = networkInfo.isConnected();
@@ -39,10 +41,12 @@ public class NetworkStatusReceiver extends BroadcastReceiver {
                 Log.i(LOG_TAG, isConnected ? "connected" : "disconnected");
                 isFirstConnect = false;
                 //active suggestion
+                preferenceController.setNetworkFlag(true);
                 meetingSuggestionManager.enableSuggestionByNetworkStatus();
             }
         } else {
             isFirstConnect = true;
+            preferenceController.setNetworkFlag(false);
             meetingSuggestionManager.disableSuggestionByNetworkStatus();
         }
     }

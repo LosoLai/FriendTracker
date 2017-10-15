@@ -1,6 +1,9 @@
 package com.example.loso.friendtracker.View;
 
 import android.Manifest;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -28,6 +31,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.example.loso.friendtracker.Alarm.AlarmSuggestionReceiver;
+import com.example.loso.friendtracker.Alarm.MeetingSuggestionManager;
 import com.example.loso.friendtracker.Controller.DatabaseController;
 import com.example.loso.friendtracker.Controller.FriendController;
 import com.example.loso.friendtracker.Controller.MeetingController;
@@ -81,9 +86,17 @@ public class MainActivity extends AppCompatActivity {
 
         // Initialise PreferenceController
         final SharedPreferences prefs = android.preference.PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-
         final PreferenceController preferenceController = PreferenceController.getInstance();
         preferenceController.loadSharedPreference(prefs);
+        //active suggestion
+        if(preferenceController.isSuggestionFlag() && preferenceController.isNetworkFlag())
+        {
+            AlarmManager alarmManager = (AlarmManager)this.getSystemService(Context.ALARM_SERVICE);
+            intent = new Intent(this, AlarmSuggestionReceiver.class);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(this, AlarmSuggestionReceiver.ALARM_SUGGESTION_ID, intent, 0);
+            MeetingSuggestionManager meetingSuggestionManager = MeetingSuggestionManager.getInstance();
+            meetingSuggestionManager.enableMeetingSuggestion(alarmManager, intent, pendingIntent);
+        }
     }
 
     @Override

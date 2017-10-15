@@ -26,6 +26,8 @@ public class ActionCancelReminderActivity extends Activity {
         AlarmManager alarmManager = (AlarmManager)this.getSystemService(Context.ALARM_SERVICE);
         alarmManager.cancel(pendingIntent);
 
+        PreferenceController preferenceController = PreferenceController.getInstance();
+        preferenceController.setReminderFlag(false);
         //set sharepreferece
         SharedPreferences prefs = android.preference.PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         SharedPreferences.Editor editor = prefs.edit();

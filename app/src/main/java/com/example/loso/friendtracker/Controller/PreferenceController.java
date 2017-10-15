@@ -17,6 +17,7 @@ public class PreferenceController {
     private int reminderTime;
     private int snooze;
     private int suggestion;
+    private boolean networkFlag;
 
     public static PreferenceController getInstance()
     {
@@ -74,8 +75,27 @@ public class PreferenceController {
         this.currentLocation = currentLocation;
     }
 
+    public boolean isNetworkFlag() {
+        return networkFlag;
+    }
+
+    public void setNetworkFlag(boolean networkFlag) {
+        this.networkFlag = networkFlag;
+    }
+
     public void loadSharedPreference(final SharedPreferences prefs)
     {
+        //force remider to be flase
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putBoolean(UserSettingActivity.MyPreferenceFragment.MEETING_NOTIFICATION, false);
+        editor.apply();
+        setReminderFlag(false);
+
+        //force suggest to be flase
+        editor.putBoolean(UserSettingActivity.MyPreferenceFragment.MEETING_SUGGESTION, false);
+        editor.apply();
+        setSuggestionFlag(false);
+
         String time = prefs.getString(UserSettingActivity.MyPreferenceFragment.MEETING_NOTIFICATION_TIME, "3");
         int remainderTime = Integer.parseInt(time);
         setReminderTime(remainderTime);

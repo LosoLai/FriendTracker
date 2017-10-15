@@ -40,6 +40,7 @@ public class MeetingSuggestionManager {
 
         int time = preferenceController.getSuggestion() * 1000;
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, SystemClock.elapsedRealtime()+time, time, pendingIntent);
+        preferenceController.setSuggestionFlag(true);
     }
 
     public void enableSuggestionByNetworkStatus()
@@ -47,6 +48,7 @@ public class MeetingSuggestionManager {
         int time = preferenceController.getSuggestion() * 1000;
         if(alarmManager != null && intent != null && pendingIntent != null) {
             alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, SystemClock.elapsedRealtime() + time, time, pendingIntent);
+            preferenceController.setSuggestionFlag(true);
             isSet = false;
         }
     }
@@ -54,6 +56,7 @@ public class MeetingSuggestionManager {
     public void disableMeetingSuggestion(AlarmManager alarmManager, PendingIntent pendingIntent)
     {
         alarmManager.cancel(pendingIntent);
+        preferenceController.setSuggestionFlag(false);
     }
 
     public void disableSuggestionByNetworkStatus()
@@ -62,6 +65,7 @@ public class MeetingSuggestionManager {
         {
             if(alarmManager != null && pendingIntent != null) {
                 alarmManager.cancel(pendingIntent);
+                preferenceController.setSuggestionFlag(false);
                 isSet = true;
             }
         }
