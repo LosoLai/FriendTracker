@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.example.loso.friendtracker.Alarm.AlarmNotificationReceiver;
 import com.example.loso.friendtracker.Alarm.AlarmSuggestionReceiver;
+import com.example.loso.friendtracker.Alarm.MeetingSuggestionManager;
 import com.example.loso.friendtracker.Controller.MeetingController;
 import com.example.loso.friendtracker.Controller.PreferenceController;
 import com.example.loso.friendtracker.R;
@@ -133,17 +134,15 @@ public class UserSettingActivity extends PreferenceActivity {
                     Intent intent = new Intent(getActivity(), AlarmSuggestionReceiver.class);
                     PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), AlarmSuggestionReceiver.ALARM_SUGGESTION_ID, intent, 0);
 
-                    //get time limit
-                    int time = Integer.valueOf(prefs.getString(MEETING_SUGGESTION_TIME, "30")) * 1000;
-
+                    MeetingSuggestionManager meetingSuggestionManager = MeetingSuggestionManager.getInstance();
                     if(checked) {
                         if(alarmManager != null)
-                            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, SystemClock.elapsedRealtime()+time, time, pendingIntent);
+                            meetingSuggestionManager.enableMeetingSuggestion(alarmManager, intent, pendingIntent);
                         Toast.makeText(getActivity(), "Suggestion Active", Toast.LENGTH_SHORT).show();
                     }
                     else {
                         if(alarmManager != null)
-                            alarmManager.cancel(pendingIntent);
+                            meetingSuggestionManager.disableMeetingSuggestion(alarmManager, pendingIntent);
                         Toast.makeText(getActivity(), "Suggestion Inactive", Toast.LENGTH_SHORT).show();
                     }
 

@@ -31,6 +31,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.loso.friendtracker.Alarm.AlarmSuggestionReceiver;
+import com.example.loso.friendtracker.Alarm.MeetingSuggestionManager;
 import com.example.loso.friendtracker.Controller.MeetingController;
 import com.example.loso.friendtracker.Controller.MeetingListAdapter;
 import com.example.loso.friendtracker.Controller.PreferenceController;
@@ -177,8 +178,8 @@ public class Tab_Meeting extends Fragment implements Observer {
                 AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
                 Intent intent = new Intent(getActivity(), AlarmSuggestionReceiver.class);
                 PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), AlarmSuggestionReceiver.ALARM_SUGGESTION_ID, intent, 0);
-                int time = preferenceController.getSuggestion() * 1000;
-                alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), time, pendingIntent);
+                MeetingSuggestionManager meetingSuggestionManager = MeetingSuggestionManager.getInstance();
+                meetingSuggestionManager.enableMeetingSuggestion(alarmManager, intent, pendingIntent);
 
                 //MeetingSuggestionController
                 MeetingSuggestionController suggestionController = MeetingSuggestionController.getInstance();
