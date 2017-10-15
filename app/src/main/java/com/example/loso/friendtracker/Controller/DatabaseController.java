@@ -39,10 +39,9 @@ public class DatabaseController {
             mFriendModel.setFriends(DataManager.createDummyFriendList(context));
             //then store in DB directly
             int size = mFriendModel.getFriends().size();
-            for(int i=0 ; i<size ; i++)
-            {
+            for (int i = 0; i < size; i++) {
                 Friend friend = mFriendModel.getFriends().get(i);
-                if(friend == null)
+                if (friend == null)
                     continue;
 
                 db.addFriend(friend);
@@ -61,16 +60,14 @@ public class DatabaseController {
             mMeetingModel.setMeetings(DataManager.createDummMeetingList());
             //then store in DB directly
             int size = mMeetingModel.getMeetings().size();
-            for(int i=0 ; i<size ; i++)
-            {
+            for (int i = 0; i < size; i++) {
                 Meeting meeting = mMeetingModel.getMeetings().get(i);
-                if(meeting == null)
+                if (meeting == null) {
                     continue;
-
+                }
                 db.addMeeting(meeting);
             }
-        }
-        else //setting attendlist
+        } else //setting attendlist
         {
             int size = mMeetingModel.getMeetings().size();
             for (int i = 0; i < size; i++) {

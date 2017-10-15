@@ -1,5 +1,7 @@
 package com.example.loso.friendtracker.Model;
 
+import android.support.annotation.NonNull;
+
 import java.util.Date;
 
 /**
@@ -10,7 +12,7 @@ import java.util.Date;
  * @author Lettisia George
  */
 
-public class Friend {
+public class Friend implements Comparable<Friend> {
     private String ID;
     private String name;
     private String email;
@@ -103,5 +105,10 @@ public class Friend {
 
     public void setWalkTime(WalkTime walkTime) {
         this.walkTime = walkTime;
+    }
+
+    @Override
+    public int compareTo(@NonNull Friend o) {
+        return ((Double) this.walkTime.getNumericTime()).compareTo((Double) o.walkTime.getNumericTime());
     }
 }

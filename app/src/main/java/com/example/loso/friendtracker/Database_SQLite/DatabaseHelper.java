@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.example.loso.friendtracker.Model.Friend;
+import com.example.loso.friendtracker.Model.Location;
 import com.example.loso.friendtracker.Model.Meeting;
 import com.example.loso.friendtracker.Model.WalkTime;
 
@@ -29,7 +30,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         String sqlFriendTable = "CREATE TABLE friend(friend_id TEXT PRIMARY KEY, name TEXT, email TEXT, date NUMERIC);";
-        String sqlMeetingTable = "CREATE TABLE meeting(meeting_id TEXT PRIMARY KEY, title TEXT, start_date NUMERIC, end_date NUMERIC, location TEXT);";
+        String sqlMeetingTable = "CREATE TABLE meeting(meeting_id TEXT PRIMARY KEY, title TEXT, start_date NUMERIC, end_date NUMERIC, latitude NUMERIC, longitude NUMERIC);";
         String sqlAttendList = "CREATE TABLE attendlist(meeting_id TEXT, friend_id TEXT,  " +
                 "FOREIGN KEY(meeting_id) REFERENCES meeting(meeting_id), " +
                 "FOREIGN KEY(friend_id) REFERENCES friend(friend_id));";
@@ -52,15 +53,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
+
     public boolean checkFriendDB(ArrayList<Friend> friendList) {
         Cursor cursor = readDB_FriendTable();
-        if(cursor == null)
+        if (cursor == null)
             return false;
 
         getFriends(cursor, friendList);
+        cursor.close();
         return friendList.size() != 0;
-
     }
+
 
     private void getFriends(Cursor cursor, ArrayList<Friend> friendList) {
         if (friendList != null)
@@ -71,31 +74,32 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 long time = cursor.getLong(3);
                 Date date = new Date(time);
                 Friend friend = new Friend(cursor.getString(0), cursor.getString(1),
-                                            cursor.getString(2), date);
+                        cursor.getString(2), date);
                 friendList.add(friend);
             } while (cursor.moveToNext());
         }
     }
+
+
     private Cursor readDB_FriendTable() {
         String selectQuery = "SELECT * FROM friend";
         SQLiteDatabase db = getWritableDatabase();
-        Cursor cursor = db.rawQuery(selectQuery, null);
-        return cursor;
+        return db.rawQuery(selectQuery, null);
     }
+
 
     public boolean checkMeetingDB(ArrayList<Meeting> meetingList) {
         Cursor cursor = readDB_MeetingTable();
-        if(cursor == null)
+        if (cursor == null)
             return false;
 
         getMeetings(cursor, meetingList);
-        if (meetingList.size() == 0)
-            return false;
-
-        return true;
+        return meetingList.size() != 0;
     }
+
+
     private void getMeetings(Cursor cursor, ArrayList<Meeting> meetingList) {
-        if(meetingList != null)
+        if (meetingList != null)
             meetingList.clear();
 
         if (cursor.moveToFirst()) {
@@ -104,39 +108,54 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 String title = cursor.getString(1);
                 long startTime = cursor.getLong(2);
                 long endTime = cursor.getLong(3);
+                double latitude = cursor.getDouble(4);
+                double longitude = cursor.getDouble(5);
+
                 Date start = new Date();
-                if(startTime != 0)
+                if (startTime != 0)
                     start.setTime(startTime);
                 Date end = new Date();
-                if(endTime != 0)
+                if (endTime != 0)
                     end.setTime(endTime);
+                Location location = null;
+                if (latitude != 0 && longitude != 0) {
+                    location = new Location(latitude, longitude);
+                }
+
                 Meeting meeting = new Meeting(id, title);
                 meeting.setStartDate(start);
                 meeting.setEndDate(end);
+                if (location != null)
+                    meeting.setLocation(location);
                 meetingList.add(meeting);
             } while (cursor.moveToNext());
         }
     }
+
+
     private Cursor readDB_MeetingTable() {
         String selectQuery = "SELECT * FROM meeting";
         SQLiteDatabase db = getWritableDatabase();
-        Cursor cursor = db.rawQuery(selectQuery, null);
-        return cursor;
+        return db.rawQuery(selectQuery, null);
     }
+
+
     public ArrayList<String> readDB_AttendListTable(String meetingID) {
         String selectQuery = "SELECT * FROM attendlist WHERE meeting_id ='" + meetingID + "'";
         SQLiteDatabase db = getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
 
-        ArrayList<String> attendList = new ArrayList<String>();
+        ArrayList<String> attendList = new ArrayList<>();
         if (cursor.moveToFirst()) {
             do {
                 // Adding attend to list
                 attendList.add(cursor.getString(1));
             } while (cursor.moveToNext());
         }
+        cursor.close();
         return attendList;
     }
+
 
     public void deleteRows() {
         String sqlDeleteRows_Friend = "DELETE FROM friend";
@@ -150,6 +169,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.close();
     }
 
+
     public boolean addFriend(Friend friend) {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues contentValues = new ContentValues();
@@ -159,36 +179,42 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             contentValues.put("email", friend.getEmail());
         if (friend.getBirthday() != null)
             contentValues.put("date", friend.getBirthday().getTime());
-        //contentValues.put("date", String.valueOf(friend.getBirthday()));
         db.insert("friend", null, contentValues);
         db.close();
         return true;
     }
+
 
     public boolean addMeeting(Meeting meeting) {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put("meeting_id", meeting.getID());
         contentValues.put("title", meeting.getTitle());
-        if(meeting.getStartDate() != null)
+        if (meeting.getStartDate() != null) {
             contentValues.put("start_date", meeting.getStartDate().getTime());
-        if(meeting.getEndDate() != null)
+        }
+        if (meeting.getEndDate() != null) {
             contentValues.put("end_date", meeting.getEndDate().getTime());
-        //contentValues.put("start_date", String.valueOf(meeting.getStartDate()));
-        //contentValues.put("end_date", String.valueOf(meeting.getEndDate()));
-        if(meeting.getLocation() != null)
-            contentValues.put("location", meeting.getLocation().toString());
+        }
+        if (meeting.getLocation() != null) {
+            contentValues.put("latitude", meeting.getLocation().getLatitude());
+            contentValues.put("longitude", meeting.getLocation().getLongitude());
+        } else {
+            contentValues.put("latitude", 0.0);
+            contentValues.put("longitude", 0.0);
+        }
         db.insert("meeting", null, contentValues);
         addAttendList(meeting);
         db.close();
         return true;
     }
 
+
     private boolean addAttendList(Meeting meeting) {
         SQLiteDatabase db = getWritableDatabase();
         HashMap<Friend, WalkTime> attendlist = meeting.getFriends();
         for (Friend attend : attendlist.keySet()) {
-            if(attend == null)
+            if (attend == null)
                 continue;
             ContentValues contentValues = new ContentValues();
             contentValues.put("meeting_id", meeting.getID());

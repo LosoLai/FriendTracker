@@ -28,6 +28,7 @@ import com.example.loso.friendtracker.Model.FriendModel;
 import com.example.loso.friendtracker.R;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -61,6 +62,7 @@ public class Tab_Friend extends Fragment implements Observer {
         //fc.updateFriendLocations(this.getContext());
 
         adapter = new FriendListAdapter(rootView.getContext(), friends);
+        Collections.sort(friends);
         ListView lvFriend = (ListView) rootView.findViewById(R.id.friendlist);
         lvFriend.setAdapter(adapter);
 

@@ -99,7 +99,7 @@ public class Tab_Map extends Fragment implements OnMapReadyCallback {
         }
 
         mMap.moveCamera(CameraUpdateFactory.newLatLng(here));
-        mMap.moveCamera(CameraUpdateFactory.zoomTo(15));
+        mMap.moveCamera(CameraUpdateFactory.zoomTo(13));
 
     }
 }

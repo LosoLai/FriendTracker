@@ -6,7 +6,6 @@ import com.example.loso.friendtracker.Model.Friend;
 import com.example.loso.friendtracker.Model.FriendComparator;
 import com.example.loso.friendtracker.Model.Location;
 import com.example.loso.friendtracker.Model.Meeting;
-import com.example.loso.friendtracker.Model.MeetingComparator;
 import com.example.loso.friendtracker.Model.WalkTime;
 
 import java.util.ArrayList;
@@ -28,6 +27,10 @@ public class MeetingSuggestionController {
     private Meeting suggestion;
     private int index;
     private int status;
+
+    private MeetingSuggestionController() {
+        index = 0;
+    }
 
     public static MeetingSuggestionController getInstance()
     {
@@ -59,6 +62,7 @@ public class MeetingSuggestionController {
         ArrayList<Friend> friends = friendController.getFriendsList();
         FriendComparator comp = new FriendComparator();
         Collections.sort(friends, comp);
+        Collections.reverse(friends);
         if(index >= friends.size())
             index = 0;
         Friend near = friends.get(index);

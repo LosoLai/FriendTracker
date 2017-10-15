@@ -77,8 +77,8 @@ public class EditMeetingActivity extends AppCompatActivity implements Observer {
 
         Location location = meetingController.getMeetingLocation(meetingID);
         if (location != null) {
-            etLat.setText(String.format("%.3f", location.getLatitude()));
-            etLong.setText(String.format("%.3f", location.getLongitude()));
+            etLat.setText(String.format(Locale.ENGLISH, "%.3f", location.getLatitude()));
+            etLong.setText(String.format(Locale.ENGLISH, "%.3f", location.getLongitude()));
         }
 
         // initialise DatePickerDIalog so birthday can be selected
@@ -93,7 +93,7 @@ public class EditMeetingActivity extends AppCompatActivity implements Observer {
 
         Calendar curDate = Calendar.getInstance();
         SimpleDateFormat sdf_Date = new SimpleDateFormat("yyyy-MM-dd");
-        SimpleDateFormat sdf_Time = new SimpleDateFormat("hh:mm a");
+        SimpleDateFormat sdf_Time = new SimpleDateFormat("hh:mma");
 
         if (dates[0] != null) {
             curDate.setTime(dates[0]);

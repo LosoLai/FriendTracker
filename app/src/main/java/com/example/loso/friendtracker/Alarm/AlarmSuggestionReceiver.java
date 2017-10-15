@@ -47,8 +47,8 @@ public class AlarmSuggestionReceiver extends BroadcastReceiver {
 //        Intent settingIntent = new Intent(context, UserSettingActivity.class);
 //        PendingIntent preSetting = PendingIntent.getActivity(context, 0, settingIntent, 0);
 
-        Intent cancleIntent = new Intent(context, ActionCancelSuggestionActivity.class);
-        PendingIntent actionCancel = PendingIntent.getActivity(context, ALARM_SUGGESTION_ID, cancleIntent, 0);
+        Intent cancelIntent = new Intent(context, ActionCancelSuggestionActivity.class);
+        PendingIntent actionCancel = PendingIntent.getActivity(context, ALARM_SUGGESTION_ID, cancelIntent, 0);
 
         Intent cleanIntent = new Intent(context, ActionCleanSuggestionActivity.class);
         PendingIntent actionNo = PendingIntent.getActivity(context, ALARM_SUGGESTION_ID, cleanIntent, 0);

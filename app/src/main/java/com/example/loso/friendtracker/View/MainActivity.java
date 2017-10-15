@@ -67,7 +67,6 @@ public class MainActivity extends AppCompatActivity {
         Log.i(LOG_TAG, "onStart()");
         super.onStart();
 
-
         // Start the broadcast receiver that monitors network connectivity
         IntentFilter intentFilter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
         getApplicationContext().registerReceiver(new NetworkStatusReceiver(), intentFilter);
@@ -80,12 +79,14 @@ public class MainActivity extends AppCompatActivity {
             public void onReceive(Context context, Intent intent) {
                 Log.i(LOG_TAG, "entered onReceive()");
                 boolean connected = intent.getBooleanExtra(NetworkStatusReceiver.IS_NETWORK_CONNECTED, false);
+
                 String text = connected ? "Network Connected" : "Network Disconnected";
                 Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
 
                 if (connected) {
                     // TODO @Loso Start suggest now function when network becomes reconnected.
                 }
+
                 Log.d(LOG_TAG, text);
             }
         }, intentFilter1);
@@ -103,10 +104,6 @@ public class MainActivity extends AppCompatActivity {
 
         // Initialise PreferenceController
         final SharedPreferences prefs = android.preference.PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-
-//        SharedPreferences.Editor editor = prefs.edit();
-//        editor.clear();
-//        editor.apply();
 
         final PreferenceController preferenceController = PreferenceController.getInstance();
         preferenceController.loadSharedPreference(prefs);
