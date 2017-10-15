@@ -71,7 +71,7 @@ public class UserSettingActivity extends PreferenceActivity {
                     MeetingController meetingController = new MeetingController();
                     long meetingTime = meetingController.getUpcommingMeeting().getStartDate().getTime();
                     //get time limit value
-                    String time = prefs.getString(MEETING_NOTIFICATION_TIME, "9");
+                    String time = prefs.getString(MEETING_NOTIFICATION_TIME, "3");
                     int duration = Integer.valueOf(time) * 60 * 1000;
                     long reminderTime = meetingTime - duration;
 

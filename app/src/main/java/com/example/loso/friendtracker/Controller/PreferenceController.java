@@ -10,13 +10,13 @@ import com.example.loso.friendtracker.View.UserSettingActivity;
  */
 
 public class PreferenceController {
+    private static PreferenceController instance = null;
     private Location currentLocation;
     private boolean reminderFlag;
     private boolean suggestionFlag;
     private int reminderTime;
     private int snooze;
     private int suggestion;
-    private static PreferenceController instance = null;
 
     public static PreferenceController getInstance()
     {
@@ -76,7 +76,7 @@ public class PreferenceController {
 
     public void loadSharedPreference(final SharedPreferences prefs)
     {
-        String time = prefs.getString(UserSettingActivity.MyPreferenceFragment.MEETING_NOTIFICATION_TIME, "9");
+        String time = prefs.getString(UserSettingActivity.MyPreferenceFragment.MEETING_NOTIFICATION_TIME, "3");
         int remainderTime = Integer.parseInt(time);
         setReminderTime(remainderTime);
         time = prefs.getString(UserSettingActivity.MyPreferenceFragment.MEETING_NOTIFICATION_SNOOZE, "1");

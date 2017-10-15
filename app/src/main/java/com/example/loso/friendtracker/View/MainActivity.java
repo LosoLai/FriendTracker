@@ -1,8 +1,6 @@
 package com.example.loso.friendtracker.View;
 
 import android.Manifest;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -20,7 +18,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -70,26 +67,6 @@ public class MainActivity extends AppCompatActivity {
         // Start the broadcast receiver that monitors network connectivity
         IntentFilter intentFilter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
         getApplicationContext().registerReceiver(new NetworkStatusReceiver(), intentFilter);
-
-
-        // This code chunk could potentially be moved to where meeting suggestion functionality is:
-        IntentFilter intentFilter1 = new IntentFilter(NetworkStatusReceiver.NETWORK_CHANGE_DETECTED);
-        LocalBroadcastManager.getInstance(this).registerReceiver(new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                Log.i(LOG_TAG, "entered onReceive()");
-                boolean connected = intent.getBooleanExtra(NetworkStatusReceiver.IS_NETWORK_CONNECTED, false);
-
-                String text = connected ? "Network Connected" : "Network Disconnected";
-                Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
-
-                if (connected) {
-                    // TODO @Loso Start suggest now function when network becomes reconnected.
-                }
-
-                Log.d(LOG_TAG, text);
-            }
-        }, intentFilter1);
 
         // call CurrentLocationService constructor to update current location in preferences.
         Location currentLocation = new CurrentLocationService(this).getCurrentLocation();

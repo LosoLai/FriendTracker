@@ -6,13 +6,16 @@ package com.example.loso.friendtracker.View;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.Gravity;
@@ -37,6 +40,8 @@ import com.example.loso.friendtracker.Model.Meeting;
 import com.example.loso.friendtracker.Model.MeetingComparator;
 import com.example.loso.friendtracker.Model.MeetingModel;
 import com.example.loso.friendtracker.R;
+import com.example.loso.friendtracker.Service.MeetingSuggestionController;
+import com.example.loso.friendtracker.Service.NetworkStatusReceiver;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
@@ -47,6 +52,7 @@ import java.util.Observer;
 
 public class Tab_Meeting extends Fragment implements Observer {
     private static final String LOG_TAG = "meetingtab";
+    private static boolean isVisible = true;
     private View rootView;
     private MeetingListAdapter adapter;
 
@@ -60,6 +66,30 @@ public class Tab_Meeting extends Fragment implements Observer {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        // This code chunk could potentially be moved to where meeting suggestion functionality is:
+        IntentFilter intentFilter1 = new IntentFilter(NetworkStatusReceiver.NETWORK_CHANGE_DETECTED);
+        LocalBroadcastManager.getInstance(getContext()).registerReceiver(new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                Log.i(LOG_TAG, "entered onReceive()");
+                boolean connected = intent.getBooleanExtra(NetworkStatusReceiver.IS_NETWORK_CONNECTED, false);
+
+                String text = connected ? "Network Connected" : "Network Disconnected";
+                Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
+
+                if (connected) {
+                    MeetingSuggestionController suggestionController = MeetingSuggestionController.getInstance();
+                    Meeting suggest = suggestionController.getSuggestion();
+
+                    if (isVisible) {
+                        setPopUpWindow(suggest);
+                    }
+                }
+                Log.d(LOG_TAG, text);
+            }
+        }, intentFilter1);
+
 
         // ListView
         MeetingModel mMeetingModel = MeetingModel.getInstance();
@@ -128,12 +158,12 @@ public class Tab_Meeting extends Fragment implements Observer {
         });
 
         Button btnSuggestion = (Button) rootView.findViewById(R.id.btnSuggestion);
-        final ArrayList<Meeting> suggestion = new ArrayList<Meeting>();
-        MeetingController meetingController = new MeetingController();
-        final Meeting suggest = meetingController.createTempMeeting();
         btnSuggestion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                MeetingController meetingController = new MeetingController();
+                Meeting suggest = meetingController.createTempMeeting();
+
                 //get current location
                 SharedPreferences pref = getActivity().getSharedPreferences("location", Context.MODE_PRIVATE);
                 LatLng here = new LatLng(pref.getFloat("latitude", (float) Location.RMIT.getLatitude()),
@@ -143,22 +173,32 @@ public class Tab_Meeting extends Fragment implements Observer {
                 PreferenceController preferenceController = PreferenceController.getInstance();
                 preferenceController.setCurrentLocation(current);
 
-                //active suggesti alarm
-                AlarmManager alarmManager = (AlarmManager)getActivity().getSystemService(Context.ALARM_SERVICE);
+                //active suggestion alarm
+                AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
                 Intent intent = new Intent(getActivity(), AlarmSuggestionReceiver.class);
                 PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), AlarmSuggestionReceiver.ALARM_SUGGESTION_ID, intent, 0);
                 int time = preferenceController.getSuggestion() * 1000;
-                alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 1000, time, pendingIntent);
-                //Toast.makeText(getActivity(), "Active suggestion", Toast.LENGTH_SHORT).show();
+                alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), time, pendingIntent);
 
-//
-//                //MeetingSuggestionController
-//                MeetingSuggestionController suggestionController = new MeetingSuggestionController(getContext());
-//                suggestion.add(suggestionController.createASuggestedMeeting(current));
+                //MeetingSuggestionController
+                MeetingSuggestionController suggestionController = MeetingSuggestionController.getInstance();
+                suggest = suggestionController.getSuggestion();
 
-                //setPopUpWindow(suggestion);
+                setPopUpWindow(suggest);
             }
         });
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        isVisible = true;
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        isVisible = false;
     }
 
     @Override
@@ -167,20 +207,18 @@ public class Tab_Meeting extends Fragment implements Observer {
         adapter.notifyDataSetChanged();
     }
 
-    public void setPopUpWindow(final ArrayList<Meeting> suggestion)
-    {
+    public void setPopUpWindow(final Meeting suggestion) {
         //instantiate the popup.xml layout file
         LayoutInflater layoutInflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View customView = layoutInflater.inflate(R.layout.popup_suggestion,null);
+        View customView = layoutInflater.inflate(R.layout.popup_suggestion, null);
 
         Button accept = (Button) customView.findViewById(R.id.btnAccept);
         Button ignore = (Button) customView.findViewById(R.id.btnIgnore);
 
         //instantiate popup window
         final PopupWindow popupWindow = new PopupWindow(customView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        final Meeting meeting = suggestion.get(0);
-        if(meeting != null)
-            displaySuggestionInfo(customView, meeting);
+        if (suggestion != null)
+            displaySuggestionInfo(customView, suggestion);
         popupWindow.update();
 
         //display the popup window
@@ -198,10 +236,9 @@ public class Tab_Meeting extends Fragment implements Observer {
         accept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(meeting != null)
-                {
+                if (suggestion != null) {
                     MeetingController meetingController = new MeetingController();
-                    meetingController.addMeetingIntoList(meeting);
+                    meetingController.addMeetingIntoList(suggestion);
 
                     popupWindow.dismiss();
                 }
@@ -215,22 +252,22 @@ public class Tab_Meeting extends Fragment implements Observer {
         TextView attend = (TextView) customView.findViewById(R.id.text_suggest_attend);
         TextView startDate = (TextView) customView.findViewById(R.id.text_suggest_startdate);
 
-        if(title != null && meeting.getTitle() != null)
+        if (title != null && meeting.getTitle() != null)
             title.append(meeting.getTitle());
 
-        if(location != null && meeting.getLocation() != null)
+        if (location != null && meeting.getLocation() != null)
             location.append(meeting.getLocation().toString());
 
-        if(attend != null && meeting.getFriends() != null)
-        {
+        if (attend != null && meeting.getFriends() != null) {
             Iterator<Friend> itr = meeting.getFriends().keySet().iterator();
-            if(itr.hasNext()){
+            if (itr.hasNext()) {
                 Friend friend = itr.next();
                 attend.append(friend.getName());
             }
         }
 
-        if(startDate != null && meeting.getStartDate() != null)
+        if (startDate != null && meeting.getStartDate() != null)
             startDate.append(meeting.getStartDate().toString());
     }
+
 }
