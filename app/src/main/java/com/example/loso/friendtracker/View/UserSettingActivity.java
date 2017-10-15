@@ -17,9 +17,12 @@ import android.widget.Toast;
 
 import com.example.loso.friendtracker.Alarm.AlarmNotificationReceiver;
 import com.example.loso.friendtracker.Alarm.AlarmSuggestionReceiver;
+import com.example.loso.friendtracker.Alarm.MeetingReminderManager;
 import com.example.loso.friendtracker.Controller.MeetingController;
 import com.example.loso.friendtracker.Controller.PreferenceController;
 import com.example.loso.friendtracker.R;
+
+import java.util.Calendar;
 
 /**
  * Created by Loso on 2017/10/1.
@@ -55,12 +58,13 @@ public class UserSettingActivity extends PreferenceActivity {
 
         public void setMeetingNotification(final SharedPreferences prefs, final PreferenceController preferenceController)
         {
-            final CheckBoxPreference checkBoxPreference = (CheckBoxPreference) findPreference(MEETING_SUGGESTION);
+            final CheckBoxPreference checkBoxPreference = (CheckBoxPreference) findPreference(MEETING_NOTIFICATION);
             checkBoxPreference.setOnPreferenceChangeListener(new CheckBoxPreference.OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
                     boolean checked = Boolean.valueOf(newValue.toString());
                     preferenceController.setReminderFlag(checked);
+                    //MeetingReminderManager meetingReminderManager = MeetingReminderManager.getInstance();
 
                     //check alarm shuld be fire or not
                     AlarmManager alarmManager = (AlarmManager)getActivity().getSystemService(Context.ALARM_SERVICE);
@@ -71,9 +75,14 @@ public class UserSettingActivity extends PreferenceActivity {
                     MeetingController meetingController = new MeetingController();
                     long meetingTime = meetingController.getUpcommingMeeting().getStartDate().getTime();
                     //get time limit value
-                    String time = prefs.getString(MEETING_NOTIFICATION_TIME, "3");
-                    int duration = Integer.valueOf(time) * 60 * 1000;
-                    long reminderTime = meetingTime - duration;
+                    //String time = prefs.getString(MEETING_NOTIFICATION_TIME, "3");
+                    Calendar current = Calendar.getInstance();
+                    int duration = preferenceController.getReminderTime() * 60 * 1000;
+                    long reminderTime = 0;
+                    if(meetingTime - duration <= current.getTime().getTime())
+                        reminderTime = current.getTime().getTime();
+                    else
+                        reminderTime = meetingTime - duration;
 
                     if(checked) {
                         if(alarmManager != null)
