@@ -56,15 +56,17 @@ public class DatabaseController {
 
         boolean hasMeetings = db.checkMeetingDB(mMeetingModel.getMeetings());
         //Add dummy data to Model
+        //if (true) {
         if (!hasMeetings) {
+            db.updateMeetingsDB();
             mMeetingModel.setMeetings(DataManager.createDummMeetingList());
             //then store in DB directly
             int size = mMeetingModel.getMeetings().size();
             for (int i = 0; i < size; i++) {
                 Meeting meeting = mMeetingModel.getMeetings().get(i);
-                if (meeting == null) {
+                if (meeting == null)
                     continue;
-                }
+
                 db.addMeeting(meeting);
             }
         } else //setting attendlist

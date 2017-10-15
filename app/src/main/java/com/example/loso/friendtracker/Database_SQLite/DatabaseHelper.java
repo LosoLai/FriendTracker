@@ -209,6 +209,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return true;
     }
 
+    public void updateMeetingsDB() {
+        SQLiteDatabase db = getWritableDatabase();
+
+        String sqlMeetingTable = "DROP TABLE IF EXISTS meeting";
+        String sqlAttendList = "DROP TABLE IF EXISTS  attendlist";
+
+        db.execSQL(sqlAttendList);
+        db.execSQL(sqlMeetingTable);
+
+        onCreate(db);
+    }
+
 
     private boolean addAttendList(Meeting meeting) {
         SQLiteDatabase db = getWritableDatabase();

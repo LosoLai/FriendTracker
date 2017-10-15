@@ -18,7 +18,7 @@ public class MeetingLocationTask extends AsyncTask<Void, Void, Void> {
     public static final String MEETING_LOCATION_TASK = "MeetingLocationTask";
     public static final String MAX_WALKTIME = "MaxWalk";
     public static final String GUESTLIST = "GuestList";
-    private WalkigTimeCallBack<WalkTime> mCallBack;
+    private WalkingTimeCallBack<WalkTime> mCallBack;
     private GuestList guests;
     private Location midPoint;
     private Location[] twoPoints = new Location[2];
@@ -33,7 +33,7 @@ public class MeetingLocationTask extends AsyncTask<Void, Void, Void> {
         mCallBack = null;
     }
 
-    public MeetingLocationTask(WalkigTimeCallBack<WalkTime> callBack, Location midPoint, Location friend, Location current) {
+    public MeetingLocationTask(WalkingTimeCallBack<WalkTime> callBack, Location midPoint, Location friend, Location current) {
         this.context = null;
         guests = null;
         twoPoints[0] = friend;

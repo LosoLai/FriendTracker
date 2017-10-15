@@ -86,9 +86,10 @@ public class MeetingSuggestionController {
         final Date endDate = new Date(current.getTimeInMillis());
         suggest.setStartDate(startDate);
         suggest.setEndDate(endDate);
+        suggestion = suggest;
 
         //get two locations walkingTime
-        MeetingLocationTask meetingLocationTask = new MeetingLocationTask(new WalkigTimeCallBack<WalkTime>() {
+        MeetingLocationTask meetingLocationTask = new MeetingLocationTask(new WalkingTimeCallBack<WalkTime>() {
             @Override
             public void onSuccess(WalkTime object) {
                 double maxWalk = object.getNumericTime();
